@@ -1,0 +1,119 @@
+{
+  "$schema": "./config.schema.json",
+  "meta": {
+    "description": "Single source of truth for the developer-assistant-skills plugin. Copy to the path in DEVELOPER_CONFIG (default ~/.developer/config.json).",
+    "version": "0.1.0"
+  },
+  "profile": {
+    "name": "Your Name",
+    "role": "Software Engineer",
+    "github": "https://github.com/your-handle",
+    "preferred_languages": ["typescript", "python"],
+    "coding_style": {
+      "tone": ["direct", "pragmatic"],
+      "conventions": "follow the repository's existing conventions and instructions"
+    }
+  },
+  "repo": {
+    "default_branch": "main",
+    "test_command": "npm test",
+    "build_command": "npm run build",
+    "lint_command": "npm run lint",
+    "package_manager": "npm"
+  },
+  "repos": [
+    {
+      "name": "my-app",
+      "provider": "github",
+      "url": "https://github.com/your-org/my-app",
+      "default_branch": "main"
+    },
+    {
+      "name": "legacy-service",
+      "provider": "ado",
+      "org": "your-org",
+      "project": "your-project",
+      "repo": "legacy-service",
+      "default_branch": "main"
+    }
+  ],
+  "quality_gates": {
+    "wcag_level": "AA",
+    "require_tests_for_changes": true,
+    "require_regression_pass_before_pr": true,
+    "specialists": [
+      "security",
+      "accessibility",
+      "performance",
+      "architecture",
+      "unit-testing",
+      "e2e",
+      "observability",
+      "dependency",
+      "style",
+      "i18n"
+    ]
+  },
+  "autonomy": {
+    "permission_level": 2,
+    "max_repair_attempts": 3,
+    "allow_autonomous_merge": false,
+    "note": "Merge stays human-owned. CI autonomy is opt-in via repo variables (see .github/workflows/README.md)."
+  },
+  "toolchain": {
+    "prefer": "cli-then-mcp",
+    "git_provider": "github",
+    "issue_provider": "github",
+    "clis": {
+      "git": "git",
+      "github": "gh",
+      "ado": "az",
+      "playwright": "npx playwright",
+      "axe": "npx axe",
+      "node": "node",
+      "python": "python"
+    },
+    "mcp": {
+      "github": { "enabled": true, "definition": ".developer/mcp/github.json" },
+      "playwright": { "enabled": true, "definition": ".developer/mcp/playwright.json" },
+      "ado": { "enabled": false, "definition": ".developer/mcp/ado.json" }
+    }
+  },
+  "test_environments": {
+    "_comment": "Secrets are read from env vars named below — never store credentials in this file.",
+    "cert_folder": "~/.developer/certs",
+    "storage_state_dir": "~/.developer/.playwright",
+    "default": "local",
+    "environments": {
+      "local": {
+        "base_url": "http://localhost:3000",
+        "auth": { "type": "none" }
+      },
+      "staging": {
+        "base_url": "https://staging.example.com",
+        "auth": {
+          "type": "storage-state",
+          "storage_state": "staging.json",
+          "login_url": "https://staging.example.com/login",
+          "username_env": "STAGING_USER",
+          "password_env": "STAGING_PASS"
+        }
+      },
+      "prod": {
+        "base_url": "https://example.com",
+        "auth": { "type": "none" },
+        "read_only": true
+      }
+    },
+    "auth_types": ["none", "storage-state", "basic", "cert", "oidc"]
+  },
+  "traceability": {
+    "graph_path": "./output/traceability.json"
+  },
+  "paths": {
+    "content": "./content.md",
+    "memory": "./memory.md",
+    "notes": "./notes.md",
+    "output_dir": "./output"
+  }
+}

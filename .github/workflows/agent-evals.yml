@@ -1,0 +1,37 @@
+name: Agent Evals
+
+# DISABLED BY DEFAULT (auto). Runs the skill/agent eval suite as a regression gate when
+# .developer/** changes. Manual dispatch always; automatic on PRs only when ENABLE_AUTONOMOUS or
+# ENABLE_AGENT_EVALS is 'true'.
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - ".developer/**"
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (vars.ENABLE_AUTONOMOUS == 'true' || vars.ENABLE_AGENT_EVALS == 'true')
+    env:
+      AGENT_RUN_CMD: ${{ vars.AGENT_RUN_CMD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run evals (if a runner and evals are configured)
+        run: |
+          if [ -z "$AGENT_RUN_CMD" ]; then
+            echo "AGENT_RUN_CMD not set — skipping agent evals (structural CI still enforces the skill contract)."
+            exit 0
+          fi
+          if [ -d .developer/evals ]; then
+            eval "$AGENT_RUN_CMD \"/dev:run-evals\""
+          else
+            echo "No .developer/evals directory yet — nothing to run."
+          fi

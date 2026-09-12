@@ -1,0 +1,34 @@
+# Private user config (single config + companions)
+config.json
+content.md
+memory.md
+notes.md
+.developer/config/config.json
+.developer/config/content.md
+.developer/config/memory.md
+.developer/config/notes.md
+
+# Secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Generated output
+output/
+.developer/**/output/
+evals/results/
+
+# Python
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+
+# Node
+node_modules/
+*.tgz
+
+# Local editor / runtime state
+.claude/settings.local.json
+.tmp*/

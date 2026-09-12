@@ -1,0 +1,51 @@
+{
+  "name": "developer-assistant-skills",
+  "version": "1.0.0",
+  "description": "Vendor-neutral, open-source developer plugin for Claude Code, GitHub Copilot, and Codex: skills and agents for the full software lifecycle with closed-loop, bounded autonomous repair.",
+  "keywords": [
+    "ai",
+    "agents",
+    "skills",
+    "claude-code",
+    "github-copilot",
+    "codex",
+    "code-review",
+    "playwright",
+    "accessibility",
+    "wcag",
+    "software-lifecycle",
+    "mcp"
+  ],
+  "homepage": "https://github.com/deepakkamboj/developer-assistant-skills#readme",
+  "bugs": {
+    "url": "https://github.com/deepakkamboj/developer-assistant-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepakkamboj/developer-assistant-skills.git"
+  },
+  "license": "MIT",
+  "author": "Deepak Kamboj",
+  "type": "commonjs",
+  "bin": {
+    "dev-skills": "bin/cli.js"
+  },
+  "scripts": {
+    "validate": "node bin/cli.js validate",
+    "list": "node bin/cli.js list skills",
+    "doctor": "node bin/cli.js doctor",
+    "test": "node bin/cli.js validate"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    ".developer/",
+    "bin/",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "usage.md",
+    "LICENSE",
+    "README.md"
+  ]
+}

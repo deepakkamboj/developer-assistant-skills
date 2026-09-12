@@ -1,0 +1,71 @@
+name: Autonomous Bug Fix
+
+# DISABLED BY DEFAULT. Runs only via manual dispatch, or automatically only when the repo
+# variable ENABLE_AUTONOMOUS (or ENABLE_AUTONOMOUS_BUGFIX) is set to 'true'.
+# See .github/workflows/README.md. Never auto-merges — opens a draft PR for human review.
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Issue number to fix"
+        required: true
+  issues:
+    types: [labeled] # only acts on the 'auto-fix' label, and only when enabled
+
+concurrency:
+  group: autonomous-bugfix-${{ github.event.issue.number || github.event.inputs.issue }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      ((vars.ENABLE_AUTONOMOUS == 'true' || vars.ENABLE_AUTONOMOUS_BUGFIX == 'true') &&
+       github.event.label.name == 'auto-fix')
+    env:
+      ISSUE: ${{ github.event.inputs.issue || github.event.issue.number }}
+      AGENT_RUN_CMD: ${{ vars.AGENT_RUN_CMD }}
+      MAX_ATTEMPTS: ${{ vars.AGENT_MAX_ATTEMPTS || '3' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — agent runner configured
+        run: |
+          if [ -z "$AGENT_RUN_CMD" ]; then
+            echo "::error::AGENT_RUN_CMD is not set. Configure it to enable autonomous runs (see .github/workflows/README.md)."
+            exit 1
+          fi
+
+      - name: Create working branch
+        run: |
+          git config user.name "developer-assistant[bot]"
+          git config user.email "developer-assistant@users.noreply.github.com"
+          git checkout -b "auto/bugfix-issue-${ISSUE}"
+
+      - name: Run fix-bug skill (bounded)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Bounded repair: the skill reproduces, fixes, and validates; regression gate inside the skill.
+          eval "$AGENT_RUN_CMD \"/dev:fix-bug ${ISSUE} --max-attempts ${MAX_ATTEMPTS} --draft\""
+
+      - name: Open draft PR if changes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes produced — nothing to PR."; exit 0
+          fi
+          git add -A
+          git commit -m "fix: autonomous repair for #${ISSUE}"
+          git push -u origin "auto/bugfix-issue-${ISSUE}"
+          gh pr create --draft --title "fix: autonomous repair for #${ISSUE}" \
+            --body "Automated bounded repair for #${ISSUE}. Review required before merge." \
+            --base main --head "auto/bugfix-issue-${ISSUE}"

@@ -1,0 +1,17 @@
+{
+  "name": "github",
+  "description": "GitHub issues, pull requests, code, and Actions. Preferred CLI: `gh`. This MCP server is the fallback / structured interface when the CLI is not available.",
+  "transport": "stdio",
+  "command": "docker",
+  "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"],
+  "env": {
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+  },
+  "alt_command": {
+    "note": "If you cannot run Docker, use the remote hosted GitHub MCP server (https://api.githubcopilot.com/mcp/) with OAuth, or the `gh` CLI directly.",
+    "command": "gh",
+    "example": "gh issue view <n> --json title,body,labels"
+  },
+  "capabilities": ["issues", "pull_requests", "repos", "code_search", "actions"],
+  "notes": "Never pass the token on the command line. Provide it via the GITHUB_TOKEN environment variable. Read-only by default; write actions (comment, PR) require confirmation."
+}

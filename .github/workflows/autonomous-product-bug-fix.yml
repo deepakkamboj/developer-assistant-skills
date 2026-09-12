@@ -1,0 +1,69 @@
+name: Autonomous Product Bug Fix
+
+# DISABLED BY DEFAULT. Bounded root-cause analysis + repair for product bugs (EASE-MAS closed loop:
+# E -> F -> B -> RCA -> deltaC -> C'). Manual dispatch always; automatic on 'product-bug' label only
+# when ENABLE_AUTONOMOUS or ENABLE_AUTONOMOUS_PRODUCTBUG is 'true'. Draft PR only — human merges.
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Issue number (product bug)"
+        required: true
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: autonomous-productbug-${{ github.event.issue.number || github.event.inputs.issue }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      ((vars.ENABLE_AUTONOMOUS == 'true' || vars.ENABLE_AUTONOMOUS_PRODUCTBUG == 'true') &&
+       github.event.label.name == 'product-bug')
+    env:
+      ISSUE: ${{ github.event.inputs.issue || github.event.issue.number }}
+      AGENT_RUN_CMD: ${{ vars.AGENT_RUN_CMD }}
+      MAX_ATTEMPTS: ${{ vars.AGENT_MAX_ATTEMPTS || '3' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — agent runner configured
+        run: |
+          if [ -z "$AGENT_RUN_CMD" ]; then
+            echo "::error::AGENT_RUN_CMD is not set (see .github/workflows/README.md)."; exit 1
+          fi
+
+      - name: Prepare branch
+        run: |
+          git config user.name "developer-assistant[bot]"
+          git config user.email "developer-assistant@users.noreply.github.com"
+          git checkout -b "auto/product-bug-${ISSUE}"
+
+      - name: Analyze bug and repair (bounded, with RCA + regression gate)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          eval "$AGENT_RUN_CMD \"/dev:analyze-bug ${ISSUE}\""
+          eval "$AGENT_RUN_CMD \"/dev:root-cause ${ISSUE}\""
+          eval "$AGENT_RUN_CMD \"/dev:fix-bug ${ISSUE} --max-attempts ${MAX_ATTEMPTS} --require-regression-pass --draft\""
+
+      - name: Open draft PR if changes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -z "$(git status --porcelain)" ] && { echo "No changes."; exit 0; }
+          git add -A
+          git commit -m "fix: bounded product-bug repair for #${ISSUE}"
+          git push -u origin "auto/product-bug-${ISSUE}"
+          gh pr create --draft --title "fix: product-bug repair for #${ISSUE}" \
+            --body "Bounded RCA + repair for #${ISSUE}. Regression gate enforced. Review required." \
+            --base main --head "auto/product-bug-${ISSUE}"

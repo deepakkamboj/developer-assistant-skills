@@ -1,0 +1,71 @@
+name: Autonomous Test Fix
+
+# DISABLED BY DEFAULT. Fixes failing or flaky tests. Runs on manual dispatch always; automatically
+# (after a failed CI run, or on the weekly schedule) only when ENABLE_AUTONOMOUS or
+# ENABLE_AUTONOMOUS_TESTFIX is 'true'. Opens a draft PR — never auto-merges.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "failing | flaky"
+        default: "failing"
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  schedule:
+    - cron: "0 6 * * 1" # weekly flaky sweep (Mon 06:00 UTC), gated below
+
+concurrency:
+  group: autonomous-testfix
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  fix-tests:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      ((vars.ENABLE_AUTONOMOUS == 'true' || vars.ENABLE_AUTONOMOUS_TESTFIX == 'true') &&
+       (github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure')))
+    env:
+      MODE: ${{ github.event.inputs.mode || (github.event_name == 'schedule' && 'flaky' || 'failing') }}
+      AGENT_RUN_CMD: ${{ vars.AGENT_RUN_CMD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — agent runner configured
+        run: |
+          if [ -z "$AGENT_RUN_CMD" ]; then
+            echo "::error::AGENT_RUN_CMD is not set (see .github/workflows/README.md)."; exit 1
+          fi
+
+      - name: Prepare branch
+        run: |
+          git config user.name "developer-assistant[bot]"
+          git config user.email "developer-assistant@users.noreply.github.com"
+          git checkout -b "auto/test-fix-${MODE}-${GITHUB_RUN_ID}"
+
+      - name: Run test-fix skill
+        run: |
+          if [ "$MODE" = "flaky" ]; then
+            eval "$AGENT_RUN_CMD \"/dev:flaky-test --fix --draft\""
+          else
+            eval "$AGENT_RUN_CMD \"/dev:fix-test --from-ci --draft\""
+          fi
+
+      - name: Open draft PR if changes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -z "$(git status --porcelain)" ] && { echo "No changes."; exit 0; }
+          git add -A
+          git commit -m "test: autonomous ${MODE}-test fix"
+          git push -u origin "auto/test-fix-${MODE}-${GITHUB_RUN_ID}"
+          gh pr create --draft --title "test: autonomous ${MODE}-test fix" \
+            --body "Automated ${MODE} test repair. Review required before merge." \
+            --base main --head "auto/test-fix-${MODE}-${GITHUB_RUN_ID}"

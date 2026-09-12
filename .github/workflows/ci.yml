@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate config template JSON (if present)
+        run: |
+          if [ -f .developer/config/config.example.json ]; then
+            node -e "JSON.parse(require('fs').readFileSync('.developer/config/config.example.json','utf8'));console.log('config.example.json OK')"
+          else
+            echo "no config template yet — skipping"
+          fi
+
+      - name: Validate skills and agents
+        run: node bin/cli.js validate
+
+      - name: Check command adapters are up to date
+        run: |
+          node .developer/scripts/gen-commands.js
+          if [ -n "$(git status --porcelain .claude .github/prompts)" ]; then
+            echo "Command adapters are stale — run: node .developer/scripts/gen-commands.js"
+            git --no-pager diff --stat .claude .github/prompts
+            exit 1
+          fi
+          echo "Command adapters up to date."

@@ -1,0 +1,15 @@
+{
+  "name": "playwright",
+  "description": "Browser automation for interactive exploration and accessibility checks. Preferred for deterministic CI runs: the Playwright CLI (`npx playwright test`). Use this MCP server for live, interactive driving of a page (navigate, click, snapshot, a11y tree).",
+  "transport": "stdio",
+  "command": "npx",
+  "args": ["-y", "@playwright/mcp@latest"],
+  "cli": {
+    "note": "CLI-first. Deterministic test execution in CI uses the CLI, not MCP.",
+    "install": "npm i -D @playwright/test && npx playwright install --with-deps",
+    "run": "npx playwright test [file] --reporter=list",
+    "auth": "npx playwright open <login_url>  # then save storage state"
+  },
+  "capabilities": ["navigate", "click", "type", "snapshot", "accessibility_tree", "screenshot", "network"],
+  "notes": "Use the CLI for reproducible test execution and artifact collection (trace/video/screenshot/DOM/console/network). Use MCP for exploratory/interactive verification. Auth via config.test_environments (storage-state / cert / basic / oidc)."
+}

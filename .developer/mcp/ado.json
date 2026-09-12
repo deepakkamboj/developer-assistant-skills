@@ -1,0 +1,18 @@
+{
+  "name": "ado",
+  "description": "OPTIONAL, DISABLED BY DEFAULT. Azure DevOps (work items, repos, pipelines, test plans) for teams that use ADO instead of GitHub. The core plugin is open-source and GitHub-first; enable this only if your org uses ADO. Preferred CLI: `az devops` (Azure CLI DevOps extension).",
+  "transport": "stdio",
+  "command": "npx",
+  "args": ["-y", "@azure-devops/mcp", "${ADO_ORG}"],
+  "env": {
+    "ADO_PAT": "${AZURE_DEVOPS_EXT_PAT}"
+  },
+  "cli": {
+    "note": "CLI-first via the Azure CLI DevOps extension.",
+    "install": "az extension add --name azure-devops",
+    "example": "az boards work-item show --id <id> --output json"
+  },
+  "capabilities": ["work_items", "repos", "pipelines", "test_plans"],
+  "enabled": false,
+  "notes": "Optional integration. The plugin's default providers are GitHub. Provider is selected by config.toolchain.issue_provider / git_provider. Never store the PAT here; use AZURE_DEVOPS_EXT_PAT."
+}

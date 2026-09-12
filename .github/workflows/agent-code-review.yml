@@ -1,0 +1,50 @@
+name: Agent Code Review
+
+# DISABLED BY DEFAULT. Runs the specialist-agent code review (security, a11y, performance,
+# architecture, tests, ...) on a PR and posts findings. Manual dispatch always; automatic on PRs
+# only when ENABLE_AUTONOMOUS or ENABLE_AGENT_REVIEW is 'true'. Read-only + comments; never merges.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number to review"
+        required: true
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+concurrency:
+  group: agent-review-${{ github.event.pull_request.number || github.event.inputs.pr }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (vars.ENABLE_AUTONOMOUS == 'true' || vars.ENABLE_AGENT_REVIEW == 'true')
+    env:
+      PR: ${{ github.event.inputs.pr || github.event.pull_request.number }}
+      AGENT_RUN_CMD: ${{ vars.AGENT_RUN_CMD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Guard — agent runner configured
+        run: |
+          if [ -z "$AGENT_RUN_CMD" ]; then
+            echo "::error::AGENT_RUN_CMD is not set (see .github/workflows/README.md)."; exit 1
+          fi
+
+      - name: Run roster-driven code review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # The code-review skill dispatches specialist agents and deliberates on findings,
+          # then posts a single review comment. No merge is performed.
+          eval "$AGENT_RUN_CMD \"/dev:code-review ${PR} --post-comment\""
