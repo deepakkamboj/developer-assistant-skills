@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture · developer-assistant-skills</title>
+  <meta name="description" content="Architecture of developer-assistant-skills: canonical library, closed-loop lifecycle, traceability graph, and the code-review critic pipeline." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand always" href="index.html">developer-<span>assistant</span>-skills</a>
+      <span class="spacer"></span>
+      <a class="link" href="getting-started.html">Getting started</a>
+      <a class="link" href="architecture.html">Architecture</a>
+      <a class="link" href="skills.html">Skills</a>
+      <a class="link" href="agents.html">Agents</a>
+      <a class="link always" href="https://github.com/deepakkamboj/developer-assistant-skills">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1 style="color:var(--heading)">Architecture</h1>
+    <p class="tagline" style="color:var(--muted)">The <code>.developer/</code> tree is the single source of truth. Everything else — runtime adapters, CI, and docs — points back to it.</p>
+
+    <h2 class="section">Layered overview</h2>
+    <p>Each runtime invokes skills through a thin, generated adapter. Adapters carry no logic; they resolve to a canonical <code>SKILL.md</code>. Skills then drive external systems through a CLI-first, MCP-fallback tooling layer.</p>
+    <figure>
+      <img src="assets/architecture.svg" alt="Layered architecture diagram." />
+      <figcaption>Runtimes → adapters → canonical library → tooling.</figcaption>
+    </figure>
+
+    <h2 class="section">Closed-loop lifecycle (EASE-MAS)</h2>
+    <p>A <code>supervisor</code> plans the work as a DAG and delegates each stage to the owning skill or lead. Failures feed root-cause analysis and a <em>bounded</em> repair loop; every repair is re-validated against a regression gate before a human merges.</p>
+    <figure>
+      <img src="assets/closed-loop.svg" alt="Closed-loop lifecycle from requirements through repair back to re-validation." />
+      <figcaption>Forward flow (orange) builds; the return flow (green) diagnoses, repairs, and re-validates. Merge is human-only.</figcaption>
+    </figure>
+
+    <h2 class="section">Traceability graph</h2>
+    <p>The <code>traceability-keeper</code> maintains a graph so every artifact links back to a requirement and forward to its tests and status. It is written by <code>.developer/scripts/traceability.js</code> and is queryable for coverage and change-impact.</p>
+    <figure>
+      <img src="assets/traceability.svg" alt="Traceability graph nodes and edges." />
+      <figcaption>Nodes: Requirement, PRDItem, ArchDecision, CodeSymbol, TestCase, Execution, Failure, Bug, Hypothesis, Repair, Validation.</figcaption>
+    </figure>
+
+    <h2 class="section">Code-review critic pipeline</h2>
+    <p>The <code>code-review</code> skill dispatches a diff to the relevant specialist critics by file type and risk. Critics are independent and read-only; their findings are weighed by <code>deliberate</code> into a single verdict.</p>
+    <figure>
+      <img src="assets/review-pipeline.svg" alt="Code review pipeline dispatching to specialist critics and a deliberate step." />
+      <figcaption>Dispatch → independent critics → <code>deliberate</code> → human-owned merge.</figcaption>
+    </figure>
+
+    <h2 class="section">Design principles</h2>
+    <div class="grid">
+      <div class="card"><h3>Ask, don't hallucinate</h3><p>Skills load config/profile first and ask when intent is unclear rather than inventing requirements or values.</p></div>
+      <div class="card"><h3>Human-owned merge</h3><p>Autonomy ladder L0–L4; autonomous CI workflows are disabled by default and open draft PRs only.</p></div>
+      <div class="card"><h3>Open-source only</h3><p>No vendor-internal content — generic equivalents (GitHub Issues/PRs, WCAG, standard CI) throughout.</p></div>
+      <div class="card"><h3>Minimal by default</h3><p>Skills favor the smallest correct change; no gold-plating, no scope creep.</p></div>
+    </div>
+  </main>
+
+  <footer class="site">
+    Open-source · MIT · <a href="https://github.com/deepakkamboj/developer-assistant-skills">github.com/deepakkamboj/developer-assistant-skills</a>
+  </footer>
+</body>
+</html>

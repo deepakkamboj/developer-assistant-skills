@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" font-family="Segoe UI, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Code review critic pipeline</title>
+  <desc id="d">A diff is dispatched by file type to independent specialist critics, whose findings are weighed by the deliberate skill into an action verdict, with human-owned merge.</desc>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#8b949e"/>
+    </marker>
+  </defs>
+  <rect width="960" height="520" fill="#0d1117"/>
+  <text x="480" y="40" fill="#f0f6fc" font-size="22" font-weight="700" text-anchor="middle">Code review — independent critics</text>
+
+  <!-- diff -->
+  <rect x="60" y="220" width="140" height="70" rx="10" fill="#161b22" stroke="#d97757"/>
+  <text x="130" y="250" fill="#f0f6fc" font-size="14" text-anchor="middle">Diff / PR</text>
+  <text x="130" y="270" fill="#8b949e" font-size="11" text-anchor="middle">code-review</text>
+
+  <!-- dispatcher -->
+  <rect x="250" y="210" width="150" height="90" rx="10" fill="#10161f" stroke="#388bfd"/>
+  <text x="325" y="248" fill="#388bfd" font-size="14" font-weight="700" text-anchor="middle">Dispatch</text>
+  <text x="325" y="268" fill="#8b949e" font-size="11" text-anchor="middle">by file type</text>
+  <text x="325" y="284" fill="#8b949e" font-size="11" text-anchor="middle">&amp; risk</text>
+
+  <!-- critics grid -->
+  <g font-size="11.5" text-anchor="middle" fill="#c9d1d9">
+    <rect x="450" y="60" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="82">security-advocate</text>
+    <rect x="450" y="100" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="122">architecture-advocate</text>
+    <rect x="450" y="140" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="162">performance-advocate</text>
+    <rect x="450" y="180" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="202">accessibility-advocate</text>
+    <rect x="450" y="220" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="242">unit-testing-advocate</text>
+    <rect x="450" y="260" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="282">dependency-manager</text>
+    <rect x="450" y="300" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="322">style-guardian</text>
+    <rect x="450" y="340" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="362">i18n-expert</text>
+    <rect x="450" y="380" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="402">documentation-steward</text>
+    <rect x="450" y="420" width="180" height="34" rx="7" fill="#161b22" stroke="#8957e5"/><text x="540" y="442">observability · +5 more</text>
+  </g>
+
+  <!-- deliberate -->
+  <rect x="680" y="200" width="160" height="110" rx="10" fill="#10161f" stroke="#2ead33"/>
+  <text x="760" y="238" fill="#2ead33" font-size="14" font-weight="700" text-anchor="middle">deliberate</text>
+  <text x="760" y="260" fill="#8b949e" font-size="11" text-anchor="middle">Take Action</text>
+  <text x="760" y="276" fill="#8b949e" font-size="11" text-anchor="middle">Stand Down</text>
+  <text x="760" y="292" fill="#8b949e" font-size="11" text-anchor="middle">Defer · Escalate</text>
+
+  <!-- human merge -->
+  <rect x="700" y="360" width="180" height="50" rx="10" fill="#161b22" stroke="#f0f6fc"/>
+  <text x="790" y="390" fill="#f0f6fc" font-size="13" text-anchor="middle">Human-owned merge</text>
+
+  <!-- arrows -->
+  <g stroke="#8b949e" stroke-width="1.6" fill="none" marker-end="url(#a)">
+    <path d="M200,255 L248,255"/>
+    <path d="M400,250 L448,110"/>
+    <path d="M400,252 L448,190"/>
+    <path d="M400,255 L448,277"/>
+    <path d="M400,258 L448,357"/>
+    <path d="M400,262 L448,437"/>
+    <path d="M630,120 L678,225"/>
+    <path d="M630,240 L678,250"/>
+    <path d="M630,400 L678,285"/>
+    <path d="M760,310 L790,358"/>
+  </g>
+  <text x="480" y="486" fill="#8b949e" font-size="12" text-anchor="middle">Critics are read-only and independent; they never edit code or approve their own findings.</text>
+</svg>

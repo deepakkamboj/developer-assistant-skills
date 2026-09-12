@@ -33,6 +33,8 @@ autonomous repair** — usable from Claude Code, GitHub Copilot, or Codex.
 
 The canonical source of truth is [`.developer/`](.developer/); thin runtime adapters point back to it.
 
+📖 **Documentation site:** https://deepakkamboj.github.io/developer-assistant-skills/ (deployed from [`docs/`](docs/)).
+
 - **34 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
 - **Closed-loop (EASE-MAS):** orchestrator + traceability graph + independent critics; repair is
   bounded with a regression gate and **human-only merge**

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="Segoe UI, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">EASE-MAS closed loop</title>
+  <desc id="d">A closed loop from requirements through PRD, architecture, code, test, execution, failure, root-cause, and bounded repair back to re-validation, with human-only merge.</desc>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#d97757"/>
+    </marker>
+    <marker id="ag" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2ead33"/>
+    </marker>
+  </defs>
+  <rect width="960" height="560" fill="#0d1117"/>
+  <text x="480" y="40" fill="#f0f6fc" font-size="22" font-weight="700" text-anchor="middle">Closed-loop lifecycle (EASE-MAS)</text>
+
+  <!-- nodes around an ellipse -->
+  <g font-size="13" text-anchor="middle">
+    <!-- top row -->
+    <g>
+      <rect x="60" y="90" width="150" height="52" rx="9" fill="#161b22" stroke="#388bfd"/>
+      <text x="135" y="112" fill="#f0f6fc">Requirements</text>
+      <text x="135" y="130" fill="#8b949e" font-size="10.5">from-requirements</text>
+    </g>
+    <g>
+      <rect x="245" y="90" width="150" height="52" rx="9" fill="#161b22" stroke="#388bfd"/>
+      <text x="320" y="112" fill="#f0f6fc">PRD + grade</text>
+      <text x="320" y="130" fill="#8b949e" font-size="10.5">grade-spec</text>
+    </g>
+    <g>
+      <rect x="430" y="90" width="150" height="52" rx="9" fill="#161b22" stroke="#8957e5"/>
+      <text x="505" y="112" fill="#f0f6fc">Architecture</text>
+      <text x="505" y="130" fill="#8b949e" font-size="10.5">architecture-doc</text>
+    </g>
+    <g>
+      <rect x="615" y="90" width="150" height="52" rx="9" fill="#161b22" stroke="#8957e5"/>
+      <text x="690" y="112" fill="#f0f6fc">Design</text>
+      <text x="690" y="130" fill="#8b949e" font-size="10.5">design-spec</text>
+    </g>
+    <!-- right -->
+    <g>
+      <rect x="770" y="230" width="150" height="52" rx="9" fill="#161b22" stroke="#d97757"/>
+      <text x="845" y="252" fill="#f0f6fc">Code</text>
+      <text x="845" y="270" fill="#8b949e" font-size="10.5">implement-change</text>
+    </g>
+    <!-- bottom row (reverse) -->
+    <g>
+      <rect x="615" y="370" width="150" height="52" rx="9" fill="#161b22" stroke="#2ead33"/>
+      <text x="690" y="392" fill="#f0f6fc">Test</text>
+      <text x="690" y="410" fill="#8b949e" font-size="10.5">test-plan · playwright</text>
+    </g>
+    <g>
+      <rect x="430" y="370" width="150" height="52" rx="9" fill="#161b22" stroke="#2ead33"/>
+      <text x="505" y="392" fill="#f0f6fc">Execute</text>
+      <text x="505" y="410" fill="#8b949e" font-size="10.5">validate-scenario</text>
+    </g>
+    <g>
+      <rect x="245" y="370" width="150" height="52" rx="9" fill="#161b22" stroke="#e5534b"/>
+      <text x="320" y="392" fill="#f0f6fc">Failure → RCA</text>
+      <text x="320" y="410" fill="#8b949e" font-size="10.5">analyze-bug · root-cause</text>
+    </g>
+    <g>
+      <rect x="60" y="370" width="150" height="52" rx="9" fill="#161b22" stroke="#e5534b"/>
+      <text x="135" y="392" fill="#f0f6fc">Bounded repair</text>
+      <text x="135" y="410" fill="#8b949e" font-size="10.5">fix-bug (max attempts)</text>
+    </g>
+  </g>
+
+  <!-- center: supervisor + gate -->
+  <ellipse cx="480" cy="256" rx="120" ry="60" fill="#10161f" stroke="#d97757" stroke-width="1.5"/>
+  <text x="480" y="248" fill="#d97757" font-size="15" font-weight="700" text-anchor="middle">supervisor</text>
+  <text x="480" y="268" fill="#8b949e" font-size="11" text-anchor="middle">DAG · traceability · gates</text>
+
+  <!-- forward arrows (orange) -->
+  <g stroke="#d97757" stroke-width="1.8" fill="none" marker-end="url(#a)">
+    <path d="M210,116 L243,116"/>
+    <path d="M395,116 L428,116"/>
+    <path d="M580,116 L613,116"/>
+    <path d="M712,142 Q820,175 845,228"/>
+    <path d="M845,282 Q820,345 767,384"/>
+  </g>
+  <!-- return arrows (green) -->
+  <g stroke="#2ead33" stroke-width="1.8" fill="none" marker-end="url(#ag)">
+    <path d="M613,396 L582,396"/>
+    <path d="M428,396 L397,396"/>
+    <path d="M245,396 L213,396"/>
+    <path d="M135,368 Q100,255 120,180" stroke-dasharray="5 4"/>
+  </g>
+
+  <text x="150" y="472" fill="#8b949e" font-size="12">re-validate after repair · regression gate</text>
+
+  <!-- human merge -->
+  <rect x="700" y="470" width="200" height="46" rx="9" fill="#161b22" stroke="#f0f6fc"/>
+  <text x="800" y="498" fill="#f0f6fc" font-size="13" text-anchor="middle">Human-only merge ✓</text>
+  <path d="M180,396 Q460,540 698,494" stroke="#8b949e" stroke-width="1.4" fill="none" stroke-dasharray="4 4" marker-end="url(#a)"/>
+</svg>
