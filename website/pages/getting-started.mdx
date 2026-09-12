@@ -2,17 +2,45 @@
 title: Getting started
 ---
 
+import { PackageInstall } from "../components/PackageInstall";
+import { EnvTable } from "../components/EnvTable";
+import { FileStructure } from "../components/FileStructure";
+
 # Getting started
 
 Requirements: Node.js ≥ 18. Optional CLIs used on demand by skills: `gh`, `az`, `npx playwright`, `npx axe`.
 
 ## 1. Install
 
+<PackageInstall packages={["developer-assistant-skills"]} />
+
+Or clone the repo to work with the canonical library directly:
+
 ```bash
 git clone https://github.com/deepakkamboj/developer-assistant-skills.git
 cd developer-assistant-skills
 node bin/cli.js validate      # sanity-check the skill/agent library
 ```
+
+The canonical library lives under `.developer/`:
+
+<FileStructure
+  items={[
+    {
+      name: ".developer/",
+      type: "folder",
+      description: "canonical source of truth",
+      children: [
+        { name: "skills/", type: "folder", description: "34 skills in 10 lifecycle groups" },
+        { name: "agents/", type: "folder", description: "20 critics & leads" },
+        { name: "config/", type: "folder", description: "config.example.json + companions" },
+        { name: "mcp/", type: "folder", description: "github · playwright · ado" },
+        { name: "scripts/", type: "folder", description: "cli · traceability · gen-commands" },
+        { name: "docs/", type: "folder", description: "design · skill-sources" },
+      ],
+    },
+  ]}
+/>
 
 ## 2. Configure
 
@@ -31,7 +59,31 @@ export DEVELOPER_CONFIG=~/.developer/config.json
 ```
 
 Set your `profile`, `repos[]` (provider `github` or `ado`), `quality_gates`, `autonomy`,
-`toolchain`, and `test_environments`.
+`toolchain`, and `test_environments`. The plugin resolves configuration from these environment
+variables:
+
+<EnvTable
+  vars={[
+    {
+      name: "DEVELOPER_CONFIG",
+      required: false,
+      description: "Path to config.json. Falls back to ~/.developer/config.json when unset.",
+      example: "~/.developer/config.json",
+    },
+    {
+      name: "NEXT_PUBLIC_BASE_PATH",
+      required: false,
+      description: "Base path for building this docs site for GitHub Pages.",
+      example: "/developer-assistant-skills",
+    },
+    {
+      name: "NPM_AUTH_TOKEN",
+      required: false,
+      description: "CI-only secret used by the publish workflow to publish to npm.",
+      example: "(repo secret)",
+    },
+  ]}
+/>
 
 ## 3. Invoke a skill
 

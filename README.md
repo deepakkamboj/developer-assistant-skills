@@ -13,6 +13,8 @@
 
 **A vendor-neutral, open-source developer plugin for Claude Code, GitHub Copilot, and Codex.**
 
+[![npm version](https://img.shields.io/npm/v/developer-assistant-skills?logo=npm&color=cb3837)](https://www.npmjs.com/package/developer-assistant-skills)
+[![CI](https://github.com/deepakkamboj/developer-assistant-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/deepakkamboj/developer-assistant-skills/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A518-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-ready-D97757?logo=anthropic&logoColor=white)](https://docs.anthropic.com/claude/docs/claude-code)

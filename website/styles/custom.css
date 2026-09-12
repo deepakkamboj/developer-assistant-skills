@@ -1,6 +1,14 @@
 /* Custom styles layered on top of nextra-theme-docs for the landing page and catalog tables. */
 
-.das-home { max-width: 1000px; margin: 0 auto; }
+/* Card component (user-provided) dark-mode variables */
+:root.dark {
+  --card-bg: #161b22;
+  --card-border: #30363d;
+  --card-desc: #9ca3af;
+}
+
+/* Center the full-width landing content */
+.das-home { max-width: 1000px; margin: 0 auto; padding: 0 8px; }
 
 .das-hero { text-align: center; padding: 40px 8px 8px; }
 .das-hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); line-height: 1.15; margin: 0 0 14px; }
