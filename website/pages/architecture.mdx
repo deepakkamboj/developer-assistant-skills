@@ -1,0 +1,49 @@
+---
+title: Architecture
+---
+
+import Diagram from "../components/Diagram";
+
+# Architecture
+
+The `.developer/` tree is the single source of truth. Everything else — runtime adapters, CI, and
+docs — points back to it.
+
+## Layered overview
+
+Each runtime invokes skills through a thin, generated adapter. Adapters carry no logic; they resolve
+to a canonical `SKILL.md`. Skills then drive external systems through a CLI-first, MCP-fallback
+tooling layer.
+
+<Diagram src="/architecture.svg" alt="Layered architecture diagram." caption="Runtimes → adapters → canonical library → tooling." />
+
+## Closed-loop lifecycle (EASE-MAS)
+
+A `supervisor` plans the work as a DAG and delegates each stage to the owning skill or lead. Failures
+feed root-cause analysis and a _bounded_ repair loop; every repair is re-validated against a
+regression gate before a human merges.
+
+<Diagram src="/closed-loop.svg" alt="Closed-loop lifecycle from requirements through repair back to re-validation." caption="Forward flow (orange) builds; the return flow (green) diagnoses, repairs, and re-validates. Merge is human-only." />
+
+## Traceability graph
+
+The `traceability-keeper` maintains a graph so every artifact links back to a requirement and forward
+to its tests and status. It is written by `.developer/scripts/traceability.js` and is queryable for
+coverage and change-impact.
+
+<Diagram src="/traceability.svg" alt="Traceability graph nodes and edges." caption="Nodes: Requirement, PRDItem, ArchDecision, CodeSymbol, TestCase, Execution, Failure, Bug, Hypothesis, Repair, Validation." />
+
+## Code-review critic pipeline
+
+The `code-review` skill dispatches a diff to the relevant specialist critics by file type and risk.
+Critics are independent and read-only; their findings are weighed by `deliberate` into a single
+verdict.
+
+<Diagram src="/review-pipeline.svg" alt="Code review pipeline dispatching to specialist critics and a deliberate step." caption="Dispatch → independent critics → deliberate → human-owned merge." />
+
+## Design principles
+
+- **Ask, don't hallucinate** — skills load config/profile first and ask when intent is unclear.
+- **Human-owned merge** — autonomy ladder L0–L4; autonomous CI is disabled by default, draft PRs only.
+- **Open-source only** — no vendor-internal content; generic equivalents throughout.
+- **Minimal by default** — smallest correct change; no gold-plating.

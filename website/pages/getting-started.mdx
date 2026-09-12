@@ -1,0 +1,88 @@
+---
+title: Getting started
+---
+
+# Getting started
+
+Requirements: Node.js ≥ 18. Optional CLIs used on demand by skills: `gh`, `az`, `npx playwright`, `npx axe`.
+
+## 1. Install
+
+```bash
+git clone https://github.com/deepakkamboj/developer-assistant-skills.git
+cd developer-assistant-skills
+node bin/cli.js validate      # sanity-check the skill/agent library
+```
+
+## 2. Configure
+
+The plugin reads one `config.json`, resolved from the `DEVELOPER_CONFIG` environment variable
+(fallback `~/.developer/config.json`), plus prose companions `content.md`, `memory.md`, and `notes.md`.
+
+```bash
+mkdir -p ~/.developer
+cp .developer/config/config.example.json  ~/.developer/config.json
+cp .developer/config/content.example.md   ~/.developer/content.md
+cp .developer/config/memory.example.md    ~/.developer/memory.md
+cp .developer/config/notes.example.md     ~/.developer/notes.md
+
+export DEVELOPER_CONFIG=~/.developer/config.json
+# PowerShell: $env:DEVELOPER_CONFIG = "$HOME/.developer/config.json"
+```
+
+Set your `profile`, `repos[]` (provider `github` or `ado`), `quality_gates`, `autonomy`,
+`toolchain`, and `test_environments`.
+
+## 3. Invoke a skill
+
+### Claude Code
+
+Commands live under the `dev` namespace (`.claude/commands/dev/`):
+
+```
+/dev:code-review
+/dev:fix-bug            <issue or failing test>
+/dev:a11y-scan          <url or component>
+/dev:graph-repo         --query "who calls processOrder"
+/dev:release-readiness
+```
+
+### GitHub Copilot
+
+Enable the `chat.promptFiles` setting, which loads `.github/prompts/*.prompt.md`:
+
+```
+/code-review
+/fix-bug
+/a11y-scan
+```
+
+### Codex / any agent runner
+
+Point the agent at `.developer/AGENTS.md` and reference a skill by path, e.g.
+`.developer/skills/review/code-review/SKILL.md`.
+
+## 4. The CLI
+
+```bash
+node bin/cli.js list skills      # every skill (group/name)
+node bin/cli.js list agents      # every agent (name · kind)
+node bin/cli.js validate         # structural contract check
+node bin/cli.js path fix-bug     # print a skill's SKILL.md path
+node bin/cli.js doctor           # environment + config check
+```
+
+## 5. Traceability graph
+
+```bash
+node .developer/scripts/traceability.js --graph output/traceability/graph.json add-node --id REQ-1 --type Requirement
+node .developer/scripts/traceability.js --graph output/traceability/graph.json add-edge --from REQ-1 --to TEST-1 --type tests
+node .developer/scripts/traceability.js --graph output/traceability/graph.json impact  --node REQ-1
+node .developer/scripts/traceability.js --graph output/traceability/graph.json orphans
+```
+
+## 6. Safety
+
+- **Permission ladder:** L0 read-only · L1 comment · L2 branch+draft-PR · L3 open PR · L4 scheduled. Merge stays human-owned.
+- **Bounded repair:** `max_repair_attempts`, a regression gate, and the independent `repair-validator` before any human merge.
+- **Disabled by default:** autonomous CI workflows are opt-in per repo via variables and only ever open draft PRs.

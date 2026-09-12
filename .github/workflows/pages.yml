@@ -4,10 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - "docs/**"
+      - "website/**"
       - ".developer/skills/**"
       - ".developer/agents/**"
-      - ".developer/scripts/gen-docs-catalog.js"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -29,14 +28,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
 
-      - name: Regenerate catalog pages from skills/agents
-        run: node .developer/scripts/gen-docs-catalog.js
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci || npm install
+
+      - name: Build static site
+        working-directory: website
+        env:
+          NEXT_PUBLIC_BASE_PATH: /developer-assistant-skills
+        run: npm run build
 
       - name: Upload docs artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: website/out
 
   deploy:
     needs: build
