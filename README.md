@@ -1,17 +1,16 @@
 <div align="center">
 
-```
-     ____                 _                              _              _     _ _ _
-    |  _ \  _____   __   / \   ___ ___(_)___| |_ __ _ _ __ | |_    / \  ___ ___(_)__| | ___
-    | | | |/ _ \ \ / /  / _ \ / __/ __| / __| __/ _` | '_ \| __|  / _ \/ __/ __| / _` |/ _ \
-    | |_| |  __/\ V /  / ___ \\__ \__ \ \__ \ || (_| | | | | |_  / ___ \\__ \__ \ (_| |  __/
-    |____/ \___| \_/  /_/   \_\___/___/_|___/\__\__,_|_| |_|\__|/_/   \_\___/___/_\__,_|\___|
-                           S  K  I  L  L  S   ·   full software lifecycle, closed-loop
-```
+
+<p align="center">
+
+<img alt="developer-assistant-skills" src="./website/public/dev-assist.png">
+</p>
+
 
 # developer-assistant-skills
 
 **A vendor-neutral, open-source developer plugin for Claude Code, GitHub Copilot, and Codex.**
+<br>full software lifecycle, closed-loop
 
 [![npm version](https://img.shields.io/npm/v/developer-assistant-skills?logo=npm&color=cb3837)](https://www.npmjs.com/package/developer-assistant-skills)
 [![CI](https://github.com/deepakkamboj/developer-assistant-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/deepakkamboj/developer-assistant-skills/actions/workflows/ci.yml)
