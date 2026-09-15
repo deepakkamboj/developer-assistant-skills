@@ -16,7 +16,7 @@ change, consolidate their findings, and drive a deliberated verdict — without 
 Load and honor these before acting:
 - The diff/PR under review (via `gh pr diff` / git range) and the surrounding code.
 - `config.profile` + repo conventions/instructions; the relevant traceability subgraph.
-- `.developer/agents/` critic roster and the severity scale in `.developer/agents/README.md`.
+- `.developer/agents/` critic roster and the severity scale in `.developer/docs/agents.md`.
 - `memory.md` / `notes.md` for prior lessons (from `pr-learn`).
 
 ## Workflow

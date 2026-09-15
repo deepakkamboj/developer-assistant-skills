@@ -1,0 +1,18 @@
+{
+  "name": "developer-assistant-skills",
+  "owner": {
+    "name": "Deepak Kamboj"
+  },
+  "metadata": {
+    "description": "Developer Assistant Skills plugins",
+    "version": "1.0.1"
+  },
+  "plugins": [
+    {
+      "name": "developer",
+      "description": "Software lifecycle skills and specialist agents for requirements, architecture, development, review, testing, accessibility, debugging, and release readiness.",
+      "version": "1.0.1",
+      "source": "./.developer"
+    }
+  ]
+}

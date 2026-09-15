@@ -43,22 +43,75 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 ## Quick start
 
+### Install the namespaced plugin
+
+Register the marketplace and install the `developer` plugin for your user account. The plugin is
+then available in every project.
+
+**GitHub Copilot CLI:**
+
 ```bash
-# 1. Point the plugin at your config (or use ~/.developer/config.json)
+copilot plugin marketplace add deepakkamboj/developer-assistant-skills
+copilot plugin install developer@developer-assistant-skills
+```
+
+**Claude Code:**
+
+```bash
+claude plugin marketplace add deepakkamboj/developer-assistant-skills
+claude plugin install developer@developer-assistant-skills --scope user
+```
+
+Invoke any installed skill through the plugin namespace:
+
+```text
+/developer:a11y-fix
+/developer:code-review
+/developer:fix-bug
+```
+
+The marketplace catalogs live in `.github/plugin/marketplace.json` and
+`.claude-plugin/marketplace.json`. Both point to `.developer/`, the shared plugin root containing
+`plugin.json`, `skills/`, and `agents/`.
+
+### Install the catalog CLI
+
+The npm package also provides the standalone `dev-skills` command for listing, validating, and
+diagnosing the catalog. Installing this CLI does not copy skills into an assistant folder; use the
+commands above for assistant integration.
+
+```bash
+npm install --global developer-assistant-skills
+
+dev-skills list skills
+dev-skills list agents
+dev-skills validate
+dev-skills doctor
+```
+
+### Use a source checkout
+
+Contributors and users who want the full canonical tree and generated slash-command adapters can
+clone the repository:
+
+```bash
+git clone https://github.com/deepakkamboj/developer-assistant-skills.git
+cd developer-assistant-skills
+
+# Point the plugin at your config (or use ~/.developer/config.json)
 cp .developer/config/config.example.json ~/.developer/config.json
 export DEVELOPER_CONFIG=~/.developer/config.json     # PowerShell: $env:DEVELOPER_CONFIG="$HOME/.developer/config.json"
 
-# 2. Explore what's available
-node bin/cli.js list skills
-node bin/cli.js list agents
-node bin/cli.js validate            # structural check on every skill/agent
+node bin/cli.js validate
 ```
 
-Then invoke a skill from your assistant (see **[usage.md](usage.md)**):
+Then invoke a namespaced skill from your assistant (see **[usage.md](usage.md)**):
 
-- **Claude Code:** `/dev:code-review`, `/dev:fix-bug`, `/dev:a11y-scan`, …
-- **GitHub Copilot:** enable prompt files, then `/code-review`, `/fix-bug`, …
+- **Claude Code / GitHub Copilot CLI:** `/developer:code-review`, `/developer:fix-bug`, `/developer:a11y-scan`, …
 - **Codex / any agent:** read `.developer/AGENTS.md` and reference the skill by path.
+
+For scheduled and event-driven recipes, see the **[automation prompt library](automations/README.md)**
+for Microsoft 365 Copilot, GitHub Copilot, and Microsoft Scout.
 
 ## What's inside
 

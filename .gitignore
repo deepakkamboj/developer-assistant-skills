@@ -19,6 +19,9 @@ output/
 .developer/**/output/
 evals/results/
 
+# Local automation experiments
+automations/
+
 # Python
 __pycache__/
 *.pyc

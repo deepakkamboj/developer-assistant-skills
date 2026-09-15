@@ -1,0 +1,34 @@
+{
+  "name": "developer",
+  "displayName": "Developer Assistant Skills",
+  "description": "Software lifecycle skills and specialist agents for requirements, architecture, development, review, testing, accessibility, debugging, and release readiness.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Deepak Kamboj",
+    "url": "https://github.com/deepakkamboj"
+  },
+  "homepage": "https://github.com/deepakkamboj/developer-assistant-skills",
+  "repository": "https://github.com/deepakkamboj/developer-assistant-skills",
+  "license": "MIT",
+  "keywords": [
+    "software-lifecycle",
+    "code-review",
+    "testing",
+    "accessibility",
+    "debugging"
+  ],
+  "skills": [
+    "./skills/accessibility",
+    "./skills/architecture",
+    "./skills/debugging",
+    "./skills/design",
+    "./skills/development",
+    "./skills/devops",
+    "./skills/repo",
+    "./skills/requirements",
+    "./skills/review",
+    "./skills/testing",
+    "./skills/testing/playwright"
+  ],
+  "agents": "./agents"
+}

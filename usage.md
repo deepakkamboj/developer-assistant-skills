@@ -5,6 +5,47 @@ Copilot, and Codex. The canonical source of truth is [`.developer/`](.developer/
 
 ## 1. Install
 
+### Namespaced plugin (recommended)
+
+Register this repository as a marketplace, then install the `developer` plugin globally for the
+current user.
+
+**GitHub Copilot CLI:**
+
+```bash
+copilot plugin marketplace add deepakkamboj/developer-assistant-skills
+copilot plugin install developer@developer-assistant-skills
+```
+
+**Claude Code:**
+
+```bash
+claude plugin marketplace add deepakkamboj/developer-assistant-skills
+claude plugin install developer@developer-assistant-skills --scope user
+```
+
+Both clients load the shared plugin root from `.developer/`. Skills are invoked through the plugin
+namespace, for example `/developer:a11y-fix` or `/developer:code-review`.
+
+### Catalog CLI
+
+Install the standalone catalog and validation command globally:
+
+```bash
+npm install --global developer-assistant-skills
+dev-skills list skills
+dev-skills validate
+dev-skills doctor
+```
+
+The `dev-skills` CLI manages and validates the catalog; it does not install skills into an
+assistant folder. Use `npx skills add` above for that.
+
+### Source checkout
+
+Clone the repository when contributing or when you need the full canonical tree, agents, scripts,
+and generated slash-command adapters:
+
 ```bash
 git clone https://github.com/deepakkamboj/developer-assistant-skills.git
 cd developer-assistant-skills
@@ -37,26 +78,29 @@ shape.
 
 ## 3. Invoke skills
 
+Marketplace-installed skills use the `developer` plugin namespace. A source checkout also includes
+the generated compatibility adapters described below.
+
 ### Claude Code
 
-Commands are exposed under the `dev` namespace via `.claude/commands/dev/`:
+Plugin skills are exposed under the `developer` namespace:
 
 ```
-/dev:code-review
-/dev:fix-bug        <issue or failing test>
-/dev:a11y-scan      <url or component>
-/dev:graph-repo     --query "who calls processOrder"
-/dev:release-readiness
+/developer:code-review
+/developer:fix-bug        <issue or failing test>
+/developer:a11y-scan      <url or component>
+/developer:graph-repo     --query "who calls processOrder"
+/developer:release-readiness
 ```
 
 ### GitHub Copilot
 
-Enable prompt files (`chat.promptFiles` setting), which loads `.github/prompts/*.prompt.md`:
+After installing the plugin in Copilot CLI, use the same namespace:
 
 ```
-/code-review
-/fix-bug
-/a11y-scan
+/developer:code-review
+/developer:fix-bug
+/developer:a11y-scan
 ```
 
 ### Codex / any agent runner

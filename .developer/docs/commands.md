@@ -20,5 +20,5 @@ files — change the `SKILL.md` (name/description/argument-hint) and regenerate.
 
 ## Codex / other runners
 
-Point the agent at [`../AGENTS.md`](../AGENTS.md) and reference the skill by path, e.g.
+Point the agent at [`../AGENTS.md`](../AGENTS.md) and reference a skill by path, e.g.
 `.developer/skills/review/code-review/SKILL.md`.
