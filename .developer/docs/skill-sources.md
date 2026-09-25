@@ -40,7 +40,7 @@ architecture and the consolidated (de-duplicated) agent/skill catalog** live in
 | `review/` | `code-review`, `deliberate`, `pr-learn` |
 | `testing/` | `author-test`, `update-test`, `verify-test`, `e2e-test`, `unit-test`, `test-plan`, `coverage-gap` |
 | `debugging/` | `analyze-bug`, `fix-bug`, `fix-test`, `root-cause` (RCA) |
-| `accessibility/` | `a11y-scan`, `a11y-fix`, `a11y-test-gen`, `a11y-verify`, `a11y-review-interactive` |
+| `accessibility/` | `a11y-scan`, `a11y-review`, `a11y-fix`, `a11y-verify`, `a11y-test-gen`, `a11y-dev`, `a11y-report` |
 | `quality/` | `security-review`, `performance-review`, `observability-review`, `dependency-review` |
 | `repo/` | `sweep-codebase`, `graph-repo`, `docs-update` |
 | `devops/` | `fix-ci` |
@@ -72,14 +72,13 @@ Renamed for **goal/usage clarity** and to drop the plugin-name prefix.
 |--------------|-----------------|-----|
 | `a11y-scan-repo` | `a11y-scan` (static) | Merge repo+url scan under one skill w/ mode |
 | `a11y-scan-url` | `a11y-scan` (runtime) | Same skill, `--url` mode |
-| `a11y-fix` | `a11y-fix` | Keep; **drop MAS**, WCAG-only |
-| `a11y-verify-fix` | `a11y-verify` | Shorter |
+| `a11y-fix` | `a11y-fix` | Keep; **drop MAS/PLUGIN_ROOT/Narrator**, WCAG-only; enriched with the fix-pattern catalog, confidence levels, and framework notes from the source `a11y-fix` |
+| `a11y-verify-fix` | `a11y-verify` | Shorter; **drop ADO bug-comment posting**, keep the before/after re-scan + regression check |
 | `a11y-test-gen` | `a11y-test-gen` | Keep (Playwright + axe-core) |
-| `a11y-review-interactive` | `a11y-review-interactive` | Keep |
-| `a11y-review-contrast/color/links/modes/viewports` | `a11y-review` (sub-modes) | Consolidate 5 review skills into one with modes |
-| `a11y-report-gen` | `a11y-report` | Shorter; drop ADO bug templates |
-| `a11y-dev` | folded into `development/implement-change` | Redundant with generic dev skill |
-| agents: `a11y-reviewer`, `a11y-tester` | same | Keep; **remove MAS/Narrator internal refs** |
+| `a11y-review-interactive/contrast/color/links/modes/viewports` | `a11y-review` (sub-modes) | Consolidate all 6 review skills into one skill with `--mode`; **modes' MAS numbering (e.g. "MAS 4.3.1") replaced with the equivalent WCAG SC** (1.4.11, 2.3.3, 1.4.4/1.4.10, 1.4.12) |
+| `a11y-report-gen` | `a11y-report` | Shorter; **drop ADO bug templates + MAS mode table**, keep the self-contained filterable HTML/Markdown report with WCAG severities |
+| `a11y-dev` | `a11y-dev` | Kept as its own accessibility skill (proactive, accessibility-first generation) rather than folded into `implement-change`, so the capability stays discoverable under `accessibility/`; **drop MAS/ACCESSIBILITY_STANDARDS.md refs**, WCAG-only |
+| agents: `a11y-reviewer`, `a11y-tester` | same | Keep; **remove MAS/Narrator internal refs**; `a11y-tester` now also drives `a11y-dev`/`a11y-report` |
 
 ### engsys plugin → **mostly dropped**
 

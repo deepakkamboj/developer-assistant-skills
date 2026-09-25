@@ -140,6 +140,8 @@ e.g. `.developer/skills/review/code-review/SKILL.md`.
 | accessibility | `a11y-test-gen` | Generate Playwright + axe regression tests |
 | accessibility | `a11y-fix` | Minimal WCAG-only remediation (native-first) |
 | accessibility | `a11y-verify` | Re-scan + behavior re-check → pass/fail |
+| accessibility | `a11y-dev` | Accessibility-first code generation (proactive, not remediation) |
+| accessibility | `a11y-report` | Consolidate scan/review/fix findings into one shareable report |
 | debugging | `analyze-bug` | Reproduce, isolate, classify (product/test/flake) |
 | debugging | `root-cause` | ≥k competing hypotheses → evidenced cause |
 | debugging | `fix-bug` | Bounded, root-cause fix behind the repair gate |
