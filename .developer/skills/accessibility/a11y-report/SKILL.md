@@ -1,7 +1,7 @@
 ---
 name: a11y-report
-description: Consolidate findings from a11y-scan, a11y-review, a11y-fix, and a11y-verify into a single shareable accessibility report — Markdown by default, or a self-contained filterable HTML file — with a WCAG severity/criterion summary.
-argument-hint: "[--out <folder>] [--format md|html]"
+description: Consolidate findings from a11y-scan, a11y-review, a11y-fix, and a11y-verify into a single shareable accessibility report — Markdown by default, or a self-contained filterable HTML file — with a WCAG severity/criterion summary. Can optionally file GitHub issues for open findings, gated on explicit approval.
+argument-hint: "[--out <folder>] [--format md|html] [--file-issues]"
 ---
 
 # A11y Report
@@ -10,7 +10,7 @@ argument-hint: "[--out <folder>] [--format md|html]"
 
 You are an accessibility reporting assistant. You turn ephemeral scan/review/fix output from this
 session into one persistent, shareable report — no re-scanning, just structuring what was already
-found.
+found — and can optionally file GitHub issues for the open findings, only with explicit approval.
 
 ## Context to load
 
@@ -21,6 +21,8 @@ Load and honor these before acting:
   rather than fabricating results.
 - If `config.quality_gates.accessibility_standard_file` is configured, label findings sourced from it
   distinctly from WCAG findings (e.g. an "Org standard" column) rather than merging them silently.
+- `config.toolchain.issue_provider` (GitHub Issues is the default and the only provider this skill
+  files to; see the **Filing GitHub issues** section).
 
 ## Workflow
 
@@ -31,7 +33,8 @@ TodoWrite([
   { content: "Collect findings from prior skill runs in context", status: "in_progress" },
   { content: "Structure + dedupe violations; compute summary counts", status: "pending" },
   { content: "Resolve output folder + format", status: "pending" },
-  { content: "Write the report file; output its path + summary", status: "pending" }
+  { content: "Write the report file; output its path + summary", status: "pending" },
+  { content: "Offer to file GitHub issues (only if the user approves)", status: "pending" }
 ])
 ```
 
@@ -51,6 +54,10 @@ TodoWrite([
    template with the collected data substituted in).
 5. **Summarize.** Report the file path, total findings, severity breakdown, and how many are already
    fixed/verified vs. still open.
+6. **Offer to file GitHub issues.** If there are open (not-yet-fixed) findings and
+   `config.toolchain.issue_provider` is `github` (the default), offer to file GitHub issues per the
+   **Filing GitHub issues** section below. Never file automatically — always wait for explicit
+   approval, and skip this step entirely if the provider isn't GitHub or `gh` isn't available.
 
 ## Markdown report format (default)
 
@@ -156,6 +163,78 @@ Render one `<tr>` per finding with `data-severity`/`data-status` attributes and 
 badge class matching the CSS above. The 8 themes (default, high-contrast black/white, aquatic,
 forest, sunset, midnight, corporate) are generic color palettes, not tied to any vendor.
 
+## Filing GitHub issues (optional, approval-gated)
+
+After writing the report, if open findings remain, offer to turn them into tracked GitHub issues.
+This is the only accessibility skill that writes to the issue tracker — always behind an explicit
+approval gate, never automatic.
+
+### Prerequisites
+
+```bash
+gh --version && gh auth status
+```
+
+If `gh` isn't installed/authenticated, say so, give the install/`gh auth login` hint, and continue
+with just the report — filing issues is optional, not a blocker.
+
+```bash
+gh repo view --json nameWithOwner,defaultBranchRef --jq '{owner: .nameWithOwner, branch: .defaultBranchRef.name}'
+```
+
+Use this to build file-line hyperlinks: `https://github.com/{owner}/{repo}/blob/{branch}/{path}#L{line}`
+(or `#L{start}-L{end}` for a range).
+
+### Permission flow
+
+1. Summarize what would be filed: N individual issues (Critical/High) + M grouped checklist issues
+   (Medium/Low), with example titles.
+2. **Ask for explicit approval before creating anything.** If declined, stop here — the report file
+   already stands on its own.
+3. On approval, file the issues below, then report back the created issue numbers/links.
+
+### Individual issues (Critical/Serious — one per finding)
+
+```bash
+gh issue create \
+  --title "[A11y] <Component/Feature> — <brief description>" \
+  --body "## WCAG Guideline
+<SC number and name> — Level <A/AA>
+
+## Location
+[\`path/to/file.tsx:123\`](<file-line link>)
+
+## Issue
+<description>
+
+## Recommendation
+<fix, with a short code example if useful>
+
+## Priority
+<Critical|Serious>" \
+  --label "accessibility" --label "wcag-aa"
+```
+
+### Grouped issues (Moderate/Minor — one per violation category)
+
+```bash
+gh issue create \
+  --title "[A11y] <category> issues in <area>" \
+  --body "## WCAG Guideline
+<SC number and name>
+
+## Violations
+- [ ] [\`path/to/file1.tsx:45\`](<link>) — <short description>
+- [ ] [\`path/to/file2.tsx:78\`](<link>) — <short description>
+
+## Common fix approach
+<shared guidance for this category>" \
+  --label "accessibility" --label "wcag-aa"
+```
+
+If `config.toolchain.issue_provider` is `ado` instead of the default `github`, skip this section
+entirely and just note in the report that issue filing isn't wired up for that provider yet.
+
 ## Rules
 
 - Report only findings that actually appeared in this conversation — never invent violations to fill
@@ -163,5 +242,8 @@ forest, sunset, midnight, corporate) are generic color palettes, not tied to any
 - WCAG 2.1/2.2 AA severities (Critical/Serious/Moderate/Minor) are the default and always shown; no
   vendor-specific standard ships in this repo. If `config.quality_gates.accessibility_standard_file`
   is configured, include its findings in a clearly labeled extra column/section — don't blend them
-  into the WCAG counts. No ticketing-system integration.
+  into the WCAG counts.
 - Keep the report factual and reproducible: every row must cite a WCAG SC and a location.
+- **Never file a GitHub issue without explicit user approval.** Filing issues is optional and
+  additive to the report file, not a replacement for it — it never blocks the report if declined,
+  unavailable, or the provider isn't GitHub.

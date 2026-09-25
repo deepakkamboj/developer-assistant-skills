@@ -28,7 +28,8 @@ off findings with a clear plan — you coordinate skills, you don't duplicate th
 4. **Remediate (on approval).** Route fixes to `a11y-fix`; then `a11y-verify` each.
 5. **Regression.** Use `a11y-test-gen` to add Playwright + axe tests so fixes stay fixed.
 6. **Report.** Use `a11y-report` to produce a consolidated report: violations by SC/impact, fixes
-   applied/verified, and tests added.
+   applied/verified, and tests added. `a11y-report` can also offer to file GitHub issues for any
+   remaining open findings — that offer is gated on the user's explicit approval, same as remediation.
 
 ## Related skill
 
