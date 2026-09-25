@@ -63,8 +63,10 @@ flowchart LR
 | Test authoring: EASE-MAS A13/A14 · ppengsys `author/update/verify-test` · a11y `a11y-test-gen` | Keep `author-test`/`update-test`/`verify-test`; `a11y-test-gen` stays distinct (axe-core focus). |
 | Test planning: EASE-MAS A10–A12 · power-pages agent4 · ppengsys `validate-scenario` | `test-plan` (strategy+plan+cases) + `validate-scenario` (test↔spec drift, incl. **semantic-drift** metric from power-pages). |
 | Requirements/PRD: EASE-MAS A1–A5 · sunshine `start-feature`/`grade-spec` · power-pages PRD extractor | `from-requirements` (ingest→normalize→PRD) + `grade-spec` (critic); `start-feature` orchestrates them. |
-| a11y reviews: 5 ppengsys `a11y-review-*` | **One `a11y-review`** with modes (contrast/color/links/modes/viewports). |
+| a11y reviews: 6 ppengsys `a11y-review-*` | **One `a11y-review`** with modes (interactive/contrast/color/links/modes/viewports). |
 | a11y scan: `a11y-scan-repo`+`a11y-scan-url` | **One `a11y-scan`** with static/runtime modes. |
+| a11y reporting: ppengsys `a11y-report-gen` | **`a11y-report`** — same consolidated-report capability, ADO bug templates and MAS mode table dropped. |
+| a11y proactive generation: ppengsys `a11y-dev` | **`a11y-dev`** — kept as its own accessibility skill (WCAG-only) rather than folded into `implement-change`, so the capability stays discoverable. |
 | Flaky tests: engsys `flaky-detect/fix` (internal) | **New generic `flaky-test`** (detect+quarantine+fix). |
 
 ## 4. Final agent roster (`.developer/agents/`)
@@ -156,6 +158,8 @@ Each ships as `SKILL.md` (Role → Context → Step 0 TodoWrite → Steps) + a `
 - **a11y-test-gen** — Playwright + axe-core a11y tests — ppengsys.
 - **a11y-fix** — fix WCAG violations (WCAG-only, no MAS) — ppengsys.
 - **a11y-verify** — verify a fix resolves the violation — ppengsys.
+- **a11y-dev** — accessibility-first code generation, proactive not remedial — ppengsys.
+- **a11y-report** — consolidate scan/review/fix findings into one shareable report — ppengsys.
 
 ### quality/ (critic-backed skills, optional standalone)
 - **security-review** [A9] · **performance-review** · **observability-review** · **dependency-review** — thin skills that invoke the matching advocate agent for a focused pass — sunshine.
@@ -219,7 +223,8 @@ count, cost, latency.
 2. **Dev core:** `start-feature`, `implement-change`, `refactor`, `sweep-codebase`, `pr-learn`.
 3. **Testing + debugging:** `test-plan`, `author/update/verify-test`, `validate-scenario`,
    `coverage-gap`, `flaky-test`, `analyze-bug`, `root-cause`, `fix-bug`, `fix-test`.
-4. **Accessibility:** `a11y-scan`, `a11y-review`, `a11y-test-gen`, `a11y-fix`, `a11y-verify`.
+4. **Accessibility:** `a11y-scan`, `a11y-review`, `a11y-test-gen`, `a11y-fix`, `a11y-verify`,
+   `a11y-dev`, `a11y-report`.
 5. **Architecture/design:** `graph-repo`, `architecture-doc`, `threat-model`, `design-spec`, `from-figma`.
 6. **Closed-loop layer:** `supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`,
    `from-requirements`, `grade-spec`, `release-readiness` + traceability graph.

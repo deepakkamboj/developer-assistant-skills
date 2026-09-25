@@ -36,7 +36,7 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 📖 **Documentation site:** https://deepakkamboj.github.io/developer-assistant-skills/ (Nextra site in [`website/`](website/)).
 
-- **34 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
+- **36 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
 - **Closed-loop (EASE-MAS):** orchestrator + traceability graph + independent critics; repair is
   bounded with a regression gate and **human-only merge**
 - **CLI-first, MCP-fallback** tooling (`gh`, `az`, `npx playwright`, `npx axe`)
@@ -125,7 +125,7 @@ for Microsoft 365 Copilot, GitHub Copilot, and Microsoft Scout.
 | **review** | `code-review`, `deliberate`, `pr-learn` |
 | **testing** | `test-plan`, `validate-scenario`, `coverage-gap`, `flaky-test` |
 | **testing/playwright** | `playwright-auth`, `run-tests`, `author-test`, `verify-test`, `update-test` |
-| **accessibility** | `a11y-scan`, `a11y-review`, `a11y-test-gen`, `a11y-fix`, `a11y-verify` |
+| **accessibility** | `a11y-scan`, `a11y-review`, `a11y-test-gen`, `a11y-fix`, `a11y-verify`, `a11y-dev`, `a11y-report` |
 | **debugging** | `analyze-bug`, `root-cause`, `fix-bug`, `fix-test` |
 | **devops** | `fix-ci`, `release-readiness` |
 

@@ -16,6 +16,9 @@ AA and didn't regress anything else.
 Load and honor these before acting:
 - The original violation(s) and the applied fix (from `a11y-fix`).
 - The target URL/component; `config.test_environments`; axe/Playwright.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`/
+  `screen_reader_notes_file` — verify against these thresholds too when the original fix targeted
+  them. Unset by default (WCAG-only).
 
 ## Workflow
 
@@ -46,5 +49,6 @@ TodoWrite([
 
 ## Rules
 
-- WCAG AA. Prove the fix with a re-scan + behavior check, not assumption.
+- WCAG AA is the floor. Prove the fix with a re-scan + behavior check, not assumption. Also verify
+  against the org overlay (`accessibility_standard_file`/`screen_reader_notes_file`) if configured.
 - If new violations appear, report them — a fix that trades one violation for another isn't done.

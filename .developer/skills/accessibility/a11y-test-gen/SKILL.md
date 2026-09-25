@@ -16,6 +16,8 @@ compliance and fail when accessibility regresses.
 Load and honor these before acting:
 - The component/page source (or URL) and its interactive elements.
 - Repo test conventions; `.developer/skills/testing/playwright/_conventions.md`; `config.test_environments`.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (assert the stricter threshold if one exists) and `screen_reader_notes_file`. Unset by default.
 
 ## Workflow
 
@@ -39,6 +41,12 @@ TodoWrite([
    - **Keyboard** — tab order, operability, no traps.
    - **Focus** — focus moves on open/route and is restored on close.
    - **ARIA/state** — roles and state (expanded/selected/checked) exposed (WCAG 4.1.2).
+   - **Interactive widgets** — for tabs, dropdowns/comboboxes, accordions, toggles/switches, menus/
+     flyouts, dialogs/modals, radio groups, action buttons, and external links, assert the specific
+     per-type ARIA/keyboard behavior in the `a11y-review` interactive-mode table (e.g. `aria-selected`
+     flips on Arrow keys for tabs; `aria-expanded` flips and focus returns to the trigger on Escape
+     for comboboxes/menus; focus is trapped and restored for dialogs) — don't just assert the role is
+     present, assert the state actually changes at runtime.
 3. **Generate.** Write the `*.spec.ts` under `--out` (default `tests/a11y`), one describe block per
    component, clear names, deterministic assertions (no fixed sleeps).
 4. **Run once.** Execute via `run-tests` to confirm it passes for the right reason. Remind to
