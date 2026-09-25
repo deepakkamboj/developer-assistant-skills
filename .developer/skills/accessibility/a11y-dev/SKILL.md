@@ -90,6 +90,17 @@ useEffect(() => {
 // <div role="dialog" aria-modal="true" aria-labelledby="modal-title" onKeyDown={onEscapeClose}>
 ```
 
+## Framework notes
+
+- **React** — `htmlFor` not `for` on labels; manage focus with `useRef`/`useEffect`; keyboard handlers
+  via `onKeyDown`; fragments over wrapper `<div>`s.
+- **Vue** — `v-bind:aria-*` for dynamic ARIA; `@keydown` handlers for keyboard support; `ref` for
+  focus management.
+- **Angular** — `[attr.aria-*]` bindings; `(keydown)` handlers; `@ViewChild` + `nativeElement.focus()`
+  for focus management.
+- **Plain HTML/JS** — `addEventListener('keydown', …)`; `element.focus()`;
+  `setAttribute('aria-*', …)` for dynamic ARIA.
+
 ## Rules
 
 - WCAG 2.1/2.2 AA by default; ships with no vendor-specific standard. If

@@ -81,14 +81,31 @@ links for styling:
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
-  body{font-family:ui-sans-serif,system-ui,sans-serif}
+  :root,[data-theme="default"]{--bg:#f9fafb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb}
+  [data-theme="hc-black"]{--bg:#000;--card:#0d0d0d;--text:#fff;--muted:#d1d5db;--border:#fff;--accent:#ffff00}
+  [data-theme="hc-white"]{--bg:#fff;--card:#fff;--text:#000;--muted:#333;--border:#000;--accent:#00008b}
+  [data-theme="aquatic"]{--bg:#ecfeff;--card:#fff;--text:#164e63;--muted:#0e7490;--border:#a5f3fc;--accent:#0284c7}
+  [data-theme="forest"]{--bg:#f0fdf4;--card:#fff;--text:#14532d;--muted:#166534;--border:#bbf7d0;--accent:#16a34a}
+  [data-theme="sunset"]{--bg:#fff7ed;--card:#fff;--text:#7c2d12;--muted:#9a3412;--border:#fed7aa;--accent:#ea580c}
+  [data-theme="midnight"]{--bg:#030712;--card:#111827;--text:#f9fafb;--muted:#9ca3af;--border:#374151;--accent:#818cf8}
+  [data-theme="corporate"]{--bg:#f8fafc;--card:#fff;--text:#0f172a;--muted:#475569;--border:#cbd5e1;--accent:#334155}
+  body{font-family:ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+  .card{background:var(--card);border:1px solid var(--border)}
   .sev-critical{background:#fee2e2;color:#991b1b} .sev-serious{background:#ffedd5;color:#9a3412}
   .sev-moderate{background:#fef9c3;color:#854d0e} .sev-minor{background:#e5e7eb;color:#374151}
   .status-fixed,.status-verified{background:#dcfce7;color:#166534} .status-open{background:#fee2e2;color:#991b1b}
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900 p-6">
-  <h1 class="text-2xl font-bold">Accessibility Report — {{TARGET}}</h1>
+<body class="p-6" data-theme="default">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Accessibility Report — {{TARGET}}</h1>
+    <select id="themeSelect" class="border rounded px-2 py-1">
+      <option value="default">Default</option><option value="hc-black">High Contrast Black</option>
+      <option value="hc-white">High Contrast White</option><option value="aquatic">Aquatic</option>
+      <option value="forest">Forest</option><option value="sunset">Sunset</option>
+      <option value="midnight">Midnight</option><option value="corporate">Corporate</option>
+    </select>
+  </div>
   <p class="text-gray-600">Generated {{DATE}} · WCAG 2.1/2.2 AA · {{TOTAL}} findings
     ({{CRITICAL}} Critical, {{SERIOUS}} Serious, {{MODERATE}} Moderate, {{MINOR}} Minor)</p>
 
@@ -104,7 +121,7 @@ links for styling:
     </select>
   </div>
 
-  <table class="w-full border-collapse bg-white shadow rounded" id="findingsTable">
+  <table class="w-full border-collapse card shadow rounded" id="findingsTable">
     <thead><tr class="text-left border-b">
       <th class="p-2">#</th><th class="p-2">Severity</th><th class="p-2">Location</th>
       <th class="p-2">WCAG SC</th><th class="p-2">Issue</th><th class="p-2">Status</th>
@@ -118,6 +135,7 @@ links for styling:
 <script>
   const sevSel = document.getElementById('severityFilter');
   const statSel = document.getElementById('statusFilter');
+  const themeSel = document.getElementById('themeSelect');
   function applyFilters() {
     const sev = sevSel.value, stat = statSel.value;
     document.querySelectorAll('#findingsTable tbody tr').forEach(row => {
@@ -128,13 +146,15 @@ links for styling:
   }
   sevSel.addEventListener('change', applyFilters);
   statSel.addEventListener('change', applyFilters);
+  themeSel.addEventListener('change', () => document.body.dataset.theme = themeSel.value);
 </script>
 </body>
 </html>
 ```
 
 Render one `<tr>` per finding with `data-severity`/`data-status` attributes and a `sev-*`/`status-*`
-badge class matching the CSS above.
+badge class matching the CSS above. The 8 themes (default, high-contrast black/white, aquatic,
+forest, sunset, midnight, corporate) are generic color palettes, not tied to any vendor.
 
 ## Rules
 
