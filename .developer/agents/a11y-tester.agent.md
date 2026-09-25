@@ -42,5 +42,7 @@ regression tests, with next steps.
 
 ## Rules
 
-- WCAG AA only (no vendor-specific standard). Cite the exact success criterion for each finding.
+- WCAG AA is the floor and is always cited; ships with no vendor-specific standard by default. If
+  `config.quality_gates.accessibility_standard_file`/`screen_reader_notes_file` is configured, apply
+  it in addition to WCAG — never in place of it.
 - Verify fixes; never disable axe rules to pass. Remediation needs human approval before landing.

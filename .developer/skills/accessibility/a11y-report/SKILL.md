@@ -19,6 +19,8 @@ Load and honor these before acting:
   `a11y-verify` (location, WCAG SC, impact, status).
 - If no prior findings exist in context, say so and offer to run `a11y-scan`/`a11y-review` first
   rather than fabricating results.
+- If `config.quality_gates.accessibility_standard_file` is configured, label findings sourced from it
+  distinctly from WCAG findings (e.g. an "Org standard" column) rather than merging them silently.
 
 ## Workflow
 
@@ -138,6 +140,8 @@ badge class matching the CSS above.
 
 - Report only findings that actually appeared in this conversation — never invent violations to fill
   out the report. If nothing was scanned yet, say so and offer to run `a11y-scan`/`a11y-review`.
-- WCAG 2.1/2.2 AA severities only (Critical/Serious/Moderate/Minor) — no vendor-specific standard or
-  ticketing-system integration.
+- WCAG 2.1/2.2 AA severities (Critical/Serious/Moderate/Minor) are the default and always shown; no
+  vendor-specific standard ships in this repo. If `config.quality_gates.accessibility_standard_file`
+  is configured, include its findings in a clearly labeled extra column/section — don't blend them
+  into the WCAG counts. No ticketing-system integration.
 - Keep the report factual and reproducible: every row must cite a WCAG SC and a location.

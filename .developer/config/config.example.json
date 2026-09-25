@@ -39,6 +39,9 @@
   ],
   "quality_gates": {
     "wcag_level": "AA",
+    "accessibility_standard_file": null,
+    "screen_reader_notes_file": null,
+    "_accessibility_comment": "Both optional and unset by default — this repo ships WCAG-only, no vendor-specific standard. If your org has a stricter internal accessibility standard (e.g. higher contrast ratios, larger touch targets, a mandated assistive-technology test matrix) or platform-specific screen-reader behavior notes, copy .developer/config/accessibility-standard.example.md and .developer/config/screen-reader-notes.example.md to a private path, fill them in, and point these two keys at them. Accessibility skills then load and honor them *in addition to* WCAG — never instead of it — applying the stricter threshold where the two disagree.",
     "require_tests_for_changes": true,
     "require_regression_pass_before_pr": true,
     "specialists": [

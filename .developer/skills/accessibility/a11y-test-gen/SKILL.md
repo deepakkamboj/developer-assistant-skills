@@ -16,6 +16,8 @@ compliance and fail when accessibility regresses.
 Load and honor these before acting:
 - The component/page source (or URL) and its interactive elements.
 - Repo test conventions; `.developer/skills/testing/playwright/_conventions.md`; `config.test_environments`.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (assert the stricter threshold if one exists) and `screen_reader_notes_file`. Unset by default.
 
 ## Workflow
 

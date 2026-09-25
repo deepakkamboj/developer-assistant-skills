@@ -17,6 +17,9 @@ Load and honor these before acting:
 - The component/feature request, the framework in use (React/Vue/Angular/plain HTML), and
   surrounding component patterns.
 - `config.quality_gates.wcag_level` (default AA).
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (e.g. a stricter contrast ratio or touch-target size to build to) and `screen_reader_notes_file`
+  (a tested ARIA-wiring pattern to follow). Unset by default.
 
 ## Workflow
 
@@ -89,7 +92,9 @@ useEffect(() => {
 
 ## Rules
 
-- WCAG 2.1/2.2 AA by default; no vendor-specific standard.
+- WCAG 2.1/2.2 AA by default; ships with no vendor-specific standard. If
+  `config.quality_gates.accessibility_standard_file`/`screen_reader_notes_file` is configured, build
+  to it in addition to WCAG — never in place of it.
 - Semantic HTML over ARIA; ARIA states must be wired to real behavior, never decorative.
 - Never rely on color alone; never remove a focus indicator without an equally visible replacement.
 - After completing a feature, proactively offer a full audit (`a11y-review`/`a11y-scan`) rather than

@@ -16,6 +16,10 @@ with the exact success criterion and where to fix them.
 Load and honor these before acting:
 - `config.quality_gates.wcag_level` (default AA); `config.test_environments` (for authenticated URLs).
 - `.developer/mcp/README.md` (axe/Playwright CLI); repo component/markup conventions.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (stricter-than-WCAG thresholds — apply in addition to WCAG, never instead of it) and
+  `screen_reader_notes_file` (AT-specific behavior notes). Unset by default; see
+  `.developer/config/accessibility-standard.example.md`.
 
 ## Workflow
 
@@ -76,5 +80,7 @@ Violations: N (Critical n · Serious n · Moderate n · Minor n) · WCAG level: 
 
 ## Rules
 
-- WCAG 2.1/2.2 AA only; cite the exact SC (e.g., 1.4.3 Contrast) — never invent criteria.
+- WCAG 2.1/2.2 AA is the floor and is always cited; ships with no vendor-specific standard by
+  default. If `config.quality_gates.accessibility_standard_file` is configured, apply its stricter
+  thresholds in addition to WCAG, and still cite the underlying WCAG SC — never invent criteria.
 - Static scan is a first pass; confirm dynamic/contrast issues at runtime where possible.

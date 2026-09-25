@@ -76,6 +76,31 @@ Edit `config.json` to set your `profile`, `repos[]` (provider `github` or `ado`,
 `allow_autonomous_merge`), `toolchain`, and `test_environments`. See the inline example for the full
 shape.
 
+### Optional: your organization's accessibility standard
+
+The accessibility skills (`a11y-scan`, `a11y-review`, `a11y-fix`, `a11y-verify`, `a11y-dev`,
+`a11y-test-gen`, `a11y-report`) ship **WCAG 2.1/2.2 AA-only** — no vendor-specific standard is
+bundled. If your org has a stricter internal standard (e.g. tighter contrast ratios, a mandated
+assistive-technology test matrix) or documented screen-reader-specific behavior notes, copy the two
+templates below to a private path, fill them in, and reference them from `quality_gates`:
+
+```bash
+cp .developer/config/accessibility-standard.example.md ~/.developer/accessibility-standard.md
+cp .developer/config/screen-reader-notes.example.md    ~/.developer/screen-reader-notes.md
+```
+
+```json
+"quality_gates": {
+  "wcag_level": "AA",
+  "accessibility_standard_file": "~/.developer/accessibility-standard.md",
+  "screen_reader_notes_file": "~/.developer/screen-reader-notes.md"
+}
+```
+
+Skills apply these **in addition to WCAG, never instead of it** — they always cite the WCAG success
+criterion, and layer your stricter threshold or AT-specific pattern on top when configured. Leave
+both keys `null` (the default) to use WCAG AA only.
+
 ## 3. Invoke skills
 
 Marketplace-installed skills use the `developer` plugin namespace. A source checkout also includes

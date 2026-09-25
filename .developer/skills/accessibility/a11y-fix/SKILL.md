@@ -16,6 +16,9 @@ using native semantics first and ARIA only when necessary — never faking a pas
 Load and honor these before acting:
 - The violation(s) from `a11y-scan`/`a11y-review` (WCAG SC + location) and the component source.
 - Repo component patterns; `config.quality_gates.wcag_level`.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (e.g. a stricter contrast ratio or touch-target size to fix *to*) and `screen_reader_notes_file`
+  (a tested pattern for a specific ARIA-wiring pitfall). Unset by default.
 
 ## Workflow
 
@@ -76,5 +79,8 @@ Report a confidence per fix so reviewers know what to double-check:
 
 ## Rules
 
-- WCAG AA only; native semantics over ARIA; never disable/ignore a rule to fake compliance.
+- WCAG AA is the floor; native semantics over ARIA; never disable/ignore a rule to fake compliance.
+- If `config.quality_gates.accessibility_standard_file`/`screen_reader_notes_file` is configured,
+  apply it in addition to WCAG (e.g. fix to the stricter ratio, or use the documented AT-tested ARIA
+  pattern) — never in place of citing the WCAG SC.
 - Minimal change; re-verify; add a regression test for anything non-trivial.

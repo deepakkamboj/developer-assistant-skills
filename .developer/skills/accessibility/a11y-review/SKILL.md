@@ -16,6 +16,9 @@ real contrast, meaning-by-color, link clarity, display modes, and responsiveness
 Load and honor these before acting:
 - The target URL + `config.test_environments` (auth via `playwright-auth` if needed).
 - `.developer/mcp/playwright.json` (interactive driving); WCAG 2.1/2.2 AA.
+- Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
+  (stricter-than-WCAG thresholds) and `screen_reader_notes_file` (AT-specific behavior notes beyond
+  WCAG's Name/Role/Value criterion). Unset by default.
 
 ## Workflow
 
@@ -124,5 +127,6 @@ Prioritized findings per mode: `mode · selector · WCAG SC · impact · observe
 
 ## Rules
 
-- WCAG AA; cite the exact SC. Verify interactively — don't assert keyboard/ARIA behavior you didn't
-  observe.
+- WCAG AA is the floor; cite the exact SC. If an org `accessibility_standard_file` is configured,
+  apply its stricter thresholds in addition to WCAG. Verify interactively — don't assert
+  keyboard/ARIA behavior you didn't observe.
