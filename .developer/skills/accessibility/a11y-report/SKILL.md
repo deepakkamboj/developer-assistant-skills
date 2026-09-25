@@ -1,7 +1,7 @@
 ---
 name: a11y-report
 description: Consolidate findings from a11y-scan, a11y-review, a11y-fix, and a11y-verify into a single shareable accessibility report — Markdown by default, or a self-contained filterable HTML file — with a WCAG severity/criterion summary. Can optionally file GitHub issues for open findings, gated on explicit approval.
-argument-hint: "[--out <folder>] [--format md|html] [--file-issues]"
+argument-hint: "[--out <folder>] [--format md|html]"
 ---
 
 # A11y Report
@@ -56,8 +56,10 @@ TodoWrite([
    fixed/verified vs. still open.
 6. **Offer to file GitHub issues.** If there are open (not-yet-fixed) findings and
    `config.toolchain.issue_provider` is `github` (the default), offer to file GitHub issues per the
-   **Filing GitHub issues** section below. Never file automatically — always wait for explicit
-   approval, and skip this step entirely if the provider isn't GitHub or `gh` isn't available.
+   **Filing GitHub issues** section below. This offer happens automatically whenever open findings
+   exist — there is no flag to pre-approve or skip it; every filing still requires a fresh explicit
+   approval in that step, and it's skipped entirely if the provider isn't GitHub or `gh` isn't
+   available.
 
 ## Markdown report format (default)
 
@@ -85,8 +87,6 @@ links for styling:
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Accessibility Report — {{TARGET}}</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
   :root,[data-theme="default"]{--bg:#f9fafb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb}
   [data-theme="hc-black"]{--bg:#000;--card:#0d0d0d;--text:#fff;--muted:#d1d5db;--border:#fff;--accent:#ffff00}
@@ -193,16 +193,27 @@ Use this to build file-line hyperlinks: `https://github.com/{owner}/{repo}/blob/
    already stands on its own.
 3. On approval, file the issues below, then report back the created issue numbers/links.
 
-### Individual issues (Critical/Serious — one per finding)
+### Write each issue body to a temp file first
+
+Issue bodies contain Markdown with backticks, code fences, and links — inline `--body "…"` strings
+break unpredictably once those characters hit shell quoting (especially on Windows PowerShell). Write
+each body to a temp file and pass it with `--body-file` instead of inlining it:
 
 ```bash
-gh issue create \
-  --title "[A11y] <Component/Feature> — <brief description>" \
-  --body "## WCAG Guideline
+# write the composed Markdown body to a temp file, then:
+gh issue create --title "<title>" --body-file "<temp-file-path>" --label "accessibility" --label "wcag-aa"
+```
+
+### Individual issues (Critical/Serious — one per finding)
+
+Body template (write to a temp file, then file with `--body-file` as above):
+
+```markdown
+## WCAG Guideline
 <SC number and name> — Level <A/AA>
 
 ## Location
-[\`path/to/file.tsx:123\`](<file-line link>)
+[`path/to/file.tsx:123`](<file-line link>)
 
 ## Issue
 <description>
@@ -211,26 +222,28 @@ gh issue create \
 <fix, with a short code example if useful>
 
 ## Priority
-<Critical|Serious>" \
-  --label "accessibility" --label "wcag-aa"
+<Critical|Serious>
 ```
+
+Title: `[A11y] <Component/Feature> — <brief description>`
 
 ### Grouped issues (Moderate/Minor — one per violation category)
 
-```bash
-gh issue create \
-  --title "[A11y] <category> issues in <area>" \
-  --body "## WCAG Guideline
+Body template (same `--body-file` approach):
+
+```markdown
+## WCAG Guideline
 <SC number and name>
 
 ## Violations
-- [ ] [\`path/to/file1.tsx:45\`](<link>) — <short description>
-- [ ] [\`path/to/file2.tsx:78\`](<link>) — <short description>
+- [ ] [`path/to/file1.tsx:45`](<link>) — <short description>
+- [ ] [`path/to/file2.tsx:78`](<link>) — <short description>
 
 ## Common fix approach
-<shared guidance for this category>" \
-  --label "accessibility" --label "wcag-aa"
+<shared guidance for this category>
 ```
+
+Title: `[A11y] <category> issues in <area>`
 
 If `config.toolchain.issue_provider` is `ado` instead of the default `github`, skip this section
 entirely and just note in the report that issue filing isn't wired up for that provider yet.
