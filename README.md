@@ -105,13 +105,17 @@ export DEVELOPER_CONFIG=~/.developer/config.json     # PowerShell: $env:DEVELOPE
 node bin/cli.js validate
 ```
 
-Then invoke a namespaced skill from your assistant (see **[usage.md](usage.md)**):
+Then invoke a namespaced skill from your assistant:
 
 - **Claude Code / GitHub Copilot CLI:** `/developer:code-review`, `/developer:fix-bug`, `/developer:a11y-scan`, …
 - **Codex / any agent:** read `.developer/AGENTS.md` and reference the skill by path.
 
-For scheduled and event-driven recipes, see the **[automation prompt library](automations/README.md)**
-for Microsoft 365 Copilot, GitHub Copilot, and Microsoft Scout.
+Automation prompts under `.github/automations/` and the personal `usage.md` guide are local-only:
+they are ignored by Git, excluded from future npm packages, and not required by repository tests.
+Keep backups separately and manage saved Copilot schedules yourself. Untracking these files does
+not remove copies from older Git history, release tags or published npm versions, including 1.0.2.
+Shared, opt-in CI workflows remain documented in
+[the workflow guide](.github/workflows/README.md).
 
 ## What's inside
 
@@ -135,7 +139,7 @@ for Microsoft 365 Copilot, GitHub Copilot, and Microsoft Scout.
 `internationalization-expert`, `documentation-steward`, `refactorer`, `debugger`) plus 5 leads/gates
 (`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y-tester`).
 
-Full details in **[usage.md](usage.md)**.
+Each skill's instructions live in [`.developer/skills/`](.developer/skills/).
 
 ## Design
 

@@ -15,7 +15,7 @@ Key conventions:
   live at `.github/plugin/marketplace.json` and `.claude-plugin/marketplace.json`.
 - Marketplace-installed skills use the plugin namespace, for example `/developer:a11y-fix`.
 - Generated prompt adapters are retained only for source-checkout compatibility. Regenerate them
-  with `node .developer/scripts/gen-commands.js`. See `usage.md`.
+  with `node .developer/scripts/gen-commands.js`. See `README.md`.
 
 ## Official references
 

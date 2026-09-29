@@ -9,7 +9,7 @@ skill's guidance changes, confirm it still produces the expected shape of output
 evals/
   README.md          # this file
   cases/             # one JSON per scenario: input + expected assertions
-  a11y-workflow.test.js # static accessibility prompt/skill contract checks
+  a11y-workflow.test.js # static skill contracts and package allowlist checks
   results/           # generated run output (gitignored)
 ```
 
@@ -37,7 +37,10 @@ exact string match, but structural/behavioral checks (e.g. "cites a WCAG success
 `npm test` runs the repository structural validator and the Node built-in accessibility contract
 tests. No extra dependencies are required. These checks catch removed investigation gates,
 inconsistent report statuses, missing uncertainty outcomes and unsafe legacy guidance. They test
-the instruction contract, **not model obedience or live product fixes**.
+the instruction contract, **not model obedience or live product fixes**. Local automation prompts
+are intentionally not test inputs: a fresh clone or npm package must pass without them. The package
+allowlist check guards against explicitly shipping local automation folders or the personal usage
+guide. Neither is required by a fresh clone or package install.
 
 To check sensitivity against an older tracked revision in PowerShell:
 
@@ -47,8 +50,8 @@ node --test evals/a11y-workflow.test.js
 Remove-Item Env:A11Y_CONTRACT_REF
 ```
 
-Use a revision predating the contract changes. Missing historical prompt files are reported as test
-failures as well; they do not demonstrate behavioral regression.
+Use a revision predating the relevant contract change. Missing historical skill files are reported
+as failures as well; they do not demonstrate behavioral regression.
 
 [a11y-repair-scenarios.json](cases/a11y-repair-scenarios.json) is a suite array using the case format
 above, covering all seven accessibility skills and recurring weekly observation categories. It
