@@ -9,7 +9,6 @@ const test = require('node:test');
 const root = path.resolve(__dirname, '..');
 const reference = process.env.A11Y_CONTRACT_REF;
 const skillPath = name => `.developer/skills/accessibility/${name}/SKILL.md`;
-const promptPath = name => `.github/automations/accessibility-${name}/prompt.md`;
 
 function read(file) {
   if (reference) {
@@ -98,7 +97,7 @@ test('test generation proves repair sensitivity and separates manual AT coverage
 });
 
 test('manual-only AT repairs use real before-after evidence without pretending proxies reproduce speech', () => {
-  for (const file of [skillPath('a11y-fix'), skillPath('a11y-test-gen'), promptPath('fix-bugs')]) {
+  for (const file of [skillPath('a11y-fix'), skillPath('a11y-test-gen')]) {
     includesAll(read(file), [
       'where automatable', 'manual-only AT defects', 'repeatable manual',
       'baseline/candidate AT evidence', 'Missing required AT evidence still blocks success'
@@ -128,26 +127,15 @@ test('report status, HTML filters and cohort accounting preserve uncertainty', (
   assert.doesNotMatch(text, /ran on a finding, mark it `fixed`\/`verified`/);
 });
 
-test('scheduled prompts are configuration-driven and share evidence and persistence gates', () => {
-  for (const name of ['fix-bugs', 'fix-validation']) {
-    const text = read(promptPath(name));
-    includesAll(text, [
-      'DEVELOPER_CONFIG', 'FIX_HANDOFF_PATH', 'issueKey', 'fixRunId',
-      'a11y-fix', 'a11y-verify', 'repair-validator', 'baseline',
-      'actual', 'AT', 'atomic', 'lock', 'owner'
-    ]);
-    assert.doesNotMatch(text, /https?:\/\/|C:\\Users\\/);
+test('npm package allowlist excludes local automation folders and usage guide', () => {
+  const manifest = JSON.parse(read('package.json'));
+  assert.ok(Array.isArray(manifest.files) && manifest.files.length > 0);
+  for (const entry of manifest.files) {
+    assert.doesNotMatch(entry, /(^|\/)automations(\/|$)/);
+    assert.notEqual(entry.replace(/^\.\//, ''), 'usage.md');
+    assert.ok(!['.', './', '*', '**', '.github', '.github/'].includes(entry),
+      `Broad package entry could expose local automations: ${entry}`);
   }
-  includesAll(read(promptPath('fix-bugs')), [
-    '`schemaVersion`', '`validationHistory`', '`validationRepairValidatorStatus`',
-    '## Step 2 - Prove code ownership and root cause', '## Step 3 - Make a bounded repair',
-    'default `a11y-fixes.json` beside the resolved config'
-  ]);
-  includesAll(read(promptPath('fix-validation')), [
-    'validationTargetCommit', 'Preserve the original `fixCommit`',
-    'Append each attempt to `validationHistory`', 'A known failure wins over a blocker',
-    'Re-check the PR head', 'unresolved eligibility'
-  ]);
 });
 
 test('weekly-observation scenarios have unique IDs and explicit assertions', () => {

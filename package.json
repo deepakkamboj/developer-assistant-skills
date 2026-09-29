@@ -43,15 +43,12 @@
     ".claude-plugin/",
     ".developer/",
     ".github/plugin/",
-    ".github/automations/accessibility-fix-bugs/prompt.md",
-    ".github/automations/accessibility-fix-validation/prompt.md",
     "evals/README.md",
     "evals/a11y-workflow.test.js",
     "evals/cases/",
     "bin/",
     "AGENTS.md",
     "CLAUDE.md",
-    "usage.md",
     "LICENSE",
     "README.md"
   ]

@@ -21,14 +21,8 @@ evals/results/
 
 # Local automation experiments
 automations/
-!/.github/automations/
-/.github/automations/*
-!/.github/automations/accessibility-fix-bugs/
-!/.github/automations/accessibility-fix-validation/
-/.github/automations/accessibility-fix-bugs/*
-/.github/automations/accessibility-fix-validation/*
-!/.github/automations/accessibility-fix-bugs/prompt.md
-!/.github/automations/accessibility-fix-validation/prompt.md
+/.github/automations/
+/usage.md
 
 # Python
 __pycache__/
