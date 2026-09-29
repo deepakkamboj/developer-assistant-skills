@@ -1,6 +1,6 @@
 {
   "name": "developer-assistant-skills",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Vendor-neutral, open-source developer plugin for Claude Code, GitHub Copilot, and Codex: skills and agents for the full software lifecycle with closed-loop, bounded autonomous repair.",
   "keywords": [
     "ai",
