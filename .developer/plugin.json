@@ -2,7 +2,7 @@
   "name": "developer",
   "displayName": "Developer Assistant Skills",
   "description": "Software lifecycle skills and specialist agents for requirements, architecture, development, review, testing, accessibility, debugging, and release readiness.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Deepak Kamboj",
     "url": "https://github.com/deepakkamboj"
