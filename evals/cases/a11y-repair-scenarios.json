@@ -1,0 +1,226 @@
+[
+  {
+    "id": "manual-only-at-verified-repair",
+    "skill": "accessibility/a11y-test-gen",
+    "input": "A speech-only timing defect has attributable actual-AT recordings on exact baseline and candidate builds, with the original defect present before and resolved after. Required AT/regression rows pass. DOM and axe tests pass on both builds and cannot reproduce the speech failure.",
+    "expect": [
+      "Requires a repeatable manual AT regression scenario and retains the attributable baseline/candidate evidence.",
+      "Labels DOM/axe tests as partial proxy coverage rather than claiming they reproduced speech.",
+      "Does not block the otherwise fully verified repair solely because a Playwright test cannot fail for the speech-only defect.",
+      "Still blocks success if required actual AT evidence is missing."
+    ]
+  },
+  {
+    "id": "toggle-button-not-switch",
+    "skill": "accessibility/a11y-review",
+    "input": "A formatting toggle is a native button with a stable accessible name and aria-pressed that changes correctly on click, Enter and Space. It intentionally does not have role=switch or aria-checked.",
+    "expect": [
+      "Recognizes a valid toggle-button pattern and checks aria-pressed.",
+      "Does not require role=switch or aria-checked, and does not report a violation from their absence.",
+      "Preserves the documented control semantics rather than proposing an unnecessary conversion."
+    ]
+  },
+  {
+    "id": "fluent-v8-v9-mixed-repo-ownership",
+    "skill": "accessibility/a11y-fix",
+    "input": "A product spans shell, shared-controls and editor repos. Its top-level manifest has Fluent v9, but the failing editor imports a shared wrapper that resolves a nested @fluentui/react v8 package. A current v9 demo passes the issue's scenario.",
+    "expect": [
+      "Inventories and traces the actual editor-to-shared-wrapper-to-v8 source chain with exact refs and resolved versions.",
+      "Does not infer the failing generation from the top-level manifest or use the passing v9 demo to close the v8 issue.",
+      "Compares the app against a faithful same-version v8 reproduction and examines wrapper customization before assigning upstream ownership.",
+      "Does not migrate to v9 or patch an unrelated shell component without approved scope."
+    ]
+  },
+  {
+    "id": "fluent-fix-not-consumed",
+    "skill": "accessibility/a11y-verify",
+    "input": "A shared-control repo's fix and isolated Fluent v8 sample pass. The product app's lockfile and deployed bundle still use the previous shared-control version. No consumer update has been deployed.",
+    "expect": [
+      "Does not return Fixed from the shared-control PR or sample result.",
+      "Reports the missing consumer/build linkage and requests the approved consumer update and deployment.",
+      "Validates the original app scenario only after proving the runtime contains the intended shared-control fix and Fluent version."
+    ]
+  },
+  {
+    "id": "fluent-v9-only-fix-needs-migration",
+    "skill": "accessibility/a11y-fix",
+    "input": "The app uses Fluent UI v8. A faithful direct v8 example reproduces the defect with documented props, and source evidence identifies an upstream cause. The corresponding v9 component behaves correctly, but changes API and styling contracts; no migration is approved.",
+    "expect": [
+      "Records the proven v8 upstream boundary, installed version and same-version reproduction.",
+      "Distinguishes an approved compatible v8 fix/backport path from a separately scoped v9 migration.",
+      "Provides an actionable non-fix handoff with owner/decision needed; does not claim the v8 app fixed or silently update its dependency."
+    ]
+  },
+  {
+    "id": "wrong-repo-same-control-name",
+    "skill": "accessibility/a11y-fix",
+    "input": "An issue suggests repo A's Picker.tsx. The failing page's runtime import and locked dependency resolve to repo B's Picker through an app wrapper. Both repos are allowed. The failure reproduces only through that wrapper.",
+    "expect": [
+      "Does not edit repo A based on its matching component name.",
+      "Records canonical repo/ref, runtime-to-wrapper-to-component source trace and search ledger.",
+      "Tests wrapper misuse against a component defect before choosing the fix.",
+      "Requires a regression test exercising the actual caller and original scenario."
+    ]
+  },
+  {
+    "id": "source-not-found-access-denied",
+    "skill": "accessibility/a11y-fix",
+    "input": "Search of the first allowed repo finds no control. Its manifest points to a second allowed repo, but the runner cannot read that repo.",
+    "expect": [
+      "Reports blocked source access, not external-dependency or out-of-scope from an empty search.",
+      "Records searched repo/ref/queries and distinguishes no match from access denied.",
+      "Makes no speculative edit and supplies the exact access request and next owner."
+    ]
+  },
+  {
+    "id": "library-wrapper-vs-upstream",
+    "skill": "accessibility/a11y-fix",
+    "input": "A third-party grid has an incorrect name in the app. The app wrapper forwards an overriding aria-label; the same locked library version works when used without the override.",
+    "expect": [
+      "Investigates the wrapper's accessible-name override rather than declaring the grid unsupported.",
+      "Uses the library control and app-wrapper comparison to discriminate root causes.",
+      "Repairs the owned source only after baseline reproduction; does not edit installed library output or bump a version speculatively."
+    ]
+  },
+  {
+    "id": "confirmed-upstream-defect",
+    "skill": "accessibility/a11y-fix",
+    "input": "The original grid failure reproduces in the app and a minimal direct-library sample with correct props. Source and lockfile prove the implementation is upstream. A documented newer library version fixes it, but upgrading is not approved.",
+    "expect": [
+      "Records the package/version, minimal reproduction and proven upstream boundary.",
+      "Provides an actionable upstream or approval-gated upgrade handoff, without patching vendored code.",
+      "Uses a non-fix outcome with owner and next action, not fixed."
+    ]
+  },
+  {
+    "id": "missing-config-vs-no-repro",
+    "skill": "accessibility/a11y-fix",
+    "input": "The bug occurs in a gated legacy control with a specific account role. The available sample app uses the new control and the runner lacks the role and flag configuration. No failure is seen there.",
+    "expect": [
+      "Does not call the issue not-reproduced, by-design or already-fixed from the sample app.",
+      "Reports blocked prerequisites and records the control/version, role and flags still needed.",
+      "Does not change the new control or treat modified steps as the original scenario."
+    ]
+  },
+  {
+    "id": "no-repro-under-comparable-conditions",
+    "skill": "accessibility/a11y-fix",
+    "input": "The tester and runner replayed the complete original scenario on the reported build, role, data, browser and AT input mode. Neither observed the claimed failure; no source change was made.",
+    "expect": [
+      "Reports not-reproduced with the executed steps, conditions and observations.",
+      "Makes no speculative ARIA edit and does not claim a fix.",
+      "Requests discriminating evidence from the reporter rather than declaring intentional behavior."
+    ]
+  },
+  {
+    "id": "newer-fix-not-same-scenario",
+    "skill": "accessibility/a11y-fix",
+    "input": "A nearby issue was fixed by changing the closed combobox name. The current report concerns duplicate output after opening and selecting an option. The runner has not replayed that path on the newer build.",
+    "expect": [
+      "Does not classify duplicate or already-fixed from the nearby change alone.",
+      "Compares scenario, root cause and version and executes the open/select path.",
+      "Keeps the investigation inconclusive or blocked until discriminating evidence is available."
+    ]
+  },
+  {
+    "id": "product-label-and-required-title",
+    "skill": "accessibility/a11y-fix",
+    "input": "The issue proposes removing a required tooltip/title to avoid speech. There are two conflicting proposed accessible names, and the product owner has not selected wording.",
+    "expect": [
+      "Preserves required title and focus behavior; no guessed label or removal to silence output.",
+      "Computes the existing name/description and checks duplicate naming sources.",
+      "Reports needs-product-decision with the exact wording/behavior question and owner."
+    ]
+  },
+  {
+    "id": "cross-at-partial-fix",
+    "skill": "accessibility/a11y-verify",
+    "input": "The baseline defect was observed on AT A and AT B. On the exact candidate build AT A passes, while required AT B still duplicates the label. Axe is clean.",
+    "expect": [
+      "Returns Not fixed, or Fixed but new issues if the duplicate is introduced by the patch; never Fixed.",
+      "Includes separate A and B rows with versions, candidate commit and observed output.",
+      "Does not use axe or the passing AT to override the failing required combination."
+    ]
+  },
+  {
+    "id": "voice-engine-unavailable",
+    "skill": "accessibility/a11y-verify",
+    "input": "A voice-command bug has a known failing baseline. The exact candidate passes a Playwright click and accessible-name assertion, but the reported voice engine is unavailable and there is no tester result.",
+    "expect": [
+      "Returns Blocked for the required voice test, not Fixed or by-design.",
+      "Labels DOM and click checks as partial proxy evidence, not executed voice commands.",
+      "Specifies the missing engine/version/input test and responsible tester."
+    ]
+  },
+  {
+    "id": "changed-head-and-review-comment",
+    "skill": "accessibility/a11y-verify",
+    "input": "The original fix was tested at commit A. A later PR-comment edit produced commit B, which is now deployed, but only the old results and page-load success are available.",
+    "expect": [
+      "Does not transfer the pass at A to B or count addressing a comment as bug resolution.",
+      "Requires exact-build provenance and a fresh run of the original scenario and required matrix.",
+      "Reports Blocked or Inconclusive until the necessary evidence is available."
+    ]
+  },
+  {
+    "id": "verified-candidate-positive-control",
+    "skill": "accessibility/a11y-verify",
+    "input": "The original failure is recorded on the baseline. The verified candidate build passes the identical scenario and all required browser/AT rows with actual tester evidence. The regression test fails for the defect on baseline and passes on candidate, and no new issues appear.",
+    "expect": [
+      "Returns Fixed rather than blocking a fully evidenced repair.",
+      "Cites baseline/candidate commits, original steps, tests and every required matrix row.",
+      "Does not imply untested combinations or a code change alone establish compliance."
+    ]
+  },
+  {
+    "id": "static-pattern-false-positives",
+    "skill": "accessibility/a11y-scan",
+    "input": "Source contains a decorative empty-alt image, a state hook whose status is announced by a shared parent live region, and an icon button named through aria-labelledby from its caller.",
+    "expect": [
+      "Does not report automatic WCAG violations for the three regex matches.",
+      "Inspects decoration, caller-provided naming and shared announcement context.",
+      "Separates suspected findings from confirmed failures and records runtime coverage gaps."
+    ]
+  },
+  {
+    "id": "manual-tabs-timeout",
+    "skill": "accessibility/a11y-review",
+    "input": "Tabs use the documented manual activation pattern. ArrowRight moves focus; Enter selects and reveals the panel. A test expecting aria-selected on ArrowRight times out.",
+    "expect": [
+      "Does not call the timeout proof of a product defect.",
+      "Checks the activation model and confirms focus, activation and selected/panel relationships.",
+      "Recommends correcting the invalid test assumption, not changing valid product behavior."
+    ]
+  },
+  {
+    "id": "regression-test-wrong-proxy",
+    "skill": "accessibility/a11y-test-gen",
+    "input": "The repaired defect is focus loss after selecting a menu item in a wrapper. The proposed test only asserts the new aria-label on an isolated button and passes even on the baseline.",
+    "expect": [
+      "Rejects the label-only test as insensitive to the original failure.",
+      "Exercises the wrapper's original open/select sequence and asserts logical focus restoration.",
+      "Requires failure for the actual defect on baseline and pass on candidate, preserving separate manual AT coverage."
+    ]
+  },
+  {
+    "id": "accessible-development-without-overrides",
+    "skill": "accessibility/a11y-dev",
+    "input": "Add a native action button to an existing form whose field-error summary already announces errors, using the project's tested dialog primitive for confirmation.",
+    "expect": [
+      "Reuses native activation and existing announcement/dialog mechanisms without duplicate handlers or alerts.",
+      "Uses an appropriate accessible name without overriding visible labels unnecessarily.",
+      "Validates runtime behavior and lists untested AT combinations instead of guaranteeing compliance by construction."
+    ]
+  },
+  {
+    "id": "weekly-cohort-and-carried-work",
+    "skill": "accessibility/a11y-report",
+    "input": "Run R investigated 10 issues: 2 verified, 2 failed, 1 changed-unverified, 2 not-reproduced, 1 by-design and 2 blocked. A validation this week also passed 3 issues from an older source run. Another week's summary gives only 40%, with no counts.",
+    "expect": [
+      "Reports R's verified/investigated rate as 2/10 = 20%, not 5/10.",
+      "Keeps the three carried validations attributed to the older run and reports non-fix outcomes separately.",
+      "Does not mark invoked fixer/verifier skills as success or average the unweighted weekly percentages.",
+      "Preserves changed-unverified, failed and blocked statuses in both report formats."
+    ]
+  }
+]

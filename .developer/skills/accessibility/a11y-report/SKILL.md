@@ -42,24 +42,49 @@ TodoWrite([
 
 1. **Collect.** Scan the conversation for every violation/finding produced by `a11y-scan`,
    `a11y-review`, `a11y-fix` (what changed), and `a11y-verify` (pass/fail). For each, capture:
-   `id, severity (Critical/Serious/Moderate/Minor), wcag_sc, location, description, recommendation,
-   status (open/fixed/verified)`.
-2. **Structure & dedupe.** Merge duplicate findings (same location + SC); if `a11y-fix`/`a11y-verify`
-   ran on a finding, mark it `fixed`/`verified` instead of `open`. Compute a summary: total, counts by
-   severity, counts by WCAG SC, and a fixed/verified/open breakdown.
+   `issueKey, repository, scenario, severity (Critical/Serious/Moderate/Minor), wcag_sc, location,
+    description, recommendation, fixRunId, validationRunId, baselineCommit, candidateCommit,
+    evidence, outcome, status, nextAction, owner`.
+2. **Structure & dedupe.** Merge only matching repository, component, scenario/state, criterion and
+    cause; retain distinct AT failures and versions. Skill invocation does not change status.
+    Use `changed-unverified` for a patch without complete verification, `verified` only for an
+    explicit `a11y-verify` verdict of `Fixed` on the same candidate with all required matrix rows
+    passing, `failed` for a failed fix/regression, and `blocked`/`inconclusive` for missing evidence.
+    Otherwise keep `open`. A stale pass on another commit is not verification.
+    For scheduled records, source-run `fixed` is provisional until the separate job records
+    `validationStatus: pass` on that candidate. Prefer the latest independent result over earlier
+    fixer claims; a later failure/blocker or advanced head must not inherit an earlier pass.
 3. **Resolve output.** Ask for an output folder if not given (default `a11y-reports/`); default
    format is Markdown (`accessibility-report.md`); use `--format html` for the self-contained HTML
    template below (`accessibility-report.html`).
 4. **Write.** Create the folder if needed and write the report (Markdown table, or the HTML
    template with the collected data substituted in).
-5. **Summarize.** Report the file path, total findings, severity breakdown, and how many are already
-   fixed/verified vs. still open.
-6. **Offer to file GitHub issues.** If there are open (not-yet-fixed) findings and
+5. **Summarize.** Report the path, confirmed findings, severity breakdown, verification status and
+   outcomes from `a11y-fix` separately. Do not invent a violation, location or severity for a
+   non-reproduced, by-design, duplicate or blocked investigation; include it in the outcome ledger.
+6. **Offer to file GitHub issues.** If there are confirmed unresolved findings and
    `config.toolchain.issue_provider` is `github` (the default), offer to file GitHub issues per the
    **Filing GitHub issues** section below. This offer happens automatically whenever open findings
    exist — there is no flag to pre-approve or skip it; every filing still requires a fresh explicit
    approval in that step, and it's skipped entirely if the provider isn't GitHub or `gh` isn't
    available.
+
+## Weekly outcome accounting
+
+- Count each `issueKey` once per source run; use its latest recorded outcome at the reporting cutoff.
+  Keep retry counts separate from issue counts and validation runs separate from source fix runs.
+  Map automation `baseCommit`/`fixCommit` to report `baselineCommit`/`candidateCommit`; keep a
+  different `validatedCommit` distinct and retain the actual candidate of each validation attempt.
+- Report selected, investigated, repair-attempted, changed-unverified, verified, failed and
+  non-fix outcomes with explicit denominators. End-to-end verified fix rate is newly verified
+  issues / investigated issues in that source-run cohort; empty denominator means `N/A`, not 0%.
+- Carried work stays attributed to its original `fixRunId`; show later validations separately,
+  rather than adding old passes to this week's new-fix numerator.
+- Also report required AT/browser coverage and blocker counts/owners. No-repro, by-design,
+  duplicate/already-fixed, external dependency, product decision, pointer-only and PR-only work
+  are not successful repairs.
+- Percentages without issue counts and cohort definitions cannot yield a weighted overall fix
+  rate. Summarize qualitative patterns instead of averaging weekly percentages.
 
 ## Markdown report format (default)
 
@@ -68,12 +93,17 @@ TodoWrite([
 
 Generated: <date> · WCAG level: AA · Total findings: <N>
 Critical: <n> · Serious: <n> · Moderate: <n> · Minor: <n>
-Open: <n> · Fixed: <n> · Verified: <n>
+Open: <n> · Changed-unverified: <n> · Verified: <n> · Failed: <n> · Blocked: <n> · Inconclusive: <n>
+Source-run cohort/cutoff: <id/date> · Verified/investigated: <n>/<n or N/A> · Carried validations: <n>
 
 | # | Severity | Location | WCAG SC | Issue | Status | Recommendation |
 |---|----------|----------|---------|-------|--------|-----------------|
-| 1 | Critical | src/components/Modal.tsx:42 | 2.1.2 No Keyboard Trap | Focus never leaves the modal | Open | Add a focus trap + Escape handler |
+| 1 | Serious | src/components/Modal.tsx:42 | 2.1.2 No Keyboard Trap | No keyboard path closes the modal | Open | Restore the documented keyboard dismissal path |
 ```
+
+Include an evidence/coverage and outcome ledger after the findings table in either format:
+`issueKey | source/validation run | repository/commit | scenario | outcome | evidence |
+required matrix gaps | next action/owner`. Findings counts and non-fix investigation counts stay separate.
 
 ## Self-contained HTML report (`--format html`)
 
@@ -100,7 +130,9 @@ links for styling:
   .card{background:var(--card);border:1px solid var(--border)}
   .sev-critical{background:#fee2e2;color:#991b1b} .sev-serious{background:#ffedd5;color:#9a3412}
   .sev-moderate{background:#fef9c3;color:#854d0e} .sev-minor{background:#e5e7eb;color:#374151}
-  .status-fixed,.status-verified{background:#dcfce7;color:#166534} .status-open{background:#fee2e2;color:#991b1b}
+  .status-verified{background:#dcfce7;color:#166534}
+  .status-open,.status-failed{background:#fee2e2;color:#991b1b}
+  .status-changed-unverified,.status-blocked,.status-inconclusive{background:#fef9c3;color:#854d0e}
 </style>
 </head>
 <body class="p-6" data-theme="default">
@@ -124,7 +156,9 @@ links for styling:
     </select>
     <select id="statusFilter" class="border rounded px-2 py-1">
       <option value="all">All statuses</option>
-      <option value="open">Open</option><option value="fixed">Fixed</option><option value="verified">Verified</option>
+      <option value="open">Open</option><option value="changed-unverified">Changed-unverified</option>
+      <option value="verified">Verified</option><option value="failed">Failed</option>
+      <option value="blocked">Blocked</option><option value="inconclusive">Inconclusive</option>
     </select>
   </div>
 
@@ -165,9 +199,9 @@ forest, sunset, midnight, corporate) are generic color palettes, not tied to any
 
 ## Filing GitHub issues (optional, approval-gated)
 
-After writing the report, if open findings remain, offer to turn them into tracked GitHub issues.
-This is the only accessibility skill that writes to the issue tracker — always behind an explicit
-approval gate, never automatic.
+After writing the report, if confirmed unresolved findings remain, offer to turn them into tracked
+GitHub issues. Search for existing issues with the same scenario and cause first. This skill writes
+to the issue tracker only behind explicit approval; scheduled automation permissions are separate.
 
 ### Prerequisites
 
@@ -245,7 +279,7 @@ Body template (same `--body-file` approach):
 
 Title: `[A11y] <category> issues in <area>`
 
-If `config.toolchain.issue_provider` is `ado` instead of the default `github`, skip this section
+If `config.toolchain.issue_provider` is not the default `github`, skip this section
 entirely and just note in the report that issue filing isn't wired up for that provider yet.
 
 ## Rules

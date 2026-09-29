@@ -101,6 +101,44 @@ Skills apply these **in addition to WCAG, never instead of it** — they always 
 criterion, and layer your stricter threshold or AT-specific pattern on top when configured. Leave
 both keys `null` (the default) to use WCAG AA only.
 
+### Evidence-led accessibility repairs and scheduled runs
+
+All seven accessibility skills distinguish observed violations from suspicions and untested checks.
+The [a11y-fix investigation contract](.developer/skills/accessibility/a11y-fix/SKILL.md) requires
+the original failing scenario, a rendered-element-to-source trace, verified repository ownership,
+and causal evidence before editing. A suggested path or similar control name is not enough.
+The [verification skill](.developer/skills/accessibility/a11y-verify/SKILL.md) checks the exact
+candidate build and required browser/assistive-technology matrix. DOM/axe results do not prove
+screen-reader announcements or voice commands; unavailable required AT testing is a blocker.
+For multi-repo products, investigation follows the deployed app through shared control packages to
+the underlying dependency. Fluent UI v8 (`@fluentui/react`) and v9 (`@fluentui/react-components`)
+are investigated at their exact installed versions. Same-version minimal reproductions distinguish
+app/wrapper defects from upstream defects; v8-to-v9 migration is separately approved work, not an
+automatic repair. Shared-control changes must be consumed and validated in the actual app.
+
+For the Copilot app, use the reviewed
+[fixer prompt](.github/automations/accessibility-fix-bugs/prompt.md) and
+[independent validation prompt](.github/automations/accessibility-fix-validation/prompt.md).
+These are configuration-driven templates, not active schedules or executable orchestration code:
+
+1. Supply allowed repositories/default branches, an exact backlog query, supported platforms and
+   AT matrix, test-environment/build/deployment settings, permissions and escalation owners through
+   `config.json` and reviewed schedule settings or companion `content.md`.
+2. Confirm installed skills, source access and working test/browser/AT capabilities. Keep all
+   private settings and authentication outside source control.
+3. Use a protected `FIX_HANDOFF_PATH` shared by both jobs (default beside the resolved config).
+   Version-2 records use canonical issue URLs to avoid cross-repo ID collisions. Retain legacy
+   fields/history; recover missing identity/provenance only from evidence, never guessed mappings.
+4. Re-import/update the prompts in the Copilot app and refresh the installed plugin after updating
+   this checkout; existing scheduled prompt copies do not update automatically.
+5. Pilot on representative issues in read-only mode, then explicitly enable branch/draft-PR and
+   isolated test-deployment permissions. Scheduling and human merge remain owner-controlled.
+
+The [report skill](.developer/skills/accessibility/a11y-report/SKILL.md) separates verified repairs,
+unverified changes, failed fixes and non-fix outcomes. Weekly percentages must retain source-run
+cohorts and denominators; carried work, duplicates, no-repro and pointer-only results are not new
+fixes. Regression scenarios and contract-check instructions are in [evals](evals/README.md).
+
 ## 3. Invoke skills
 
 Marketplace-installed skills use the `developer` plugin namespace. A source checkout also includes
@@ -163,8 +201,8 @@ e.g. `.developer/skills/review/code-review/SKILL.md`.
 | accessibility | `a11y-scan` | Static/runtime axe WCAG AA scan |
 | accessibility | `a11y-review` | Deep review scanners miss (keyboard/contrast/modes/…) |
 | accessibility | `a11y-test-gen` | Generate Playwright + axe regression tests |
-| accessibility | `a11y-fix` | Minimal WCAG-only remediation (native-first) |
-| accessibility | `a11y-verify` | Re-scan + behavior re-check → pass/fail |
+| accessibility | `a11y-fix` | Evidence-led source diagnosis and bounded native-first repair |
+| accessibility | `a11y-verify` | Exact-build scenario/AT verification with explicit non-pass outcomes |
 | accessibility | `a11y-dev` | Accessibility-first code generation (proactive, not remediation) |
 | accessibility | `a11y-report` | Consolidate scan/review/fix findings into one shareable report |
 | debugging | `analyze-bug` | Reproduce, isolate, classify (product/test/flake) |

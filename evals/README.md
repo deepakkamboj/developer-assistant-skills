@@ -9,6 +9,7 @@ skill's guidance changes, confirm it still produces the expected shape of output
 evals/
   README.md          # this file
   cases/             # one JSON per scenario: input + expected assertions
+  a11y-workflow.test.js # static accessibility prompt/skill contract checks
   results/           # generated run output (gitignored)
 ```
 
@@ -33,9 +34,38 @@ exact string match, but structural/behavioral checks (e.g. "cites a WCAG success
 
 ## Running
 
+`npm test` runs the repository structural validator and the Node built-in accessibility contract
+tests. No extra dependencies are required. These checks catch removed investigation gates,
+inconsistent report statuses, missing uncertainty outcomes and unsafe legacy guidance. They test
+the instruction contract, **not model obedience or live product fixes**.
+
+To check sensitivity against an older tracked revision in PowerShell:
+
+```powershell
+$env:A11Y_CONTRACT_REF = 'HEAD'
+node --test evals/a11y-workflow.test.js
+Remove-Item Env:A11Y_CONTRACT_REF
+```
+
+Use a revision predating the contract changes. Missing historical prompt files are reported as test
+failures as well; they do not demonstrate behavioral regression.
+
+[a11y-repair-scenarios.json](cases/a11y-repair-scenarios.json) is a suite array using the case format
+above, covering all seven accessibility skills and recurring weekly observation categories. It
+includes a fully verified positive control so the workflow is not evaluated only on refusal to fix.
+The Node tests validate fixture shape and skill coverage; they do not grade agent responses.
+
 Evals are designed to be driven by an agent runner (the same one that executes skills) or in CI via
 `agent-evals.yml`. Because outputs are model-generated, scoring is assertion-based (a grader agent or
 human checks each `expect` item), not golden-file diffing.
+
+For behavioral evaluation, give each case's `input` and named skill to the installed runner in an
+isolated test session with fixture evidence/tools. Retain the response and score every `expect`
+assertion as pass/fail/blocked, citing the output and tool evidence. No repository-aware model runner
+is bundled here; do not report those cases as executed from a successful `npm test`.
+Before enabling scheduled writes, replay representative real issues with sanitized evidence and
+the actual app/browser/AT matrix. Compare source-location accuracy, verified-fix rate, regressions,
+blocker quality and attempts per issue using explicit source-run denominators.
 
 ## Principles
 

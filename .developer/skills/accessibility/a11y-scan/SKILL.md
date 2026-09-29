@@ -1,7 +1,7 @@
 ---
 name: a11y-scan
 description: Scan for WCAG 2.1/2.2 Level AA violations — statically over source (markup/components/styles) or at runtime against a live URL using axe-core. Produces a prioritized, deduplicated violation report with WCAG criteria and locations. WCAG-only; no vendor-specific standard.
-argument-hint: "[--repo <path> | --url <url>] [--tags wcag2a,wcag2aa,wcag21aa]"
+argument-hint: "[--repo <path> | --url <url>] [--tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa]"
 ---
 
 # A11y Scan
@@ -37,21 +37,29 @@ TodoWrite([
 ### Steps
 
 1. **Resolve mode.** `--url` → runtime scan; `--repo`/path → static scan. If neither given, ask.
-2. **Runtime (URL).** Run axe via CLI: `npx axe <url> --tags wcag2a,wcag2aa,wcag21aa` (JSON for
-   parsing). For authenticated pages, use the storage-state from `playwright-auth`.
+2. **Runtime (URL).** Use the repo-pinned axe integration and record its version and tags. Include
+   `wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa` when supported for the requested WCAG version; do not
+   silently claim 2.2 coverage with only 2.1 tags. Authenticate with `playwright-auth` when needed
+   and verify the intended app/role/build, not a login page. Drive the reported state before scanning.
+   Record unsupported rules, inaccessible frames and untested states as coverage gaps.
 3. **Static (source).** Inspect markup/components/styles for common AA issues: missing alt, unlabeled
    controls, heading order, landmark structure, color-only meaning, contrast in tokens/styles,
    focusable order, ARIA misuse. Use `grep` + component reading across `*.tsx,*.ts,*.jsx,*.js,*.html,
    *.css,*.scss,*.md`; the checks below cover 11 of the most common, high-signal WCAG AA violations.
-4. **Map & dedupe.** Attach the specific WCAG success criterion to each finding; dedupe repeats;
-   assign impact (Critical/Serious/Moderate/Minor) per the table below.
-5. **Report.** Prioritized violation table with `file:line`/selector, WCAG SC, impact, and a one-line
-   fix. Recommend `a11y-review` for interactive checks and `a11y-fix` to remediate.
+4. **Map & dedupe.** Separate `confirmed`, `suspected` and `needs-review` findings. Attach an
+   applicable WCAG criterion and observed user impact, not severity from a regex alone. Deduplicate
+   only when repository, component, scenario/state, criterion and cause match; preserve distinct
+   AT failures and variants. Treat axe `incomplete` results as requiring review, not passes.
+5. **Report.** Include repo/ref, route/state, selector, evidence, status, WCAG SC and candidate
+   source location. A source pointer is unverified until the runtime-to-source chain in `a11y-fix`
+   is established; never present the first text match as the owning code. Recommend `a11y-review`
+   for missing interactive evidence and `a11y-fix` only through its investigation gates.
 
 ## Static check catalog
 
-Static analysis is a fast first pass (it catches roughly 40% of WCAG issues); confirm the rest at
-runtime with `a11y-review`. Grep for these patterns and flag every match:
+Static analysis produces candidates, not a measured compliance rate. Use these patterns to locate
+code for inspection, never to flag every match as a violation. Check rendered context and component
+contracts with `a11y-review` before deciding a repair is needed:
 
 | # | WCAG SC | Impact | What to grep for |
 |---|---------|--------|-------------------|
@@ -63,19 +71,24 @@ runtime with `a11y-review`. Grep for these patterns and flag every match:
 | F | 2.1.1 Keyboard | Serious | `onClick` on a `<div>`/`<span>` with no `role`, `onKeyDown`, or `tabIndex`; `href="#"` used as a click handler |
 | G | 2.4.4 Link Purpose | Serious | Link text matching `click here\|read more\|learn more\|here\|more\|continue\|details\|go` with no surrounding context or `aria-label` |
 | H | 3.1.1 Language of Page | Serious | `<html>` missing `lang` |
-| I | 4.1.2 Name, Role, Value | Critical | `<button>`/`role="button"` with no text, `aria-label`, `aria-labelledby`, or `title`; positive `tabindex` |
-| J | 4.1.3 Status Messages | Serious | Components with `useState`/`setError`/`setSuccess`/`setLoading` but no `aria-live`, `role="status"`, or `role="alert"` in the same file |
+| I | 4.1.2 Name, Role, Value; 2.4.3 Focus Order | Serious | Controls with no apparent accessible name; positive `tabindex` requiring a focus-order check |
+| J | 4.1.3 Status Messages | Serious | Actual status messages not programmatically exposed; state hooks alone do not establish a status message |
 | K | 1.3.1 / 4.1.2 | Critical | `<input>`/`<textarea>`/`<select>` with an `id` but no matching `<label for="…">`/`htmlFor` and no `aria-label`/`aria-labelledby` |
 
 Cross-check findings (e.g., for K, verify a matching `<label for="X">` truly doesn't exist elsewhere
 in the file) before reporting — static patterns produce false positives that must be filtered out.
+Also inspect labels supplied by callers, slots and localization; decorative images; valid implicit
+table relationships; shared live regions; native keyboard behavior; and link purpose from
+programmatic context. Heading skips, a missing `scope`, or a state hook are not automatic WCAG
+failures. ARIA alone does not supply the visible non-color cue required by 1.4.1.
 
 ## Output
 
 ```
 ## a11y-scan — <target>
-Violations: N (Critical n · Serious n · Moderate n · Minor n) · WCAG level: AA
-| Location | WCAG SC | Impact | Issue | Fix |
+Confirmed violations: N · Suspected: N · Needs review: N · WCAG level/version: <target>
+Scope/build/tool version/tags: <evidence> · Untested states or checks: <gaps>
+| Repository/ref | Location/selector | State | Evidence/status | WCAG SC | Impact | Candidate fix |
 ```
 
 ## Rules

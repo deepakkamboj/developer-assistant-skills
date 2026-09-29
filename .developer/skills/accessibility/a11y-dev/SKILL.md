@@ -8,8 +8,8 @@ argument-hint: "[component/feature to build]"
 
 ## Role
 
-You are an accessibility-first development assistant. Every piece of UI code you generate meets
-WCAG 2.1/2.2 Level AA by construction — accessibility is the foundation, not a follow-up pass.
+You are an accessibility-first development assistant. Build toward WCAG 2.1/2.2 Level AA using
+existing accessible patterns; generated code still needs runtime and assistive-technology validation.
 
 ## Context to load
 
@@ -37,30 +37,35 @@ TodoWrite([
 ### Steps
 
 1. **Analyze.** Identify the component type (form, modal, nav, widget, page) and read existing code
-   to match its patterns and framework.
+   to match its patterns and framework. For an existing bug, use `a11y-fix` and its investigation
+   gates instead of rebuilding the control. Confirm ownership, supported component version and
+   product expectations before replacing a shared widget or adding options.
 2. **Generate accessibly, from the start:**
    - **Semantic HTML first.** `<button>` for actions, `<a>` for navigation, proper heading order,
      `<nav>/<main>/<header>/<footer>`, `<ul>/<ol>`/`<table>` for structure — never a `<div>`/`<span>`
      standing in for an interactive element.
-   - **Keyboard operability.** Every interactive element is reachable and operable via Tab/Enter/
-     Space/Arrow/Escape; visible focus indicator; no keyboard traps (except an intentional, escapable
-     modal trap); no positive `tabindex`.
+   - **Keyboard operability.** Use the keys appropriate to the native element or established widget
+     pattern, including roving focus where applicable; do not add duplicate Enter/Space handlers
+     to native buttons. Preserve visible focus and avoid keyboard traps and positive `tabindex`.
    - **Text alternatives.** Every `<img>` has a descriptive `alt`; decorative images use `alt=""`;
-     icon-only buttons get `aria-label`.
+     icon-only buttons need an accessible name, not necessarily an `aria-label` override.
    - **Forms.** Every input has an associated `<label>`/`aria-label`; related inputs are grouped with
-     `<fieldset>/<legend>`; errors use `aria-invalid` + `aria-describedby` + `role="alert"`, not color
-     alone.
+     `<fieldset>/<legend>`; associate error text and invalid state with the field. Choose an
+     announcement strategy appropriate to the flow; do not add alerts when existing focus or a
+     shared live region already communicates the error.
    - **Contrast & color.** Meet 4.5:1 (normal text) / 3:1 (large text, UI components); never convey
      state (required, error, success) by color alone — pair it with text or an icon.
    - **ARIA only to fill gaps.** Prefer semantic HTML (the first rule of ARIA); when a custom widget
      needs it, wire real state (`aria-expanded`, `aria-selected`, `aria-checked`) that actually updates.
-   - **Focus management.** Modals trap focus and restore it to the trigger on close; dynamic content
-     moves focus or announces via `aria-live`; never `outline: none` without an equally visible
-     replacement.
+   - **Focus management.** Reuse the tested dialog/focus primitive for modals and logical restoration.
+     Routine dynamic updates must not steal focus or all become live announcements. Preserve
+     title/tooltip behavior and avoid duplicate name/description/live-region output. Never remove
+     an outline without an equally visible replacement.
 3. **Self-check.** Before finishing, ask: "Could I use this with only a keyboard? With a screen
    reader? Without color perception? At 200% zoom?" Fix anything that fails.
-4. **Recommend follow-up.** Suggest `a11y-review`/`a11y-scan` for a full audit and `a11y-test-gen` for
-   a regression test, especially for anything non-trivial (modals, custom widgets, forms).
+4. **Validate.** Use `a11y-review`/`a11y-scan` and relevant regression tests, especially for
+   non-trivial widgets. Record tested states and untested browser/AT combinations; a code
+   self-check does not establish compliance. Use `a11y-test-gen` when coverage is missing.
 
 ## Reference patterns
 
@@ -77,18 +82,10 @@ TodoWrite([
 {hasError && <div id="email-error" role="alert">Please enter a valid email address</div>}
 ```
 
-**Modal focus management (React-style):**
-```jsx
-useEffect(() => {
-  if (isOpen) {
-    previouslyFocused.current = document.activeElement;
-    modalRef.current?.querySelector('button, [href], input, [tabindex]:not([tabindex="-1"])')?.focus();
-  } else {
-    previouslyFocused.current?.focus();
-  }
-}, [isOpen]);
-// <div role="dialog" aria-modal="true" aria-labelledby="modal-title" onKeyDown={onEscapeClose}>
-```
+**Modal focus management:** use the repo's tested dialog primitive rather than a partial focus
+effect. Verify initial focus, Tab/Shift+Tab containment for modals, supported dismissal, background
+inertness and restoration to the opener or a logical successor. Setting `aria-modal` alone does not
+implement those behaviors; non-modal dialogs must not inherit a modal focus trap.
 
 ## Framework notes
 

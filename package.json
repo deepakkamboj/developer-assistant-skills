@@ -34,7 +34,7 @@
     "validate": "node bin/cli.js validate",
     "list": "node bin/cli.js list skills",
     "doctor": "node bin/cli.js doctor",
-    "test": "node bin/cli.js validate"
+    "test": "node bin/cli.js validate && node --test evals/a11y-workflow.test.js"
   },
   "engines": {
     "node": ">=18"
