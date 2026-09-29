@@ -28,33 +28,49 @@ TodoWrite([
   { content: "Analyze the component/page + its interactions", status: "in_progress" },
   { content: "Decide test scope (scan + keyboard + focus + ARIA)", status: "pending" },
   { content: "Generate the Playwright + axe-core spec", status: "pending" },
-  { content: "Run once; output the test + how to run", status: "pending" }
+  { content: "Prove baseline failure and candidate pass; report manual coverage gaps", status: "pending" }
 ])
 ```
 
 ### Steps
 
-1. **Analyze.** Identify the component states (open/closed, error/success) and interactive elements.
+1. **Analyze.** Read the original scenario and `a11y-fix` investigation evidence when testing a
+   repair. Identify the actual route, wrapper, control version, flags, role/data, states and input
+   mode. An isolated component test is insufficient when the defect arises in its caller.
 2. **Scope tests:**
-   - **Automated scan** — `AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()`
-     with `violations` expected empty (test key states, e.g., dropdown open + closed).
+   - **Automated scan** — use the repo-pinned axe integration with applicable A/AA tags, including
+     `wcag21a` and `wcag22aa` when supported. Record unsupported coverage instead of silently
+     skipping it. Assert no relevant violations in key states without adding rule suppressions.
    - **Keyboard** — tab order, operability, no traps.
    - **Focus** — focus moves on open/route and is restored on close.
    - **ARIA/state** — roles and state (expanded/selected/checked) exposed (WCAG 4.1.2).
    - **Interactive widgets** — for tabs, dropdowns/comboboxes, accordions, toggles/switches, menus/
      flyouts, dialogs/modals, radio groups, action buttons, and external links, assert the specific
-     per-type ARIA/keyboard behavior in the `a11y-review` interactive-mode table (e.g. `aria-selected`
-     flips on Arrow keys for tabs; `aria-expanded` flips and focus returns to the trigger on Escape
-     for comboboxes/menus; focus is trapped and restored for dialogs) — don't just assert the role is
-     present, assert the state actually changes at runtime.
+     per-type behavior in `a11y-review`, respecting native/custom controls, manual/automatic tab
+     activation and modal/non-modal dialogs. Assert observable state transitions, not invented
+     ARIA attributes for native elements.
+   - **Original failure** — assert the reported behavior, not just the presence of a newly added
+     attribute. Cover duplicate name/description, lost focus, repeated open/close and caller-level
+     overrides where relevant. Preserve required title/tooltip and localized visible label text.
+   - **Manual matrix** — speech and voice-control behavior require actual AT execution or tester
+     evidence on the exact candidate; DOM/axe tests are only partial coverage. List required
+     browser/AT/input rows that cannot be automated and leave them unverified.
 3. **Generate.** Write the `*.spec.ts` under `--out` (default `tests/a11y`), one describe block per
    component, clear names, deterministic assertions (no fixed sleeps).
-4. **Run once.** Execute via `run-tests` to confirm it passes for the right reason. Remind to
-   `npm i -D @playwright/test @axe-core/playwright`.
+4. **Prove sensitivity.** For a repair where automatable, run the same test on the baseline and
+   candidate: it must fail for the original defect, not auth/selector/timeouts, then pass after the
+   patch. For manual-only AT defects, document a repeatable manual regression scenario and require
+   attributable baseline/candidate AT evidence. Automated proxy checks may pass on both builds;
+   label them as partial coverage, never proof of the original failure or its resolution. Missing
+   required AT evidence still blocks success. For new automated behavior, use a safe isolated
+   negative control. Repeat timing-sensitive scenarios. Execute via `run-tests` using existing
+   dependencies; request approval for missing tooling, never install or rewrite test infrastructure
+   unnecessarily. If a required run is unavailable, report that limitation.
 
 ## Output
 
-The generated test file path, a summary (scans/keyboard/focus/ARIA test counts), and the run command.
+The generated test file path, scenario/build, baseline failure and candidate result, commands,
+automated coverage and required manual browser/AT checks still outstanding.
 
 ## Rules
 

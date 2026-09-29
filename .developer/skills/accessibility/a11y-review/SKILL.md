@@ -35,7 +35,10 @@ TodoWrite([
 
 ### Steps
 
-1. **Resolve.** URL + mode (`all` runs each). Authenticate if the env requires it.
+1. **Resolve.** URL + mode (`all` runs each). For a reported bug, read the full original scenario,
+   expected behavior, build/control version, flags, role/data and browser/OS/AT/input conditions.
+   Authenticate if required. Preserve the reported path; unavailable prerequisites are blockers,
+   not non-reproduction. Read-only investigation may continue, but do not infer missing observations.
 2. **Review by mode** (via the Playwright MCP / CLI):
    - **interactive** — tabs, comboboxes, accordions, switches, menus, dialogs, radios, buttons,
      external links: keyboard operability, ARIA state (expanded/selected/checked), focus trapping and
@@ -45,31 +48,47 @@ TodoWrite([
    - **links** — link purpose/ambiguous "click here"; descriptive names (WCAG 2.4.4).
    - **modes** — dark mode, Windows High Contrast / `forced-colors`, `prefers-reduced-motion`.
    - **viewports** — reflow and target size across breakpoints (WCAG 1.4.10, 2.5.8).
-3. **Record.** Each finding: location/selector, WCAG SC, observed vs expected, evidence
-   (snapshot/steps).
-4. **Report & route.** Prioritized findings; recommend `a11y-fix` and `a11y-test-gen` for regression.
+3. **Record.** Each finding: repo/build, route/state, location/selector, WCAG applicability,
+   observed vs expected, evidence and tested conditions. Separate confirmed failures, suspicions,
+   best-practice recommendations and blocked checks. Use the `a11y-fix` investigation contract
+   to trace the rendered element through callers/wrappers to its actual source before recommending
+   a code location.
+4. **Report & route.** Prioritize confirmed failures. Record `not-reproduced` only after the original
+   scenario was executed under comparable conditions; otherwise use `blocked` or `inconclusive`.
+   A product-intent statement alone does not prove WCAG compliance. Route repairable findings to
+   `a11y-fix` and tests to `a11y-test-gen`; do not turn design preferences into bug fixes.
+
+### Assistive-technology evidence
+
+Record actual speech/voice behavior using the reported AT, version, browser and navigation/input
+mode, or an attributable tester observation. Playwright's DOM/accessibility snapshots cannot prove
+what an AT announces or whether a voice command works. If that execution is unavailable, mark the
+AT check `blocked`; never substitute a different AT, input path or page-load check. When changing
+shared semantics, identify the supported adjacent combinations requiring regression validation.
 
 ## Mode reference
 
-### interactive — 9 element types (WCAG 2.1.1, 2.4.3, 4.1.2)
+### interactive — 10 element types (WCAG 2.1.1, 2.4.3, 4.1.2)
 
 Static markup can look correct while the runtime state never updates — drive each element and watch
 the ARIA attribute change, not just its presence.
 
 | Element | Key checks |
 |---|---|
-| Tabs | `role="tab"`/`aria-selected` flips on click and Arrow keys; the linked `aria-controls` panel becomes visible |
-| Dropdowns/Comboboxes | `aria-expanded` toggles true/false; Arrow keys move through `role="option"`; Escape closes and returns focus to the trigger |
+| Tabs | Verify automatic vs manual activation: Arrow keys move focus; selection/panel visibility changes on activation (Enter/Space in a manual pattern), with matching `aria-selected`/`aria-controls` |
+| Dropdowns/Comboboxes | Distinguish native select from custom combobox; verify expansion, option navigation, commit/cancel, and active-descendant or moved-focus behavior for the implemented pattern; Escape closes without losing the logical input/trigger focus |
 | Accordions | `aria-expanded` toggles on click/Enter/Space; the controlled panel's visibility follows it |
-| Toggles/Switches | `role="switch"` + `aria-checked` flips on click and Space |
+| Toggle buttons | Native/custom button semantics with `aria-pressed` reflecting activation; preserve the toggle-button pattern rather than converting it to a switch |
+| Switches | Check the established switch semantics and changing `aria-checked` (or native `checked` for an input-based switch), with appropriate keyboard activation |
 | Menus/Flyouts | `aria-haspopup="menu"` opens a `role="menu"`; Arrow keys move through `menuitem`s; Escape closes and restores focus |
-| Dialogs/Modals | `role="dialog"` + `aria-modal="true"` + a label; focus moves in on open, is trapped inside (Tab cycles internally), and returns to the trigger on close/Escape |
+| Dialogs/Modals | Distinguish modal from non-modal; verify name/semantics, initial focus, modal containment, supported close behavior, and logical focus restoration (or a valid next target if the opener no longer exists) |
 | Radio buttons | `role="radiogroup"`/`<fieldset>` has an accessible name; Arrow keys move selection; `aria-checked`/`checked` updates |
-| Action buttons | Every button has an accessible name (text, `aria-label`, or `aria-labelledby`); icon-only buttons need `aria-label`; focus indicator is visible |
-| External links | `target="_blank"` has `rel="noopener noreferrer"`, an accessible name, and ideally warns it opens a new tab/window |
+| Action buttons | Every button has an accessible name; icon-only buttons may use hidden text, `aria-labelledby` or `aria-label`; do not require an override of an existing name; focus indicator is visible |
+| External links | Verify purpose from name and programmatic context; new-window warnings are useful guidance, not automatically an AA violation; security attributes are a separate review concern |
 
-A test that **times out** waiting for an ARIA attribute to change is almost always a real bug — the
-state change is visual-only (a CSS class) and never reaches the accessibility tree.
+A timeout is a diagnostic signal, not proof of a product defect. Check selector, loading/auth state,
+native semantics, activation model and the expected transition before blaming ARIA wiring. Do not
+change a valid widget to satisfy an incorrect test assumption.
 
 ### contrast (WCAG 1.4.3, 1.4.11)
 
@@ -84,37 +103,32 @@ state change is visual-only (a CSS class) and never reaches the accessibility tr
 
 ### color (WCAG 1.4.1 — Use of Color)
 
-Flag every case where color is the *only* signal, with no icon, text, underline, or ARIA backing it
-up: links distinguished only by color (no underline/icon), form errors shown only via a red
-border/color (missing icon + message + `aria-invalid`/`aria-describedby`), required fields marked
-only with a colored asterisk (missing "(required)" text or `aria-required`), status/success/error
-indicators using color alone (missing icon + `sr-only` text), hover/focus states that only change
-color, and charts/graphs that differentiate series by color alone (missing patterns/labels/legend).
-Decorative color, and color paired with a second indicator, are fine.
+Determine whether information requires color perception. Check visible non-color cues (text,
+shape, underline, pattern) for errors, required state, links and charts. ARIA or screen-reader-only
+text alone does not fix missing visible cues for sighted users with color-vision differences.
+Apply the criterion's contextual requirements; decorative colors and redundant color cues are fine.
 
 ### links (WCAG 2.4.4 — Link Purpose)
 
-Flag generic link text with no compensating context: `click here`, `read more`, `learn more`,
-`more`, `here`, `continue`, `details`, `download` (with no target/format), bare URLs as link text,
-and — the most common repo pattern — the **same generic text repeated in a list/grid** (e.g. every
-card says "Learn more") pointing to different destinations, which is ambiguous out of context for
-screen-reader users navigating a links list. Fix with descriptive text, `aria-label`, or `sr-only`
-text inside the link — descriptive text alone is the most robust option.
+Check whether purpose is available from link text plus programmatically determined context.
+Repeated "Learn more" or a bare URL is not automatically an AA failure; an isolated links list
+does not erase valid contextual evidence under 2.4.4. Prefer descriptive visible text when a real
+failure is established; preserve visible label wording when adding an accessible-name supplement.
 
 ### modes — display/user-preference modes
 
 | Mode | WCAG | What breaks |
 |---|---|---|
-| High Contrast / Forced Colors | 1.4.11 (related: 4.1.1) | `box-shadow` used as the only focus ring or border (removed by the OS); `background-image` icons; hardcoded SVG `fill`/`stroke` (use `currentColor`); test with `@media (forced-colors: active)` |
+| High Contrast / Forced Colors | 1.4.11, 2.4.7 | Check actual lost boundaries, icons and focus indicators when system colors replace authored styles; browser emulation is partial evidence, not proof of every OS high-contrast theme |
 | Reduced Motion | 2.3.3 (AAA, still worth honoring) | `animation`/`transition`/`scroll-behavior: smooth` with no `@media (prefers-reduced-motion: reduce)` fallback that stops or shortens it |
-| Resize/Reflow (200% zoom) | 1.4.4, 1.4.10 | Fixed pixel widths causing horizontal scroll; `overflow: hidden` clipping text; `user-scalable=no`/`maximum-scale=1` in the viewport meta tag |
+| Resize/Reflow | 1.4.4, 1.4.10 | Test text resizing at 200% and reflow at 320 CSS px width (e.g. 1280px at 400% zoom); assess applicable exceptions for genuinely two-dimensional content |
 | Text Spacing | 1.4.12 | `!important` on `line-height`/`letter-spacing`/`word-spacing` (blocks user overrides); fixed `height` + `overflow: hidden` on text containers that must grow |
 | Dark mode | Recommended, not a WCAG requirement | Hardcoded light-only colors/tokens with no `prefers-color-scheme: dark` alternative; inline styles bypassing theme tokens |
 
 ### viewports — 7 standard sizes (WCAG 1.4.10 Reflow, 2.5.8 Target Size)
 
 Desktop 1920×1080, 1366×768, 2560×1440 · Tablet 768×1024, 1024×768 · Mobile 320×568, 414×896.
-**320px is the critical baseline** — if it works there, it works everywhere wider. Check: horizontal
+**320px is a critical reflow baseline**, not proof of correctness at wider breakpoints. Check: horizontal
 overflow from fixed-width elements; missing tablet breakpoint (768–1023px) left running a broken
 desktop layout; touch targets below 24×24px (2.5.8 minimum) / 44×44px (2.5.5 AAA, still a good
 target); form `font-size` below 16px (triggers iOS auto-zoom-on-focus); fixed/sticky headers and
@@ -123,7 +137,8 @@ viewport.
 
 ## Output
 
-Prioritized findings per mode: `mode · selector · WCAG SC · impact · observed vs expected · fix`.
+Prioritized findings per mode: `mode · repo/build · route/state/selector · WCAG SC or recommendation ·
+impact · observed vs expected · evidence/status · browser/AT/input · candidate source · coverage gaps`.
 
 ## Rules
 
