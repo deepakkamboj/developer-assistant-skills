@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Developer Assistant Skills plugins",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "plugins": [
     {
       "name": "developer",
       "description": "Software lifecycle skills and specialist agents for requirements, architecture, development, review, testing, accessibility, debugging, and release readiness.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "source": "./.developer"
     }
   ]
