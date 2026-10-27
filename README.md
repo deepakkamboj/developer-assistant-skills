@@ -43,6 +43,10 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 ## Quick start
 
+For version 1.0.4 changes and the `a11y` agent/config-path migration, see the
+[release notes](CHANGELOG.md). The release preserves the seven accessibility skill names;
+individual skills do not carry separate release versions.
+
 ### Install the namespaced plugin
 
 Register the marketplace and install the `developer` plugin for your user account. The plugin is

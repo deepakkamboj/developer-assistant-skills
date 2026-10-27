@@ -268,10 +268,15 @@ test('portable Markdown links and scoped headings resolve inside the packaged ca
   }
 });
 
-test('generated adapters and portal catalog expose every synchronized entry point', () => {
+test('generated adapters and portal catalog expose every synchronized entry point', {
+  skip: !fs.existsSync(path.join(root, 'website/scripts/gen-catalog.mjs'))
+    ? 'Source-checkout integration: website and prompt adapters are not included in the npm package'
+    : false
+}, () => {
   execFileSync(process.execPath, ['website/scripts/gen-catalog.mjs'], {
     cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']
   });
+
   const catalog = JSON.parse(read('website/data/catalog.json'));
   assert.equal(catalog.skills.length, 38);
   assert.equal(catalog.agents.length, 20);
@@ -285,6 +290,30 @@ test('generated adapters and portal catalog expose every synchronized entry poin
   assert.ok(catalog.agents.some(agent => agent.name === 'a11y' && agent.kind === 'lead'));
   assert.ok(!catalog.agents.some(agent => agent.name === 'a11y-tester'));
   assert.ok(!catalog.agents.some(agent => agent.name === 'a11y-reviewer'));
+});
+
+test('packaged canonical inventory and release manifests stay synchronized', () => {
+  const skills = [];
+  function collect(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) collect(file);
+      else if (entry.name === 'SKILL.md') skills.push(file);
+    }
+  }
+  collect(path.join(root, '.developer/skills'));
+  assert.equal(skills.length, 38);
+  const agents = fs.readdirSync(path.join(root, '.developer/agents')).filter(file => file.endsWith('.agent.md'));
+  assert.equal(agents.length, 20);
+  assert.ok(agents.includes('a11y.agent.md'));
+  const version = JSON.parse(read('package.json')).version;
+  assert.equal(JSON.parse(read('.developer/plugin.json')).version, version);
+  for (const file of ['.github/plugin/marketplace.json', '.claude-plugin/marketplace.json']) {
+    const catalog = JSON.parse(read(file));
+    assert.equal(catalog.metadata.version, version);
+    assert.equal(catalog.plugins.find(plugin => plugin.name === 'developer').version, version);
+  }
+  assert.ok(read('CHANGELOG.md').includes(`## ${version}`));
 });
 
 test('consolidation has one review skill and one shared document without obsolete adapters', () => {
