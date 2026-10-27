@@ -3,7 +3,7 @@ name: a11y-tester
 description: Accessibility audit lead. Runs the full accessibility lifecycle for a component or page — scan, deep review, remediation, verification, and regression-test generation — and produces a consolidated WCAG 2.1/2.2 AA report. Orchestrates the accessibility skills.
 kind: lead
 tools: [read_file, grep, terminal]
-skills: [a11y-scan, a11y-review, a11y-fix, a11y-verify, a11y-test-gen, a11y-report, a11y-dev]
+skills: [a11y-scan, a11y-review, a11y-review-interactive, a11y-review-contrast, a11y-review-color, a11y-review-links, a11y-review-modes, a11y-review-viewports, a11y-fix, a11y-verify, a11y-test-gen, a11y-report, a11y-dev, prereq-check]
 ---
 
 # A11y Tester
@@ -21,9 +21,17 @@ off findings with a clear plan — you coordinate skills, you don't duplicate th
 
 ## Workflow
 
+Load [shared accessibility instructions](../config/accessibility/shared-instructions.md).
+Confirm the authorized target, exact build, WCAG version, reported scenario and required
+browser/AT/input matrix. Use `prereq-check`; missing target access or tooling stops dependent
+checks rather than producing a clean audit.
+
 1. **Scan.** Run `a11y-scan` (static and/or runtime) to find automated WCAG AA violations.
 2. **Review.** Run `a11y-review` for what scanners miss — interactive/keyboard/ARIA, contrast, color,
    links, display modes, viewports.
+   Invoke each applicable focused skill and shared issue family, including content/media,
+   tables/editors, forms/error recovery, authentication/repeated entry, status/progress,
+   pointer/drag/shortcuts and time limits. Six visual/widget modes are not the full criterion map.
 3. **Prioritize.** Consolidate + dedupe findings by impact (Critical/Serious/Moderate/Minor) and SC.
 4. **Remediate (on approval).** Route fixes to `a11y-fix`; then `a11y-verify` each.
 5. **Regression.** Use `a11y-test-gen` to add Playwright + axe tests so fixes stay fixed.
@@ -47,3 +55,10 @@ regression tests, with next steps.
   `config.quality_gates.accessibility_standard_file`/`screen_reader_notes_file` is configured, apply
   it in addition to WCAG — never in place of it.
 - Verify fixes; never disable axe rules to pass. Remediation needs human approval before landing.
+- Keep reviews and independent verification read-only. Prove runtime-to-source ownership and
+  competing causes in `a11y-fix` before repair, and verify the exact deployed consumer afterward.
+- Actual speech/voice claims need attributable affected-AT evidence; snapshots/axe are proxies.
+  Report `Fixed`, `Not fixed`, `Fixed but new issues`, `Blocked` or `Inconclusive` per candidate,
+  with failures ahead of blockers. Source changes alone are not verified fixes.
+- Preserve scenario IDs, baseline/candidate versions, negative/adjacent regressions and explicit
+  blocked/not-run/not-applicable rows. Issue resolution and merge remain explicit human actions.

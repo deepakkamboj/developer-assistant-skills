@@ -47,6 +47,12 @@ architecture and the consolidated (de-duplicated) agent/skill catalog** live in
 
 ## S2 — ppengsysquality: playwright + a11y (rename map)
 
+The accessibility capability refresh preserves the original public names and combined review
+modes, adds six standalone focused review skills and a read-only reviewer agent, and centralizes
+shared WCAG coverage/inspection/repair/scenarios. See
+[accessibility synchronization](accessibility-sync.md) for the current map and explicit exclusions.
+The historical consolidation table below records initial adoption, not the current full catalog.
+
 Renamed for **goal/usage clarity** and to drop the plugin-name prefix.
 
 ### playwright plugin → `testing/` + `debugging/`

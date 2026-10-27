@@ -17,6 +17,20 @@ Key conventions:
 - Generated prompt adapters are retained only for source-checkout compatibility. Regenerate them
   with `node .developer/scripts/gen-commands.js`. See `README.md`.
 
+## Accessibility maintenance
+
+Accessibility skills and agents load `.developer/config/accessibility/shared-instructions.md`
+as the single entry point for shared coverage, inspection, repair and scenario references.
+Keep this repository vendor-neutral: preserve WCAG capabilities and optional configured overlays
+without copying internal provider/tracker policy or endpoints. Retain the existing combined
+`a11y-review --mode` interface alongside focused review skills, and keep `a11y-report` and
+`a11y-verify` names stable.
+
+Do not import FastPass or Lighthouse workflows in this synchronization. Keep reviews and
+verification read-only, prerequisite changes approval-gated and unknown/blocked coverage explicit.
+Skills share the plugin release; do not add per-skill version or personal author metadata.
+After content changes run `npm test`, regenerate thin adapters and the website catalog.
+
 ## Official references
 
 GitHub Copilot:

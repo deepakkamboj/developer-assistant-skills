@@ -14,6 +14,7 @@ using native semantics first and ARIA only when necessary — never faking a pas
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
 - The full issue, comments, attachments available to the runner, and any `a11y-scan`/`a11y-review`
   evidence, not just a title, suggested file, or automated rule.
 - Resolve `DEVELOPER_CONFIG` (fallback `~/.developer/config.json`), companion context and verified
@@ -44,6 +45,11 @@ TodoWrite([
    version, OS, browser, assistive technology (AT) and version, input/navigation mode, language,
    zoom, and theme where relevant. Missing access/configuration is `blocked`, not `not-reproduced`.
    Preserve the original steps; an easier input path is not an equivalent reproduction.
+   Read every available page of issue history/comments, not just a latest-comments sample.
+   Reconcile the latest tester/owner disposition: closed/completed, duplicate, other-team-owned
+   or explicitly non-actionable work is not repair-eligible merely because a stale field says open.
+   Inspect linked existing work before changing assignment or editing; report conflicts for a
+   decision instead of reopening or reassigning silently.
 2. **Reproduce before editing.** Capture the failing state, interaction sequence, DOM/accessibility
    tree, focus transitions, or measured contrast. For speech/voice behavior, obtain an actual
    affected-AT observation; an accessibility snapshot is not speech evidence. If execution is
@@ -68,6 +74,15 @@ TodoWrite([
    A pointer, explanation, workaround, PR comment, or opened PR is not a completed fix.
 
 ## Investigation contract
+
+After proving cause/owner, select the relevant shared repair family and scenario IDs. Cover
+content/structure, forms and error recovery, keyboard/overlays, composite widgets, dynamic
+status/progress, visual modes/reflow, pointer/drag/shortcuts, authentication/repeated entry and
+media/timing as applicable. Preserve source, localization, security and dependency boundaries;
+the playbook supplies hypotheses, not permission for catalog-wide changes.
+For each repair identify an original baseline failure, precise candidate outcome, valid negative
+case and adjacent consumer regression. Missing runtime evidence may permit a justified source
+repair with an environment-pending handoff, never a verified success claim.
 
 Complete this evidence record before editing. Use `unknown` plus a next action when unresolved.
 

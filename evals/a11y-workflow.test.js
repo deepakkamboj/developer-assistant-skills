@@ -153,3 +153,124 @@ test('weekly-observation scenarios have unique IDs and explicit assertions', () 
     assert.ok(coveredSkills.has(`accessibility/${name}`), `Missing scenario for ${name}`);
   }
 });
+
+const focusedReviews = ['interactive', 'contrast', 'color', 'links', 'modes', 'viewports'];
+const sharedDirectory = '.developer/config/accessibility';
+const sharedEntry = `${sharedDirectory}/shared-instructions.md`;
+const originalSkills = [
+  'a11y-dev', 'a11y-fix', 'a11y-report', 'a11y-review', 'a11y-scan',
+  'a11y-test-gen', 'a11y-verify'
+];
+const portableFiles = [
+  ...originalSkills.map(skillPath),
+  ...focusedReviews.map(mode => skillPath(`a11y-review-${mode}`)),
+  ...['prereq-check', 'plugin-version-check'].map(name => `.developer/skills/repo/${name}/SKILL.md`),
+  ...['a11y-reviewer', 'a11y-tester', 'accessibility-advocate'].map(name => `.developer/agents/${name}.agent.md`),
+  ...['shared-instructions', 'accessibility-coverage', 'issue-families', 'repair-playbook', 'scenario-checks']
+    .map(name => `${sharedDirectory}/${name}.md`)
+];
+
+test('all accessibility roles route through one shared entry point and retain original workflows', () => {
+  for (const file of portableFiles.filter(file => !file.startsWith(sharedDirectory))) {
+    const text = read(file);
+    assert.match(text, /config\/accessibility\/shared-instructions\.md/, file);
+    assert.doesNotMatch(text, /\]\([^)]*(?:accessibility-coverage|issue-families|repair-playbook|scenario-checks)\.md\)/,
+      `${file} bypasses the shared entry point`);
+  }
+  for (const mode of focusedReviews) {
+    const text = read(skillPath(`a11y-review-${mode}`));
+    includesAll(text, ['## Role', '## Context to load', '## Workflow',
+      '### Step 0: TodoWrite Checklist', '### Steps', '## Output', 'TodoWrite([']);
+    assert.match(read(skillPath('a11y-review')), new RegExp(`a11y-review-${mode}`));
+  }
+  includesAll(read(skillPath('a11y-review')), ['combined `--mode` interface', '`all`']);
+  includesAll(read(skillPath('a11y-report')), ['Markdown', 'HTML']);
+});
+
+test('shared map includes exactly the 55 WCAG2.2 A/AA criteria and 2.1 boundaries', () => {
+  const map = read(`${sharedDirectory}/accessibility-coverage.md`);
+  const criteria = [...map.matchAll(/^\| (\d\.\d\.\d+) \| (A|AA) \|/gm)].map(match => match[1]);
+  assert.equal(criteria.length, 55);
+  assert.equal(new Set(criteria).size, 55);
+  for (const criterion of ['1.2.1', '1.2.5', '2.4.11', '2.5.7', '2.5.8', '3.2.6', '3.3.7', '3.3.8']) {
+    assert.ok(criteria.includes(criterion), criterion);
+  }
+  assert.ok(!criteria.includes('4.1.1'));
+  includesAll(map, ['WCAG 4.1.1 Parsing is part of 2.1 and removed from 2.2',
+    '24px-diameter', '44px under 2.5.5 is AAA', '18pt/24 CSS px']);
+  for (const file of ['issue-families', 'repair-playbook']) {
+    assert.equal([...read(`${sharedDirectory}/${file}.md`).matchAll(/^## \d+\. /gm)].length, 10);
+  }
+  const scenarios = read(`${sharedDirectory}/scenario-checks.md`);
+  const ids = [...scenarios.matchAll(/^\| (S\d\d) \|/gm)].map(match => match[1]);
+  assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`));
+});
+
+test('portable additions contain no internal integration payload or excluded engine workflows', () => {
+  for (const file of portableFiles) {
+    const text = read(file);
+    assert.doesNotMatch(text, /\b(?:ADO|S360|Narrator)\b|Microsoft Accessibility Standards|microsoft\.ghe\.com|visualstudio\.com|sharepoint\.com/, file);
+    assert.doesNotMatch(text, /a11y-fastpass|a11y-lighthouse|lighthouse-scan|run-fastpass/, file);
+  }
+  for (const mode of focusedReviews) {
+    const frontmatter = read(skillPath(`a11y-review-${mode}`)).split('---')[1];
+    assert.doesNotMatch(frontmatter, /^\s*(version|author):/m);
+  }
+  includesAll(read('.developer/skills/repo/plugin-version-check/SKILL.md'),
+    ['`current`, `outdated`, `ahead`, `missing` and `unknown`',
+      'SemVer precedence', 'approval-only', 'not an outdated installation']);
+  includesAll(read('.developer/skills/repo/prereq-check/SKILL.md'),
+    ['read-only', '`unauthorized`', '`startup-failed`', 'HTTP 200 alone is insufficient',
+      'Obtain explicit approval', 'host-managed']);
+});
+
+test('portable guidance preserves actual interaction and threshold counterexamples', () => {
+  includesAll(read(skillPath('a11y-review-interactive')), [
+    'Manual/automatic activation', 'Native select', 'modal/non-modal',
+    'Actual single-pointer non-drag path', 'Virtualized/infinite', 'DOM/axe are proxies'
+  ]);
+  includesAll(read(skillPath('a11y-review-color')), ['Hidden text or ARIA alone',
+    'asterisk is already a shape cue', 'Decorative/redundant colors are not failures']);
+  includesAll(read(skillPath('a11y-review-contrast')), ['unrounded ratio', '3.5:1',
+    'Text inside a button still uses text thresholds']);
+  includesAll(read(skillPath('a11y-review-links')), ['Context can satisfy 2.4.4',
+    '`aria-describedby` does not automatically', '2.4.9']);
+  includesAll(read(skillPath('a11y-review-modes')), ['OS high-contrast', 'partial evidence',
+    '0.12em', '0.16em', '2.3.3 is AAA']);
+  includesAll(read(skillPath('a11y-review-viewports')), ['256 CSS px', '24px-diameter',
+    'actual hit areas', 'Necessary 2D content']);
+  includesAll(read(sharedEntry), ['`wcag22a`', '`incomplete`', 'exact consumer build',
+    'Merge and issue closure remain explicit human actions']);
+});
+
+test('portable Markdown links resolve inside the packaged canonical tree', () => {
+  for (const file of portableFiles) {
+    const prose = read(file).replace(/```[\s\S]*?```/g, '');
+    for (const match of prose.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+      const link = match[1].split('#')[0];
+      if (!link || /^[a-z]+:/i.test(link)) continue;
+      const resolved = path.resolve(root, path.dirname(file), link);
+      assert.ok(resolved.startsWith(path.join(root, '.developer') + path.sep),
+        `Noncanonical link ${file}: ${link}`);
+      assert.ok(fs.existsSync(resolved), `Broken link ${file}: ${link}`);
+    }
+  }
+});
+
+test('generated adapters and portal catalog expose every synchronized entry point', () => {
+  execFileSync(process.execPath, ['website/scripts/gen-catalog.mjs'], {
+    cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']
+  });
+  const catalog = JSON.parse(read('website/data/catalog.json'));
+  assert.equal(catalog.skills.length, 44);
+  assert.equal(catalog.agents.length, 21);
+  for (const name of [...focusedReviews.map(mode => `a11y-review-${mode}`),
+    'prereq-check', 'plugin-version-check']) {
+    const group = name.startsWith('a11y-') ? 'accessibility' : 'repo';
+    const canonical = `.developer/skills/${group}/${name}/SKILL.md`;
+    assert.ok(catalog.skills.some(skill => skill.name === name), name);
+    assert.ok(read(`.github/prompts/${name}.prompt.md`).includes(canonical));
+    assert.ok(read(`.claude/commands/dev/${name}.md`).includes(canonical));
+  }
+  assert.ok(catalog.agents.some(agent => agent.name === 'a11y-reviewer' && agent.kind === 'critic'));
+});

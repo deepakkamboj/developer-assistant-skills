@@ -14,6 +14,7 @@ AA and didn't regress anything else.
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
 - The original full issue, baseline evidence, source trace and applied fix (the investigation
   contract in `a11y-fix`); do not trust a fixer summary or PR description as proof.
 - The target URL/component; `config.test_environments`; axe/Playwright.
@@ -69,6 +70,16 @@ TodoWrite([
    wording during independent validation. Return evidence to the fixer for a bounded new attempt.
 
 ## Verdict rules
+
+Choose shared scenario IDs from the original failure and affected siblings; do not run all
+twenty for every repair. Include valid negative cases and actual task completion. Forms need
+error/correct/resubmit transitions; status/progress needs timing and no duplicate announcements;
+tables/grids need real associations and navigation; drag needs an actual non-drag pointer path
+as well as keyboard access. Media requires actual alternative accuracy, not track presence.
+Use criterion/version exceptions and actual control semantics when measuring targets, reflow,
+focus obscuration, authentication assistance, repeated entry and timeout recovery.
+Keep manual/AT evidence separate from automated assertions. Never edit product source, tests
+or expected snapshots during independent acceptance.
 
 | Verdict | Required evidence |
 |---|---|

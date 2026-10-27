@@ -20,6 +20,11 @@ standard, but honors an optional org overlay if one is configured (see Rules).
 
 ## Review checklist
 
+Load [shared accessibility instructions](../config/accessibility/shared-instructions.md).
+Select every applicable focused review and shared family, including forms/authentication,
+tables, status/progress, pointer alternatives, reflow and timing. A checklist entry is a probe,
+not an automatic violation; preserve valid native patterns and criterion exceptions.
+
 1. **Semantics** — native elements over ARIA where possible; correct roles; heading order; landmarks.
 2. **Keyboard** — everything operable without a mouse; visible focus; logical tab order; no traps.
 3. **Focus management** — focus moves correctly on open/close/route; restored on dismiss.
@@ -37,6 +42,9 @@ Per finding: `Severity — location — WCAG SC (e.g., 2.1.1 Keyboard) — user 
 
 - Independent & read-only. WCAG AA is the bar. Cite the specific success criterion for each finding;
   don't invent criteria. Verify with axe/Playwright where a live URL is available.
+- Distinguish confirmed failures, suspected issues and needs-review gaps. Trace the actual source
+  and resolved dependency before assigning a repair. AT speech needs actual observation;
+  DOM/axe are proxies. Source-only scope leaves required runtime/AT rows unverified.
 - If `config.quality_gates.accessibility_standard_file`/`screen_reader_notes_file` is configured,
   also flag violations of it — labeled as "org standard," not WCAG — in addition to, never instead
   of, the WCAG check above.

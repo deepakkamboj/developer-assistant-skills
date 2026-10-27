@@ -14,6 +14,7 @@ real contrast, meaning-by-color, link clarity, display modes, and responsiveness
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
 - The target URL + `config.test_environments` (auth via `playwright-auth` if needed).
 - `.developer/mcp/playwright.json` (interactive driving); WCAG 2.1/2.2 AA.
 - Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
@@ -40,6 +41,8 @@ TodoWrite([
    Authenticate if required. Preserve the reported path; unavailable prerequisites are blockers,
    not non-reproduction. Read-only investigation may continue, but do not infer missing observations.
 2. **Review by mode** (via the Playwright MCP / CLI):
+   Keep this combined `--mode` interface; load the corresponding focused skill for its complete
+   procedures. `all` invokes every applicable mode, not only the first matching widget:
    - **interactive** — tabs, comboboxes, accordions, switches, menus, dialogs, radios, buttons,
      external links: keyboard operability, ARIA state (expanded/selected/checked), focus trapping and
      restoration (WCAG 2.1.1, 2.4.3, 4.1.2).
@@ -48,6 +51,10 @@ TodoWrite([
    - **links** — link purpose/ambiguous "click here"; descriptive names (WCAG 2.4.4).
    - **modes** — dark mode, Windows High Contrast / `forced-colors`, `prefers-reduced-motion`.
    - **viewports** — reflow and target size across breakpoints (WCAG 1.4.10, 2.5.8).
+   Focused routes are `a11y-review-interactive`, `a11y-review-contrast`, `a11y-review-color`,
+   `a11y-review-links`, `a11y-review-modes` and `a11y-review-viewports`, respectively.
+   Also use the shared issue families for forms/authentication, tables, language, media,
+   timing, pointer alternatives and asynchronous updates; six modes are not the whole WCAG map.
 3. **Record.** Each finding: repo/build, route/state, location/selector, WCAG applicability,
    observed vs expected, evidence and tested conditions. Separate confirmed failures, suspicions,
    best-practice recommendations and blocked checks. Use the `a11y-fix` investigation contract

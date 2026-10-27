@@ -4,6 +4,7 @@ import Diagram from "./Diagram";
 import { Features, Feature } from "./Features";
 import { Cards, Card } from "./Cards";
 import { PackageInstall } from "./PackageInstall";
+import catalog from "../data/catalog.json";
 import {
   LoopIcon,
   ShieldIcon,
@@ -26,8 +27,8 @@ const badges: [string, string, string][] = [
 ];
 
 const stats: [string, string][] = [
-  ["34", "Skills"],
-  ["20", "Agents"],
+  [String(catalog.skills.length), "Skills"],
+  [String(catalog.agents.length), "Agents"],
   ["10", "Lifecycle groups"],
   ["3", "Runtimes"],
 ];
@@ -78,7 +79,8 @@ export default function Home() {
           root-cause → repair, with a supervisor orchestrating the DAG.
         </Feature>
         <Feature icon={<ShieldIcon />} title="Independent critics">
-          15 specialist review agents (security, performance, a11y, tests, …) audit diffs read-only;
+          {catalog.agents.filter(agent => agent.kind === "critic").length} specialist review agents
+          {" "}(security, performance, a11y, tests, …) review evidence read-only;
           a <code>deliberate</code> step turns findings into a verdict.
         </Feature>
         <Feature icon={<WrenchIcon />} title="Bounded, safe autonomy">
@@ -108,10 +110,10 @@ export default function Home() {
           The canonical library, closed loop, traceability, and review pipeline.
         </Card>
         <Card icon={<TerminalIcon />} title="Skills" href="/skills">
-          All 34 lifecycle skills, generated from the real frontmatter.
+          All {catalog.skills.length} lifecycle skills, generated from the real frontmatter.
         </Card>
         <Card icon={<BookIcon />} title="Agents" href="/agents">
-          20 agents — review critics and orchestrating leads.
+          {catalog.agents.length} agents — review critics and orchestrating leads.
         </Card>
       </Cards>
 
