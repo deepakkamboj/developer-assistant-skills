@@ -3,7 +3,7 @@
 The public plugin retains its original seven accessibility skills. All six detailed review
 procedures are combined into `a11y-review`, selected through
 `--mode interactive|contrast|color|links|modes|viewports|all`. Tester and reviewer responsibilities
-are combined into `a11y-tester` with separate audit, read-only review and verification modes.
+are combined into `a11y` with separate audit, read-only review and verification modes.
 Two portable repository-readiness/version workflows are also available.
 The complete plugin has 38 skills and 20 agents.
 
@@ -16,7 +16,7 @@ ten inspection families, ten bounded repair families, twenty verification scenar
 private organization/AT templates. Workflows select applicable sections rather than duplicating
 policy or maintaining separate config documents.
 
-`a11y-tester` preserves the former reviewer's source tracing, dependency/version investigation,
+`a11y` preserves the former reviewer's source tracing, dependency/version investigation,
 sampling limits and evidence-based output. Review mode stays read-only. Independent verification
 still uses `a11y-verify` in a fresh verifier context or an attributable independent tester;
 an author cannot certify their own repair as independently verified.
@@ -42,7 +42,7 @@ or untested. No automatic installs, authentication, baseline acceptance, merge o
 | Scenario-specific regression generation | Existing `a11y-test-gen`, negative/adjacent cases and separate manual AT rows |
 | Accessible development | Existing `a11y-dev`, broadened content/forms/media/time/input guidance |
 | Shareable reporting | Existing `a11y-report` name, Markdown/HTML and approved GitHub issue filing |
-| Audit and read-only evidence review | Combined `a11y-tester` agent; existing diff advocate retained |
+| Audit and read-only evidence review | Combined `a11y` agent; existing diff advocate retained |
 | Capability/access readiness | `repo/prereq-check`, platform-appropriate read-only target checks |
 | Plugin release inventory | `repo/plugin-version-check`, actual configured host/catalog, SemVer and approval-only plans |
 

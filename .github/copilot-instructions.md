@@ -31,7 +31,7 @@ Do not import FastPass or Lighthouse workflows in this synchronization. Keep rev
 verification read-only, prerequisite changes approval-gated and unknown/blocked coverage explicit.
 Skills share the plugin release; do not add per-skill version or personal author metadata.
 After content changes run `npm test`, regenerate thin adapters and the website catalog.
-Keep `a11y-tester` as the combined audit/review agent with explicit read-only review mode.
+Keep `a11y` as the combined audit/review agent with explicit read-only review mode.
 Retain the separate diff critic and independent verification; the fixer cannot self-certify.
 Do not consolidate unrelated `code-review`, `deliberate`, `pr-learn` or specialist critics.
 

@@ -137,7 +137,7 @@ Shared, opt-in CI workflows remain documented in
 `performance-advocate`, `accessibility-advocate`, `unit-testing-advocate`, `e2e-test-author`,
 `manual-tester`, `observability-advocate`, `dependency-manager`, `style-guardian`,
 `internationalization-expert`, `documentation-steward`, `refactorer`, `debugger`) plus 5 leads/gates
-(`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y-tester`).
+(`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y`).
 
 Each skill's instructions live in [`.developer/skills/`](.developer/skills/).
 
@@ -151,7 +151,7 @@ instructions, the 55-criterion map, ten inspection/repair families, twenty verif
 and optional private policy templates, organized by scope. Forms, authentication, tables, media,
 timing and pointer alternatives remain covered.
 
-The combined `a11y-tester` agent supplies audit orchestration and a read-only review mode.
+The combined `a11y` agent supplies audit orchestration and a read-only review mode.
 The separate diff critic and independent verification remain available; a fixer cannot
 self-certify as independent. `repo/prereq-check` and `repo/plugin-version-check` provide portable
 readiness and approval-only release inventory workflows. These are instructions using verified

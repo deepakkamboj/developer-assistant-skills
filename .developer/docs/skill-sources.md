@@ -49,7 +49,7 @@ architecture and the consolidated (de-duplicated) agent/skill catalog** live in
 
 The accessibility capability refresh preserves the original public names and combined review
 modes, combines all six detailed review procedures into `a11y-review`, merges tester/reviewer
-responsibilities into `a11y-tester`, and centralizes all shared WCAG guidance in one document. See
+responsibilities into `a11y`, and centralizes all shared WCAG guidance in one document. See
 [accessibility synchronization](accessibility-sync.md) for the current map and explicit exclusions.
 The historical consolidation table below records initial adoption, not the current full catalog.
 
@@ -86,7 +86,7 @@ Renamed for **goal/usage clarity** and to drop the plugin-name prefix.
 | `a11y-dev` | `a11y-dev` | Kept as its own accessibility skill (proactive, accessibility-first generation) rather than folded into `implement-change`, so the capability stays discoverable under `accessibility/`; **drop MAS/ACCESSIBILITY_STANDARDS.md refs**, WCAG-only |
 | Source-specific accessibility policy | Organization template in `config/accessibility.md` | Not shipped filled-in. Configure a private `accessibility_standard_file` only when needed; apply in addition to WCAG, never instead of it. |
 | Source-specific AT behavior notes | Screen-reader template in `config/accessibility.md` | Configure private `screen_reader_notes_file` from observed version-specific evidence; no mandatory platform assumption or guessed speech. |
-| Source reviewer/tester agents | `a11y-tester` | Combined audit and read-only review modes; retain independent verification and the existing separate diff critic. |
+| Source reviewer/tester agents | `a11y` | Combined audit and read-only review modes; retain independent verification and the existing separate diff critic. |
 
 ### engsys plugin → **mostly dropped**
 

@@ -163,7 +163,7 @@ const originalSkills = [
 const portableFiles = [
   ...originalSkills.map(skillPath),
   ...['prereq-check', 'plugin-version-check'].map(name => `.developer/skills/repo/${name}/SKILL.md`),
-  ...['a11y-tester', 'accessibility-advocate'].map(name => `.developer/agents/${name}.agent.md`),
+  ...['a11y', 'accessibility-advocate'].map(name => `.developer/agents/${name}.agent.md`),
   sharedEntry
 ];
 
@@ -282,7 +282,8 @@ test('generated adapters and portal catalog expose every synchronized entry poin
     assert.ok(read(`.github/prompts/${name}.prompt.md`).includes(canonical));
     assert.ok(read(`.claude/commands/dev/${name}.md`).includes(canonical));
   }
-  assert.ok(catalog.agents.some(agent => agent.name === 'a11y-tester' && agent.kind === 'lead'));
+  assert.ok(catalog.agents.some(agent => agent.name === 'a11y' && agent.kind === 'lead'));
+  assert.ok(!catalog.agents.some(agent => agent.name === 'a11y-tester'));
   assert.ok(!catalog.agents.some(agent => agent.name === 'a11y-reviewer'));
 });
 
@@ -311,13 +312,15 @@ test('consolidation has one review skill and one shared document without obsolet
 });
 
 test('combined agent retains read-only reviewer evidence and independent acceptance boundaries', () => {
-  const tester = read('.developer/agents/a11y-tester.agent.md');
+  const tester = read('.developer/agents/a11y.agent.md');
+  assert.match(tester, /^name: a11y$/m);
   includesAll(tester, ['**Audit (default):**', '**Review:**', '**Verify:**',
     '## Read-only review workflow', 'frame/portal/shadow', 'search ledger',
     'same-version behavior', 'competing causes', 'producer-to-consumer build linkage',
     'sampled/unsampled', '## Review output', 'fresh verifier context',
     'cannot certify its own work', 'Do not repair']);
   assert.ok(!fs.existsSync(path.join(root, '.developer/agents/a11y-reviewer.agent.md')));
+  assert.ok(!fs.existsSync(path.join(root, '.developer/agents/a11y-tester.agent.md')));
   for (const name of ['code-review', 'deliberate', 'pr-learn']) {
     assert.ok(fs.existsSync(path.join(root, `.developer/skills/review/${name}/SKILL.md`)));
   }
