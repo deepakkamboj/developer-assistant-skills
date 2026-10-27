@@ -14,7 +14,7 @@ AA and didn't regress anything else.
 ## Context to load
 
 Load and honor these before acting:
-- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - The original full issue, baseline evidence, source trace and applied fix (the investigation
   contract in `a11y-fix`); do not trust a fixer summary or PR description as proof.
 - The target URL/component; `config.test_environments`; axe/Playwright.

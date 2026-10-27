@@ -20,8 +20,8 @@ standard, but honors an optional org overlay if one is configured (see Rules).
 
 ## Review checklist
 
-Load [shared accessibility instructions](../config/accessibility/shared-instructions.md).
-Select every applicable focused review and shared family, including forms/authentication,
+Load [shared accessibility instructions](../config/accessibility.md).
+Select every applicable `a11y-review` mode and shared family, including forms/authentication,
 tables, status/progress, pointer alternatives, reflow and timing. A checklist entry is a probe,
 not an automatic violation; preserve valid native patterns and criterion exceptions.
 

@@ -14,7 +14,7 @@ compliance and fail when accessibility regresses.
 ## Context to load
 
 Load and honor these before acting:
-- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - The component/page source (or URL) and its interactive elements.
 - Repo test conventions; `.developer/skills/testing/playwright/_conventions.md`; `config.test_environments`.
 - Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
@@ -74,7 +74,7 @@ Select relevant shared scenario IDs with an original failure, candidate expectat
 negative/control case and adjacent regression. Include applicable content/tables, forms and
 authentication/repeated entry, status/progress, media/timing and pointer/drag, not just widgets.
 Use inspected unique locators and actual native/custom patterns; expand complex coverage through
-`a11y-review-interactive` for trees/grids/editors, sliders, date pickers and virtualized content.
+`a11y-review --mode interactive` for trees/grids/editors, sliders, date pickers and virtualized content.
 Assert user outcomes and actual action counts. Inspect available A/AA tags, including `wcag22a`
 when supported; preserve unsupported and incomplete checks. Keep manual AT rows separate.
 

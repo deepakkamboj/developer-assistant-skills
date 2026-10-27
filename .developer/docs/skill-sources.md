@@ -48,8 +48,8 @@ architecture and the consolidated (de-duplicated) agent/skill catalog** live in
 ## S2 — ppengsysquality: playwright + a11y (rename map)
 
 The accessibility capability refresh preserves the original public names and combined review
-modes, adds six standalone focused review skills and a read-only reviewer agent, and centralizes
-shared WCAG coverage/inspection/repair/scenarios. See
+modes, combines all six detailed review procedures into `a11y-review`, merges tester/reviewer
+responsibilities into `a11y-tester`, and centralizes all shared WCAG guidance in one document. See
 [accessibility synchronization](accessibility-sync.md) for the current map and explicit exclusions.
 The historical consolidation table below records initial adoption, not the current full catalog.
 
@@ -84,9 +84,9 @@ Renamed for **goal/usage clarity** and to drop the plugin-name prefix.
 | `a11y-review-interactive/contrast/color/links/modes/viewports` | `a11y-review` (sub-modes) | Consolidate all 6 review skills into one skill with `--mode`; **modes' MAS numbering (e.g. "MAS 4.3.1") replaced with the equivalent WCAG SC** (1.4.11, 2.3.3, 1.4.4/1.4.10, 1.4.12) |
 | `a11y-report-gen` | `a11y-report` | Shorter; **drop ADO bug templates + MAS mode table**, keep the self-contained filterable HTML/Markdown report with WCAG severities |
 | `a11y-dev` | `a11y-dev` | Kept as its own accessibility skill (proactive, accessibility-first generation) rather than folded into `implement-change`, so the capability stays discoverable under `accessibility/`; **drop MAS/ACCESSIBILITY_STANDARDS.md refs**, WCAG-only |
-| `setup/MAS.md` (Microsoft Accessibility Standards — hardcoded, linked to an internal SharePoint) | `config/accessibility-standard.example.md` | **Not shipped filled-in.** Generalized into an optional, vendor-neutral config overlay: skills load it only if `config.quality_gates.accessibility_standard_file` is set (unset by default), and apply it *in addition to* WCAG, never instead of it. Orgs with a MAS-like standard supply their own copy outside the repo. |
-| `prompts/narrator-patterns.md` (Windows Narrator/UIA-specific ARIA patterns) | `config/screen-reader-notes.example.md` | Same treatment via `config.quality_gates.screen_reader_notes_file` — genericized across screen readers (NVDA/JAWS/VoiceOver/Narrator/etc.), no Windows-only assumptions, unset by default |
-| agents: `a11y-reviewer`, `a11y-tester` | same | Keep; **remove MAS/Narrator internal refs**; `a11y-tester` now also drives `a11y-dev`/`a11y-report` and honors the optional overlay above |
+| Source-specific accessibility policy | Organization template in `config/accessibility.md` | Not shipped filled-in. Configure a private `accessibility_standard_file` only when needed; apply in addition to WCAG, never instead of it. |
+| Source-specific AT behavior notes | Screen-reader template in `config/accessibility.md` | Configure private `screen_reader_notes_file` from observed version-specific evidence; no mandatory platform assumption or guessed speech. |
+| Source reviewer/tester agents | `a11y-tester` | Combined audit and read-only review modes; retain independent verification and the existing separate diff critic. |
 
 ### engsys plugin → **mostly dropped**
 

@@ -19,17 +19,21 @@ Key conventions:
 
 ## Accessibility maintenance
 
-Accessibility skills and agents load `.developer/config/accessibility/shared-instructions.md`
-as the single entry point for shared coverage, inspection, repair and scenario references.
+Accessibility skills and agents load `.developer/config/accessibility.md`
+as the single document for shared instructions, coverage, inspection, repair, scenarios and
+optional private policy templates. Maintain scoped headings rather than separate config documents.
 Keep this repository vendor-neutral: preserve WCAG capabilities and optional configured overlays
 without copying internal provider/tracker policy or endpoints. Retain the existing combined
-`a11y-review --mode` interface alongside focused review skills, and keep `a11y-report` and
+`a11y-review --mode` interface with all six detailed procedures in that one skill, and keep `a11y-report` and
 `a11y-verify` names stable.
 
 Do not import FastPass or Lighthouse workflows in this synchronization. Keep reviews and
 verification read-only, prerequisite changes approval-gated and unknown/blocked coverage explicit.
 Skills share the plugin release; do not add per-skill version or personal author metadata.
 After content changes run `npm test`, regenerate thin adapters and the website catalog.
+Keep `a11y-tester` as the combined audit/review agent with explicit read-only review mode.
+Retain the separate diff critic and independent verification; the fixer cannot self-certify.
+Do not consolidate unrelated `code-review`, `deliberate`, `pr-learn` or specialist critics.
 
 ## Official references
 

@@ -13,7 +13,7 @@ development checkout or an unrelated npm package. Do not execute updates.
 
 ## Context to load
 
-Load [shared instructions](../../../config/accessibility/shared-instructions.md) for prerequisite,
+Load [shared instructions](../../../config/accessibility.md) for prerequisite,
 evidence and approval boundaries.
 Resolve `DEVELOPER_CONFIG`, the current host's documented plugin-list procedure, configured
 marketplace and installed manifest. This repository's plugin identity is `developer`, sourced

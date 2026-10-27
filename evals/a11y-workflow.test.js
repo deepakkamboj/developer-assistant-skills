@@ -16,7 +16,7 @@ function read(file) {
       cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']
     });
   }
-  return fs.readFileSync(path.join(root, file), 'utf8');
+  return fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n');
 }
 
 function includesAll(text, phrases) {
@@ -155,40 +155,37 @@ test('weekly-observation scenarios have unique IDs and explicit assertions', () 
 });
 
 const focusedReviews = ['interactive', 'contrast', 'color', 'links', 'modes', 'viewports'];
-const sharedDirectory = '.developer/config/accessibility';
-const sharedEntry = `${sharedDirectory}/shared-instructions.md`;
+const sharedEntry = '.developer/config/accessibility.md';
 const originalSkills = [
   'a11y-dev', 'a11y-fix', 'a11y-report', 'a11y-review', 'a11y-scan',
   'a11y-test-gen', 'a11y-verify'
 ];
 const portableFiles = [
   ...originalSkills.map(skillPath),
-  ...focusedReviews.map(mode => skillPath(`a11y-review-${mode}`)),
   ...['prereq-check', 'plugin-version-check'].map(name => `.developer/skills/repo/${name}/SKILL.md`),
-  ...['a11y-reviewer', 'a11y-tester', 'accessibility-advocate'].map(name => `.developer/agents/${name}.agent.md`),
-  ...['shared-instructions', 'accessibility-coverage', 'issue-families', 'repair-playbook', 'scenario-checks']
-    .map(name => `${sharedDirectory}/${name}.md`)
+  ...['a11y-tester', 'accessibility-advocate'].map(name => `.developer/agents/${name}.agent.md`),
+  sharedEntry
 ];
 
 test('all accessibility roles route through one shared entry point and retain original workflows', () => {
-  for (const file of portableFiles.filter(file => !file.startsWith(sharedDirectory))) {
+  for (const file of portableFiles.filter(file => file !== sharedEntry)) {
     const text = read(file);
-    assert.match(text, /config\/accessibility\/shared-instructions\.md/, file);
+    assert.match(text, /config\/accessibility\.md/, file);
     assert.doesNotMatch(text, /\]\([^)]*(?:accessibility-coverage|issue-families|repair-playbook|scenario-checks)\.md\)/,
       `${file} bypasses the shared entry point`);
   }
   for (const mode of focusedReviews) {
-    const text = read(skillPath(`a11y-review-${mode}`));
-    includesAll(text, ['## Role', '## Context to load', '## Workflow',
-      '### Step 0: TodoWrite Checklist', '### Steps', '## Output', 'TodoWrite([']);
-    assert.match(read(skillPath('a11y-review')), new RegExp(`a11y-review-${mode}`));
+    const text = read(skillPath('a11y-review')).split(`## Mode ${mode}\n`)[1]?.split('\n## ')[0];
+    assert.ok(text, `Missing mode: ${mode}`);
+    includesAll(text, ['### Role', '### Context to load', '### Workflow',
+      '#### Step 0: TodoWrite Checklist', '#### Steps', '### Output', 'TodoWrite([']);
   }
   includesAll(read(skillPath('a11y-review')), ['combined `--mode` interface', '`all`']);
   includesAll(read(skillPath('a11y-report')), ['Markdown', 'HTML']);
 });
 
 test('shared map includes exactly the 55 WCAG2.2 A/AA criteria and 2.1 boundaries', () => {
-  const map = read(`${sharedDirectory}/accessibility-coverage.md`);
+  const map = read(sharedEntry);
   const criteria = [...map.matchAll(/^\| (\d\.\d\.\d+) \| (A|AA) \|/gm)].map(match => match[1]);
   assert.equal(criteria.length, 55);
   assert.equal(new Set(criteria).size, 55);
@@ -198,10 +195,12 @@ test('shared map includes exactly the 55 WCAG2.2 A/AA criteria and 2.1 boundarie
   assert.ok(!criteria.includes('4.1.1'));
   includesAll(map, ['WCAG 4.1.1 Parsing is part of 2.1 and removed from 2.2',
     '24px-diameter', '44px under 2.5.5 is AAA', '18pt/24 CSS px']);
-  for (const file of ['issue-families', 'repair-playbook']) {
-    assert.equal([...read(`${sharedDirectory}/${file}.md`).matchAll(/^## \d+\. /gm)].length, 10);
+  for (const heading of ['Issue-family inspection procedures', 'Evidence-led repair playbook']) {
+    const section = map.split(`## ${heading}\n`)[1]?.split('\n## ')[0];
+    assert.ok(section, heading);
+    assert.equal([...section.matchAll(/^### \d+\. /gm)].length, 10);
   }
-  const scenarios = read(`${sharedDirectory}/scenario-checks.md`);
+  const scenarios = map;
   const ids = [...scenarios.matchAll(/^\| (S\d\d) \|/gm)].map(match => match[1]);
   assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => `S${String(i + 1).padStart(2, '0')}`));
 });
@@ -212,10 +211,8 @@ test('portable additions contain no internal integration payload or excluded eng
     assert.doesNotMatch(text, /\b(?:ADO|S360|Narrator)\b|Microsoft Accessibility Standards|microsoft\.ghe\.com|visualstudio\.com|sharepoint\.com/, file);
     assert.doesNotMatch(text, /a11y-fastpass|a11y-lighthouse|lighthouse-scan|run-fastpass/, file);
   }
-  for (const mode of focusedReviews) {
-    const frontmatter = read(skillPath(`a11y-review-${mode}`)).split('---')[1];
-    assert.doesNotMatch(frontmatter, /^\s*(version|author):/m);
-  }
+  const frontmatter = read(skillPath('a11y-review')).split('---')[1];
+  assert.doesNotMatch(frontmatter, /^\s*(version|author):/m);
   includesAll(read('.developer/skills/repo/plugin-version-check/SKILL.md'),
     ['`current`, `outdated`, `ahead`, `missing` and `unknown`',
       'SemVer precedence', 'approval-only', 'not an outdated installation']);
@@ -225,34 +222,48 @@ test('portable additions contain no internal integration payload or excluded eng
 });
 
 test('portable guidance preserves actual interaction and threshold counterexamples', () => {
-  includesAll(read(skillPath('a11y-review-interactive')), [
+  const review = read(skillPath('a11y-review'));
+  includesAll(review, [
     'Manual/automatic activation', 'Native select', 'modal/non-modal',
     'Actual single-pointer non-drag path', 'Virtualized/infinite', 'DOM/axe are proxies'
   ]);
-  includesAll(read(skillPath('a11y-review-color')), ['Hidden text or ARIA alone',
+  includesAll(review, ['Hidden text or ARIA alone',
     'asterisk is already a shape cue', 'Decorative/redundant colors are not failures']);
-  includesAll(read(skillPath('a11y-review-contrast')), ['unrounded ratio', '3.5:1',
+  includesAll(review, ['unrounded ratio', '3.5:1',
     'Text inside a button still uses text thresholds']);
-  includesAll(read(skillPath('a11y-review-links')), ['Context can satisfy 2.4.4',
+  includesAll(review, ['Context can satisfy 2.4.4',
     '`aria-describedby` does not automatically', '2.4.9']);
-  includesAll(read(skillPath('a11y-review-modes')), ['OS high-contrast', 'partial evidence',
+  includesAll(review, ['OS high-contrast', 'partial evidence',
     '0.12em', '0.16em', '2.3.3 is AAA']);
-  includesAll(read(skillPath('a11y-review-viewports')), ['256 CSS px', '24px-diameter',
+  includesAll(review, ['256 CSS px', '24px-diameter',
     'actual hit areas', 'Necessary 2D content']);
   includesAll(read(sharedEntry), ['`wcag22a`', '`incomplete`', 'exact consumer build',
     'Merge and issue closure remain explicit human actions']);
 });
 
-test('portable Markdown links resolve inside the packaged canonical tree', () => {
+function headingIds(text) {
+  const seen = new Map();
+  return new Set([...text.replace(/```[\s\S]*?```/g, '').matchAll(/^#{1,6}\s+(.+)$/gm)].map(match => {
+    const base = match[1].toLowerCase().replace(/[`*]/g, '')
+      .replace(/[^\p{L}\p{N}_\-\s]/gu, '').replace(/\s/g, '-');
+    const count = seen.get(base) || 0;
+    seen.set(base, count + 1);
+    return count ? `${base}-${count}` : base;
+  }));
+}
+
+test('portable Markdown links and scoped headings resolve inside the packaged canonical tree', () => {
   for (const file of portableFiles) {
     const prose = read(file).replace(/```[\s\S]*?```/g, '');
     for (const match of prose.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
-      const link = match[1].split('#')[0];
-      if (!link || /^[a-z]+:/i.test(link)) continue;
-      const resolved = path.resolve(root, path.dirname(file), link);
+      const [link, fragment] = match[1].split('#');
+      if (/^[a-z]+:/i.test(link)) continue;
+      const resolved = link ? path.resolve(root, path.dirname(file), link) : path.join(root, file);
       assert.ok(resolved.startsWith(path.join(root, '.developer') + path.sep),
         `Noncanonical link ${file}: ${link}`);
       assert.ok(fs.existsSync(resolved), `Broken link ${file}: ${link}`);
+      if (fragment) assert.ok(headingIds(fs.readFileSync(resolved, 'utf8')).has(fragment),
+        `Broken heading ${file}: ${match[1]}`);
     }
   }
 });
@@ -262,15 +273,53 @@ test('generated adapters and portal catalog expose every synchronized entry poin
     cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']
   });
   const catalog = JSON.parse(read('website/data/catalog.json'));
-  assert.equal(catalog.skills.length, 44);
-  assert.equal(catalog.agents.length, 21);
-  for (const name of [...focusedReviews.map(mode => `a11y-review-${mode}`),
-    'prereq-check', 'plugin-version-check']) {
+  assert.equal(catalog.skills.length, 38);
+  assert.equal(catalog.agents.length, 20);
+  for (const name of ['a11y-review', 'prereq-check', 'plugin-version-check']) {
     const group = name.startsWith('a11y-') ? 'accessibility' : 'repo';
     const canonical = `.developer/skills/${group}/${name}/SKILL.md`;
     assert.ok(catalog.skills.some(skill => skill.name === name), name);
     assert.ok(read(`.github/prompts/${name}.prompt.md`).includes(canonical));
     assert.ok(read(`.claude/commands/dev/${name}.md`).includes(canonical));
   }
-  assert.ok(catalog.agents.some(agent => agent.name === 'a11y-reviewer' && agent.kind === 'critic'));
+  assert.ok(catalog.agents.some(agent => agent.name === 'a11y-tester' && agent.kind === 'lead'));
+  assert.ok(!catalog.agents.some(agent => agent.name === 'a11y-reviewer'));
+});
+
+test('consolidation has one review skill and one shared document without obsolete adapters', () => {
+  for (const mode of focusedReviews) {
+    const name = `a11y-review-${mode}`;
+    for (const file of [skillPath(name), `.github/prompts/${name}.prompt.md`, `.claude/commands/dev/${name}.md`]) {
+      assert.ok(!fs.existsSync(path.join(root, file)), `Obsolete entry point: ${file}`);
+    }
+  }
+  for (const name of ['shared-instructions', 'accessibility-coverage', 'issue-families', 'repair-playbook', 'scenario-checks']) {
+    assert.ok(!fs.existsSync(path.join(root, `.developer/config/accessibility/${name}.md`)));
+  }
+  for (const name of ['accessibility-standard.example.md', 'screen-reader-notes.example.md']) {
+    assert.ok(!fs.existsSync(path.join(root, '.developer/config', name)));
+  }
+  includesAll(read(sharedEntry), ['## Shared instructions', '## WCAG coverage and routing',
+    '## Issue-family inspection procedures', '## Evidence-led repair playbook',
+    '## Scenario-specific verification and test authoring', '## Optional organization standard template',
+    '## Optional screen-reader notes template', 'Native `required` is valid',
+    'loading is not a pressed toggle', 'avoid duplicate alerts']);
+  const config = JSON.parse(read('.developer/config/config.example.json'));
+  assert.equal(config.quality_gates.accessibility_standard_file, null);
+  assert.equal(config.quality_gates.screen_reader_notes_file, null);
+  assert.match(config.quality_gates._accessibility_comment, /config\/accessibility\.md/);
+});
+
+test('combined agent retains read-only reviewer evidence and independent acceptance boundaries', () => {
+  const tester = read('.developer/agents/a11y-tester.agent.md');
+  includesAll(tester, ['**Audit (default):**', '**Review:**', '**Verify:**',
+    '## Read-only review workflow', 'frame/portal/shadow', 'search ledger',
+    'same-version behavior', 'competing causes', 'producer-to-consumer build linkage',
+    'sampled/unsampled', '## Review output', 'fresh verifier context',
+    'cannot certify its own work', 'Do not repair']);
+  assert.ok(!fs.existsSync(path.join(root, '.developer/agents/a11y-reviewer.agent.md')));
+  for (const name of ['code-review', 'deliberate', 'pr-learn']) {
+    assert.ok(fs.existsSync(path.join(root, `.developer/skills/review/${name}/SKILL.md`)));
+  }
+  assert.ok(fs.existsSync(path.join(root, '.developer/agents/accessibility-advocate.agent.md')));
 });

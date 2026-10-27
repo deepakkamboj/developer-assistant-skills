@@ -36,7 +36,7 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 📖 **Documentation site:** https://deepakkamboj.github.io/developer-assistant-skills/ (Nextra site in [`website/`](website/)).
 
-- **44 skills** across 10 lifecycle groups · **21 agents** (16 review critics + 5 leads/validators)
+- **38 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
 - **Closed-loop (EASE-MAS):** orchestrator + traceability graph + independent critics; repair is
   bounded with a regression gate and **human-only merge**
 - **CLI-first, MCP-fallback** tooling (`gh`, `az`, `npx playwright`, `npx axe`)
@@ -129,7 +129,7 @@ Shared, opt-in CI workflows remain documented in
 | **review** | `code-review`, `deliberate`, `pr-learn` |
 | **testing** | `test-plan`, `validate-scenario`, `coverage-gap`, `flaky-test` |
 | **testing/playwright** | `playwright-auth`, `run-tests`, `author-test`, `verify-test`, `update-test` |
-| **accessibility** | `a11y-scan`, `a11y-review`, `a11y-review-interactive`, `a11y-review-contrast`, `a11y-review-color`, `a11y-review-links`, `a11y-review-modes`, `a11y-review-viewports`, `a11y-test-gen`, `a11y-fix`, `a11y-verify`, `a11y-dev`, `a11y-report` |
+| **accessibility** | `a11y-scan`, `a11y-review` (six modes), `a11y-test-gen`, `a11y-fix`, `a11y-verify`, `a11y-dev`, `a11y-report` |
 | **debugging** | `analyze-bug`, `root-cause`, `fix-bug`, `fix-test` |
 | **devops** | `fix-ci`, `release-readiness` |
 
@@ -143,14 +143,17 @@ Each skill's instructions live in [`.developer/skills/`](.developer/skills/).
 
 ### Expanded accessibility coverage
 
-The original seven accessibility workflows are retained, with six focused review skills for
-interaction, contrast, color, links, display modes and viewports. The existing combined
-`a11y-review --mode` interface still works. Shared instructions route all applicable WCAG 2.1/2.2
-A/AA content through a 55-criterion map, ten inspection/repair families and twenty verification
-scenarios, including forms, authentication, tables, media, timing and pointer alternatives.
+The original seven accessibility workflows are retained. One `a11y-review` skill contains the
+complete interaction, contrast, color, links, display modes and viewport procedures under six
+mode headings. Use `--mode interactive|contrast|color|links|modes|viewports|all`.
+One [accessibility guidance document](.developer/config/accessibility.md) contains shared
+instructions, the 55-criterion map, ten inspection/repair families, twenty verification scenarios
+and optional private policy templates, organized by scope. Forms, authentication, tables, media,
+timing and pointer alternatives remain covered.
 
-The new `a11y-reviewer` supplies read-only evidence review; the tester lead and existing diff
-critic remain available. `repo/prereq-check` and `repo/plugin-version-check` provide portable
+The combined `a11y-tester` agent supplies audit orchestration and a read-only review mode.
+The separate diff critic and independent verification remain available; a fixer cannot
+self-certify as independent. `repo/prereq-check` and `repo/plugin-version-check` provide portable
 readiness and approval-only release inventory workflows. These are instructions using verified
 host/project tooling, not additional bundled scanner or updater scripts.
 

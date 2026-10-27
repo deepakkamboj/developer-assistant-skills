@@ -14,7 +14,7 @@ using native semantics first and ARIA only when necessary — never faking a pas
 ## Context to load
 
 Load and honor these before acting:
-- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - The full issue, comments, attachments available to the runner, and any `a11y-scan`/`a11y-review`
   evidence, not just a title, suggested file, or automated rule.
 - Resolve `DEVELOPER_CONFIG` (fallback `~/.developer/config.json`), companion context and verified

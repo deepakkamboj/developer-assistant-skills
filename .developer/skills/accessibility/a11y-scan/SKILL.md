@@ -14,13 +14,13 @@ with the exact success criterion and where to fix them.
 ## Context to load
 
 Load and honor these before acting:
-- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - `config.quality_gates.wcag_level` (default AA); `config.test_environments` (for authenticated URLs).
 - `.developer/mcp/README.md` (axe/Playwright CLI); repo component/markup conventions.
 - Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
   (stricter-than-WCAG thresholds — apply in addition to WCAG, never instead of it) and
   `screen_reader_notes_file` (AT-specific behavior notes). Unset by default; see
-  `.developer/config/accessibility-standard.example.md`.
+  the optional private policy templates in the shared accessibility document.
 
 ## Workflow
 
@@ -59,7 +59,7 @@ TodoWrite([
    source location. A source pointer is unverified until the runtime-to-source chain in `a11y-fix`
    is established; never present the first text match as the owning code. Recommend `a11y-review`
    for missing interactive evidence and `a11y-fix` only through its investigation gates.
-6. **Applicable review sweep.** Run each relevant focused review: interactive, contrast, color,
+6. **Applicable review sweep.** Run each relevant `a11y-review` mode: interactive, contrast, color,
    links, modes and viewports. A full scan is the base scan plus all applicable review families,
    not the first matching mode. Reuse shared evidence without counting equivalent findings twice.
    Source-only scope must keep runtime/AT rows blocked/not-run; never invent a live target.

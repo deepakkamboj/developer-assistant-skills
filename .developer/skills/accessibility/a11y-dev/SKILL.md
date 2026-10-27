@@ -14,7 +14,7 @@ existing accessible patterns; generated code still needs runtime and assistive-t
 ## Context to load
 
 Load and honor these before acting:
-- [Shared accessibility instructions](../../../config/accessibility/shared-instructions.md).
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - The component/feature request, the framework in use (React/Vue/Angular/plain HTML), and
   surrounding component patterns.
 - `config.quality_gates.wcag_level` (default AA).
