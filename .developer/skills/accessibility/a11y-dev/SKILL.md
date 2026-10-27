@@ -14,6 +14,7 @@ existing accessible patterns; generated code still needs runtime and assistive-t
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - The component/feature request, the framework in use (React/Vue/Angular/plain HTML), and
   surrounding component patterns.
 - `config.quality_gates.wcag_level` (default AA).
@@ -66,6 +67,18 @@ TodoWrite([
 4. **Validate.** Use `a11y-review`/`a11y-scan` and relevant regression tests, especially for
    non-trivial widgets. Record tested states and untested browser/AT combinations; a code
    self-check does not establish compliance. Use `a11y-test-gen` when coverage is missing.
+
+## Broader component coverage
+
+Select applicable shared issue families while designing the feature: content equivalents and
+language, structural/table relationships, form labels/instructions/error recovery, permitted
+authentication assistance and information reuse, async status/progress, composite navigation,
+focus restoration, pointer cancellation/non-drag alternatives, targets, reflow/spacing,
+media alternatives and time-limit recovery. Reuse native controls and actual design-system APIs.
+Do not treat save/loading as pressed state, impose a grid on a static table, duplicate live
+regions or require 44px as universal AA. Keep security and localization behavior intact.
+Derive regression scenarios and negative cases from the shared scenario library; generated
+markup is not evidence that the actual user task or AT behavior works.
 
 ## Reference patterns
 

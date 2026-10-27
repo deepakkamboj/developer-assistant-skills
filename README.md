@@ -36,7 +36,7 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 📖 **Documentation site:** https://deepakkamboj.github.io/developer-assistant-skills/ (Nextra site in [`website/`](website/)).
 
-- **36 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
+- **38 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
 - **Closed-loop (EASE-MAS):** orchestrator + traceability graph + independent critics; repair is
   bounded with a regression gate and **human-only merge**
 - **CLI-first, MCP-fallback** tooling (`gh`, `az`, `npx playwright`, `npx axe`)
@@ -129,7 +129,7 @@ Shared, opt-in CI workflows remain documented in
 | **review** | `code-review`, `deliberate`, `pr-learn` |
 | **testing** | `test-plan`, `validate-scenario`, `coverage-gap`, `flaky-test` |
 | **testing/playwright** | `playwright-auth`, `run-tests`, `author-test`, `verify-test`, `update-test` |
-| **accessibility** | `a11y-scan`, `a11y-review`, `a11y-test-gen`, `a11y-fix`, `a11y-verify`, `a11y-dev`, `a11y-report` |
+| **accessibility** | `a11y-scan`, `a11y-review` (six modes), `a11y-test-gen`, `a11y-fix`, `a11y-verify`, `a11y-dev`, `a11y-report` |
 | **debugging** | `analyze-bug`, `root-cause`, `fix-bug`, `fix-test` |
 | **devops** | `fix-ci`, `release-readiness` |
 
@@ -137,9 +137,29 @@ Shared, opt-in CI workflows remain documented in
 `performance-advocate`, `accessibility-advocate`, `unit-testing-advocate`, `e2e-test-author`,
 `manual-tester`, `observability-advocate`, `dependency-manager`, `style-guardian`,
 `internationalization-expert`, `documentation-steward`, `refactorer`, `debugger`) plus 5 leads/gates
-(`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y-tester`).
+(`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y`).
 
 Each skill's instructions live in [`.developer/skills/`](.developer/skills/).
+
+### Expanded accessibility coverage
+
+The original seven accessibility workflows are retained. One `a11y-review` skill contains the
+complete interaction, contrast, color, links, display modes and viewport procedures under six
+mode headings. Use `--mode interactive|contrast|color|links|modes|viewports|all`.
+One [accessibility guidance document](.developer/config/accessibility.md) contains shared
+instructions, the 55-criterion map, ten inspection/repair families, twenty verification scenarios
+and optional private policy templates, organized by scope. Forms, authentication, tables, media,
+timing and pointer alternatives remain covered.
+
+The combined `a11y` agent supplies audit orchestration and a read-only review mode.
+The separate diff critic and independent verification remain available; a fixer cannot
+self-certify as independent. `repo/prereq-check` and `repo/plugin-version-check` provide portable
+readiness and approval-only release inventory workflows. These are instructions using verified
+host/project tooling, not additional bundled scanner or updater scripts.
+
+See the [capability map and synchronization boundaries](.developer/docs/accessibility-sync.md).
+FastPass and Lighthouse are excluded. Internal integrations are not imported, and no existing
+workflow, optional policy overlay, Markdown/HTML report format or human approval gate is removed.
 
 ## Design
 

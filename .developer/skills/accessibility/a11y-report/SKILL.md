@@ -15,8 +15,12 @@ found — and can optionally file GitHub issues for the open findings, only with
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - Findings already produced in this conversation by `a11y-scan`, `a11y-review`, `a11y-fix`, and
   `a11y-verify` (location, WCAG SC, impact, status).
+- Include all six `a11y-review --mode` outputs and shared family/scenario coverage, preserving
+  their criterion applicability, pass/findings/blocked/not-run/not-applicable rows and reasons.
+  Do not convert an unexecuted family or manual-only check into a clean finding count.
 - If no prior findings exist in context, say so and offer to run `a11y-scan`/`a11y-review` first
   rather than fabricating results.
 - If `config.quality_gates.accessibility_standard_file` is configured, label findings sourced from it

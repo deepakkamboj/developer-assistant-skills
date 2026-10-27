@@ -14,12 +14,13 @@ with the exact success criterion and where to fix them.
 ## Context to load
 
 Load and honor these before acting:
+- [Shared accessibility instructions](../../../config/accessibility.md).
 - `config.quality_gates.wcag_level` (default AA); `config.test_environments` (for authenticated URLs).
 - `.developer/mcp/README.md` (axe/Playwright CLI); repo component/markup conventions.
 - Optional org overlay, only if configured: `config.quality_gates.accessibility_standard_file`
   (stricter-than-WCAG thresholds — apply in addition to WCAG, never instead of it) and
   `screen_reader_notes_file` (AT-specific behavior notes). Unset by default; see
-  `.developer/config/accessibility-standard.example.md`.
+  the optional private policy templates in the shared accessibility document.
 
 ## Workflow
 
@@ -41,11 +42,15 @@ TodoWrite([
    `wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa` when supported for the requested WCAG version; do not
    silently claim 2.2 coverage with only 2.1 tags. Authenticate with `playwright-auth` when needed
    and verify the intended app/role/build, not a login page. Drive the reported state before scanning.
-   Record unsupported rules, inaccessible frames and untested states as coverage gaps.
+   Inspect available A tags including `wcag22a` when supported for a 2.2 target. Record unavailable
+   tags/rules, axe `incomplete`, inaccessible frames and untested states as coverage gaps.
 3. **Static (source).** Inspect markup/components/styles for common AA issues: missing alt, unlabeled
    controls, heading order, landmark structure, color-only meaning, contrast in tokens/styles,
    focusable order, ARIA misuse. Use `grep` + component reading across `*.tsx,*.ts,*.jsx,*.js,*.html,
-   *.css,*.scss,*.md`; the checks below cover 11 of the most common, high-signal WCAG AA violations.
+   *.css,*.scss,*.md`; the catalog below is a discovery aid, not the complete scan.
+   Inventory all applicable shared issue families: content/structure/language, tables/editors,
+   forms/recovery, authentication/repeated entry, dynamic updates/progress, complex widgets,
+   keyboard/focus, visual presentation, pointer/drag/shortcuts and media/timing.
 4. **Map & dedupe.** Separate `confirmed`, `suspected` and `needs-review` findings. Attach an
    applicable WCAG criterion and observed user impact, not severity from a regex alone. Deduplicate
    only when repository, component, scenario/state, criterion and cause match; preserve distinct
@@ -54,6 +59,10 @@ TodoWrite([
    source location. A source pointer is unverified until the runtime-to-source chain in `a11y-fix`
    is established; never present the first text match as the owning code. Recommend `a11y-review`
    for missing interactive evidence and `a11y-fix` only through its investigation gates.
+6. **Applicable review sweep.** Run each relevant `a11y-review` mode: interactive, contrast, color,
+   links, modes and viewports. A full scan is the base scan plus all applicable review families,
+   not the first matching mode. Reuse shared evidence without counting equivalent findings twice.
+   Source-only scope must keep runtime/AT rows blocked/not-run; never invent a live target.
 
 ## Static check catalog
 
@@ -64,10 +73,10 @@ contracts with `a11y-review` before deciding a repair is needed:
 | # | WCAG SC | Impact | What to grep for |
 |---|---------|--------|-------------------|
 | A | 1.1.1 Non-text Content | Critical | `<img>` missing `alt`, empty `alt=""` on non-decorative images, generic `alt="image\|photo\|icon"`, markdown `![]()` |
-| B | 1.2.2 Captions | Critical | `<video>` with no nearby `<track kind="captions">`/`kind="subtitles"` |
+| B | 1.2.1-1.2.5 Media | Needs review | Inventory audio/video/live/prerecorded; verify actual accurate captions and applicable descriptions/alternatives, not just track presence |
 | C | 1.3.1 Info & Relationships | Moderate | Heading level jumps (e.g. `<h2>` → `<h4>`, `#` → `####`) |
 | D | 1.3.1 Info & Relationships | Moderate | `<table>` without `<th>`/`scope`; markdown tables missing the header separator row |
-| E | 1.4.1 Use of Color | Moderate | Status/error styling keyed only to `color`/`background-color` (`error`, `success`, `warning`, `danger` classes) with no icon, text, or `role="alert"` nearby |
+| E | 1.4.1 Use of Color | Moderate | Meaning keyed only to color with no equivalent visible text/shape/pattern/icon; ARIA or an alert alone cannot replace a visible cue |
 | F | 2.1.1 Keyboard | Serious | `onClick` on a `<div>`/`<span>` with no `role`, `onKeyDown`, or `tabIndex`; `href="#"` used as a click handler |
 | G | 2.4.4 Link Purpose | Serious | Link text matching `click here\|read more\|learn more\|here\|more\|continue\|details\|go` with no surrounding context or `aria-label` |
 | H | 3.1.1 Language of Page | Serious | `<html>` missing `lang` |
