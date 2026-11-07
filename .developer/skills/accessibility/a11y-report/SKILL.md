@@ -14,6 +14,8 @@ found — and can optionally file GitHub issues for the open findings, only with
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - Findings already produced in this conversation by `a11y-scan`, `a11y-review`, `a11y-fix`, and

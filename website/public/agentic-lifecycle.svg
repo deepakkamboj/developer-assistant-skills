@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title description">
+  <title id="title">Agentic development lifecycle and evidence gates</title>
+  <desc id="description">Prepare context, understand requirements, design, plan and build. Verify the exact candidate, review supported findings and give the human a release decision. Failures enter diagnosis and bounded repair, then return to verification. Learning and measurement feed future requirements. One owner is the default; specialists and squads are optional execution arrangements.</desc>
+  <rect width="1200" height="760" rx="20" fill="#0f172a"/>
+  <g font-family="system-ui,sans-serif" text-anchor="middle">
+    <g fill="#f1f5f9">
+      <text x="600" y="46" font-size="27" font-weight="700">Methods + responsibilities + evidence, not automatic fanout</text>
+      <text x="600" y="80" font-size="19">Default: one owner. Add independent specialists only when justified and authorized.</text>
+    </g>
+    <g fill="#bfdbfe" stroke="#93c5fd" stroke-width="2">
+      <rect x="30" y="118" width="205" height="114" rx="12"/>
+      <rect x="263" y="118" width="205" height="114" rx="12"/>
+      <rect x="496" y="118" width="205" height="114" rx="12"/>
+      <rect x="729" y="118" width="205" height="114" rx="12"/>
+      <rect x="962" y="118" width="205" height="114" rx="12"/>
+      <rect x="729" y="304" width="438" height="114" rx="12"/>
+      <rect x="263" y="304" width="438" height="114" rx="12"/>
+    </g>
+    <g fill="#fde68a" stroke="#fcd34d" stroke-width="2">
+      <rect x="30" y="304" width="205" height="114" rx="12"/>
+      <rect x="729" y="478" width="438" height="100" rx="12"/>
+    </g>
+    <rect x="30" y="478" width="671" height="100" rx="12" fill="#a7f3d0" stroke="#6ee7b7" stroke-width="2"/>
+    <g fill="#0f172a" font-size="23" font-weight="700">
+      <text x="132" y="156">0. Prepare</text><text x="365" y="156">1. Understand</text>
+      <text x="598" y="156">2. Design</text><text x="831" y="156">3. Plan</text>
+      <text x="1064" y="156">4. Build</text><text x="948" y="344">5. Verify exact candidate</text>
+      <text x="482" y="344">6. Independent review</text><text x="132" y="344">8. Handoff</text>
+      <text x="948" y="518">7. Diagnose + bounded repair</text>
+      <text x="365" y="518">9. Learn, curate and measure outcomes</text>
+    </g>
+    <g fill="#0f172a" font-size="18">
+      <text x="132" y="190">Host / source / scope</text><text x="132" y="216">Access verified</text>
+      <text x="365" y="190">Acceptance criteria</text><text x="365" y="216">Decisions explicit</text>
+      <text x="598" y="190">Interfaces / risks</text><text x="598" y="216">Material choices approved</text>
+      <text x="831" y="190">DAG / ownership</text><text x="831" y="216">Tests and write scope</text>
+      <text x="1064" y="190">Observe RED / GREEN</text><text x="1064" y="216">Checked refactoring</text>
+      <text x="948" y="378">Fresh checks, correct runner and real environment</text>
+      <text x="948" y="403">Failed, blocked and not run are not success</text>
+      <text x="482" y="378">Evidence-backed findings and deliberate decisions</text>
+      <text x="482" y="403">Independent repair acceptance where required</text>
+      <text x="132" y="378">Human-owned merge</text><text x="132" y="403">Separate deploy approval</text>
+      <text x="948" y="550">Reproduce, test causes, repair, re-verify</text>
+      <text x="365" y="550">Approved evidence feeds future requirements; activity is not impact</text>
+    </g>
+    <g stroke="#cbd5e1" stroke-width="3" fill="none">
+      <path d="M239 175h18m-8-7 8 7-8 7M472 175h18m-8-7 8 7-8 7M705 175h18m-8-7 8 7-8 7M938 175h18m-8-7 8 7-8 7"/>
+      <path d="M1064 237v60m-7-8 7 8 7-8M723 361h-16m8-7-8 7 8 7M257 361h-16m8-7-8 7 8 7"/>
+      <path d="M132 424v48m-7-8 7 8 7-8M948 424v48m-7-8 7 8 7-8"/>
+      <path d="M1175 527h12V280H950v18m-7-8 7 8 7-8"/>
+      <path d="M365 584v24H15V100h350v12m-7-8 7 8 7-8"/>
+    </g>
+    <g fill="#f1f5f9">
+      <text x="600" y="652" font-size="22" font-weight="700">Cross-cutting: traceability, privacy, accessibility and bounded authorization</text>
+      <text x="600" y="688" font-size="19">Skills are methods. Agents are roles. A squad is a host-supported arrangement, not a new permission.</text>
+      <text x="600" y="723" font-size="19">Each box names its stage and evidence: the flow does not depend on color alone.</text>
+    </g>
+  </g>
+</svg>

@@ -14,6 +14,8 @@ skills reuse.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `config.test_environments` — environments, `base_url`, `auth` block, `cert_folder`, `storage_state_dir`.
 - `config.toolchain` — CLI-first vs MCP preference.

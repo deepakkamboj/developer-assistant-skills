@@ -1,7 +1,7 @@
 ---
 name: design-spec
-description: Turn a brief or existing component into a design-system-aligned component spec — anatomy, variants/states, props/API, tokens, interaction, and accessibility requirements — ready for implementation and review. Framework-agnostic; grounded in the project's design tokens.
-argument-hint: "[component name or brief]"
+description: Produce a design-system component spec or a professional profile/banner design brief from approved inputs. Cover layout, content, responsive accessibility and brand constraints; do not generate images or change profiles without a separate request.
+argument-hint: "[component or approved profile material] [--mode component|profile-banner]"
 ---
 
 # Design Spec
@@ -12,6 +12,8 @@ You are a design-systems author. You produce a precise, buildable component spec
 project's design language and bakes in accessibility from the start.
 
 ## Context to load
+
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
 
 Load and honor these before acting:
 - `config.brand`/design tokens if present; existing components + patterns in the repo.
@@ -33,6 +35,8 @@ TodoWrite([
 ### Steps
 
 1. **Clarify.** Purpose, primary use cases, and non-goals. If the brief is vague, ask 2–3 questions.
+   Choose `component` (default) or `profile-banner`. For the latter, use the profile procedure
+   below instead of inventing a component API.
 2. **Anatomy & variants.** Structural parts; variants (size/kind/emphasis) and states (default, hover,
    focus, active, disabled, loading, error, empty).
 3. **API & tokens.** Props/inputs with types and defaults; events; slots. Map visual properties to
@@ -53,3 +57,20 @@ a11y requirements, and open questions.
 
 - Tokens over hardcoded values; accessibility is part of the spec, not an afterthought.
 - Framework-agnostic; ask rather than assume product-specific behavior.
+
+## Profile and banner brief
+
+For `--mode profile-banner`, use only approved biography, portfolio, brand and target-audience
+inputs. Separate verified credentials from proposed positioning. Do not infer identity,
+endorsements, employer approval or accomplishments from a name or image.
+
+1. Establish the professional audience, message hierarchy, tone and intended surface. Request
+   current dimensions and crop/safe-area guidance from the user or an approved public reference;
+   if unavailable, mark dimensions as unverified rather than invent platform requirements.
+2. Draft accurate headline/about copy and a banner concept with one clear message. Map each
+   factual claim to its source; omit confidential client details or unsupported metrics.
+3. Specify layout, typography, approved color tokens, focal placement, mobile cropping, contrast,
+   legibility and a text alternative. Explain how the profile image might overlap the banner.
+4. Return a design brief, copy variants, safe-area assumptions and a review checklist. An optional
+   image-model prompt is text only. Do not call an image generator, upload assets, modify a
+   profile or publish without a separate explicit request and applicable host permission.

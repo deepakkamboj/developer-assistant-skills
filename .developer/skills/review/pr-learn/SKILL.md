@@ -13,6 +13,8 @@ to shared memory so the plugin gets better over time.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The target merged PR(s) via `gh` (diff, review comments, linked issues, follow-up fixes).
 - Existing `memory.md` (avoid duplicates) and the traceability subgraph.

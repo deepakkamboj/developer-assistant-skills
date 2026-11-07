@@ -13,6 +13,8 @@ other skills (review, refactor, RCA, repair) can reason about impact and blast r
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The target repo/path; its languages, build files, and module layout.
 - `config.paths.output_dir` (where the graph JSON/diagram are written); `config.repo`.

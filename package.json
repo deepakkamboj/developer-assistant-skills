@@ -34,7 +34,7 @@
     "validate": "node bin/cli.js validate",
     "list": "node bin/cli.js list skills",
     "doctor": "node bin/cli.js doctor",
-    "test": "node bin/cli.js validate && node --test evals/a11y-workflow.test.js"
+    "test": "node bin/cli.js validate && node --test evals/a11y-workflow.test.js evals/generic-catalog.test.js"
   },
   "engines": {
     "node": ">=18"
@@ -45,6 +45,7 @@
     ".github/plugin/",
     "evals/README.md",
     "evals/a11y-workflow.test.js",
+    "evals/generic-catalog.test.js",
     "evals/cases/",
     "bin/",
     "AGENTS.md",

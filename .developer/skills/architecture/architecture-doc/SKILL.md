@@ -13,6 +13,8 @@ the code as it is — not an aspirational diagram — and links decisions to req
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `graph-repo` output (structure + dependencies); existing architecture docs (for `--update`).
 - Requirement/PRD nodes and NFRs in the traceability graph; `config.repo`.

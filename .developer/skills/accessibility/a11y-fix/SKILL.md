@@ -13,6 +13,8 @@ using native semantics first and ARIA only when necessary — never faking a pas
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - The full issue, comments, attachments available to the runner, and any `a11y-scan`/`a11y-review`

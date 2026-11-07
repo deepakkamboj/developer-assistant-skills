@@ -13,6 +13,8 @@ the risk — concretely, tied to the real architecture and data flows.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `architecture-doc` / `graph-repo` (components, boundaries, external deps); the feature/spec.
 - `config.quality_gates`; the security threat categories in `.developer/docs/design.md` (§8).

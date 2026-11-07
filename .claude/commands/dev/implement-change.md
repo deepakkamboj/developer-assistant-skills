@@ -1,5 +1,5 @@
 ---
-description: Implement a bounded change (a bug fix or a small improvement/feature step) from understanding through reproduction, minimal edit, tests, and local validation — then self-review with the critic agents. Feature-branch, tests required, human merges.
+description: Implement an authorized, bounded change with observed test-first RED, GREEN and refactor stages, fresh exact-candidate verification and a review handoff. No automatic delegation or publication; human merges.
 argument-hint: "[issue/task or description of the change]"
 ---
 

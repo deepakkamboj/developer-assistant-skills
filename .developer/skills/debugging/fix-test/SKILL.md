@@ -13,6 +13,8 @@ the product itself isn't actually broken.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The failing test, its requirement/scenario, and the current product behavior.
 - CI failure evidence (`gh run`); `config.repo` test command; `config.test_environments`.

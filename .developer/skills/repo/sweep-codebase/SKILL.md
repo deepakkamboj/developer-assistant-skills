@@ -13,6 +13,8 @@ approved work — you never attempt a repo-wide rewrite.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The scope from `$ARGUMENTS` (default: a single module/directory — never the whole repo at once).
 - Repo conventions; `config.autonomy` (permission/bounds); `memory.md` lessons.

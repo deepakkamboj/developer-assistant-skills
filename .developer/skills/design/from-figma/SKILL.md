@@ -13,6 +13,8 @@ consistent with the project's design system.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The Figma reference (URL/node) and whether the **Figma MCP** is configured; if not, an exported
   image/JSON the user provides.

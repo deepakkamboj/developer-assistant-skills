@@ -36,10 +36,29 @@ The canonical source of truth is [`.developer/`](.developer/); thin runtime adap
 
 📖 **Documentation site:** https://deepakkamboj.github.io/developer-assistant-skills/ (Nextra site in [`website/`](website/)).
 
-- **38 skills** across 10 lifecycle groups · **20 agents** (15 review critics + 5 leads/validators)
+- **One canonical English-named catalog** of skills and agents; list current counts with
+  `node bin/cli.js list skills` and `node bin/cli.js list agents`
 - **Closed-loop (EASE-MAS):** orchestrator + traceability graph + independent critics; repair is
   bounded with a regression gate and **human-only merge**
-- **CLI-first, MCP-fallback** tooling (`gh`, `az`, `npx playwright`, `npx axe`)
+- **CLI-first, MCP-fallback** tooling (`gh`, `git`, `npx playwright`, `npx axe`)
+
+### Generic consolidation
+
+All generic procedures and agent definitions are authored under `.developer/`.
+Generated runtime adapters and the website catalog point to that same tree.
+Microsoft-specific provider workflows are maintained separately, not copied into this plugin.
+Installed personal/plugin copies are not silently changed or uninstalled by this repository.
+
+The [coverage map](.developer/config/generic-coverage.json) records the existing catalog,
+the named comparison baseline, supporting generic purposes, and their canonical English IDs.
+The [source record](.developer/docs/skill-sources.md#generic-consolidation-2026-11-06)
+explains provenance and the source boundary. New consolidation workflows are original text
+written against project requirements and established engineering methods. No Superpowers
+files, scripts, prompts, tests, or distinctive workflow text were imported.
+
+Coverage means the named outcomes have a canonical method; it does not mean every upstream
+runtime behavior was reproduced. Host discovery, permissions, configuration and scenario
+execution still require validation. Existing project and third-party notices remain applicable.
 
 ## Quick start
 
@@ -137,11 +156,13 @@ Shared, opt-in CI workflows remain documented in
 | **debugging** | `analyze-bug`, `root-cause`, `fix-bug`, `fix-test` |
 | **devops** | `fix-ci`, `release-readiness` |
 
-**Agents** — 15 review critics (`code-reviewer`, `security-advocate`, `architecture-advocate`,
+**Existing review agents** — (`code-reviewer`, `security-advocate`, `architecture-advocate`,
 `performance-advocate`, `accessibility-advocate`, `unit-testing-advocate`, `e2e-test-author`,
 `manual-tester`, `observability-advocate`, `dependency-manager`, `style-guardian`,
 `internationalization-expert`, `documentation-steward`, `refactorer`, `debugger`) plus 5 leads/gates
 (`supervisor`, `traceability-keeper`, `bug-exterminator`, `repair-validator`, `a11y`).
+Additional read-only work/evidence roles and their reuse mappings are listed in the coverage
+map and generated website catalog. Existing public names remain stable.
 
 Each skill's instructions live in [`.developer/skills/`](.developer/skills/).
 

@@ -13,6 +13,8 @@ keeping assertions meaningful — never by loosening the test just to make it gr
 
 ## Context to load
 
+First apply the [shared execution boundary](../../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The failing/drifted test, the current UI/component, and the requirement it maps to.
 - `config.test_environments` + `.developer/skills/testing/playwright/_conventions.md`.

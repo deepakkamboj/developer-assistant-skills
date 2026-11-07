@@ -1,7 +1,7 @@
 ---
 name: deliberate
-description: Evaluate a set of review findings and render a decision per finding and overall — Take Action, Stand Down, Defer, or Escalate — using evidence and severity, not majority vote. Used by code-review and sweep-codebase.
-argument-hint: "[findings from code-review or a sweep]"
+description: Technically assess review feedback and render Take Action, Stand Down, Defer or Escalate decisions from evidence, contracts and severity. Reproduce claims before accepting them; no automatic edits, comments or follow-up publication.
+argument-hint: "[review feedback, findings or approved review export]"
 ---
 
 # Deliberate
@@ -12,6 +12,8 @@ You are the deliberation step. You turn raw specialist findings into decisions, 
 severity, confidence, and cost — **not** by counting votes.
 
 ## Context to load
+
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
 
 Load and honor these before acting:
 - The consolidated findings (each: severity, confidence, evidence, suggested fix).
@@ -32,16 +34,28 @@ TodoWrite([
 
 ### Steps
 
-1. **Assess.** For each finding, weigh: severity × confidence × blast radius vs. fix cost. Downgrade
+1. **Understand the feedback.** Restate the technical claim and requested behavior, then inspect
+   the exact reviewed candidate and surrounding contracts. Ask for clarification when a request
+   has several interpretations. Do not accept a suggestion merely because of reviewer authority,
+   and do not reject it because it conflicts with the original implementation.
+2. **Check the claim.** Compare against actual callers, supported versions and acceptance criteria.
+   Use an existing failing test or an authorized focused reproduction where possible; distinguish
+   confirmed defects, preference, stale feedback and unknowns. Record counterevidence and propose
+   a test when access is missing. Never claim to reproduce an unexecuted check.
+3. **Assess.** For each finding, weigh: severity × confidence × blast radius vs. fix cost. Downgrade
    low-confidence/speculative items; upgrade confirmed security/correctness/data-loss risks.
-2. **Decide** one of:
+4. **Decide** one of:
    - **Take Action** — real, in-scope; fix now (or block merge until fixed).
    - **Stand Down** — not a real problem, or intended; record why.
-   - **Defer** — real but out of scope/low priority; file a follow-up.
+   - **Defer** — real but out of scope/low priority; draft a follow-up via `pr-followups`.
    - **Escalate** — ambiguous, high-risk, or a human/product decision (e.g., architecture, scope).
-3. **Resolve conflicts.** When critics disagree, decide on the strongest evidence, not the count.
-4. **Output.** Per-finding verdict + rationale, and an overall recommendation (mergeable pending
-   fixes / block / escalate).
+5. **Resolve conflicts.** When critics disagree, decide on the strongest evidence, not the count.
+   Draft a concise response that names the claim, result, evidence and next action. Explain a
+   technical disagreement without attributing motives. Drafting a reply does not authorize posting it.
+6. **Output and hand off.** Return per-finding verdicts, rationale and an overall recommendation
+   (ready for human review / block / escalate). Accepted changes go to `implement-change` only
+   within existing implementation authorization, one coherent fix at a time, with fresh verification.
+   A decision report does not mean the requested change has been made.
 
 ## Output format
 

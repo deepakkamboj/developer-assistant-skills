@@ -13,6 +13,8 @@ protected by tests.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The target code + its callers (`graph-repo` for impact); existing tests; repo conventions.
 - `config.repo` test command; findings from the `refactorer` agent if this came from a review.
@@ -40,9 +42,12 @@ TodoWrite([
 3. **Refactor in steps.** Apply one small transformation at a time (extract, rename, inline,
    de-duplicate). **Run the tests after each step**; keep every intermediate state green.
 4. **Verify no behavior change.** Confirm public behavior/contracts are identical; diff should show
-   structure moved, not semantics changed. No new dependencies.
-5. **Summarize.** Report what improved and why, and confirm tests are green. Update `notes.md`.
-   **Do not merge**; open a draft PR if requested and run `code-review`.
+   structure moved, not semantics changed. Use `verify-change` on the final candidate; no new
+   dependencies. Characterization tests that already pass are a valid baseline for structural
+   refactoring, not a claimed behavioral RED.
+5. **Summarize.** Report what improved and why, with observed test evidence. Propose `notes.md`
+   updates unless persistence is authorized. Prepare a `code-review` request; publication and
+   independent agents need separate authorization. **Do not merge.**
 
 ## Rules
 

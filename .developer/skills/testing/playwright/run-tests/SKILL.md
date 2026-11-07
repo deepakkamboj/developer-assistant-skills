@@ -13,6 +13,8 @@ structured evidence, and report a clear pass/fail summary with failure artifacts
 
 ## Context to load
 
+First apply the [shared execution boundary](../../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `config.test_environments` — target `base_url` + auth; `config.traceability.graph_path`.
 - `.developer/skills/testing/playwright/_conventions.md` — CLI-first execution + auth.
@@ -25,7 +27,7 @@ Load and honor these before acting:
 ```
 TodoWrite([
   { content: "Resolve target tests + environment + auth", status: "in_progress" },
-  { content: "Ensure Playwright is installed and storage-state is available", status: "pending" },
+  { content: "Check existing Playwright tooling and authorized auth state", status: "pending" },
   { content: "Run tests via the CLI and collect artifacts", status: "pending" },
   { content: "Parse results; record Execution/Failures in the traceability graph", status: "pending" }
 ])
@@ -35,8 +37,10 @@ TodoWrite([
 
 1. **Resolve inputs.** Test path from `$ARGUMENTS` (default: the project's test dir). Environment
    from `$ARGUMENTS` else `test_environments.default`; read its `base_url`/`auth`.
-2. **Prepare.** Ensure `@playwright/test` is installed (`npx playwright install --with-deps` if
-   needed). If auth is `storage-state` and the file is missing/expired, run `playwright-auth` first.
+2. **Prepare.** Check existing project Playwright tooling and browser availability without
+   triggering package downloads. Missing dependencies/browsers are blocked prerequisites;
+   return an approval-ready installation plan, never install automatically. If storage-state
+   auth is missing/expired, use `playwright-auth` only within separately authorized authentication.
 3. **Execute (CLI, deterministic):**
    ```bash
    BASE_URL=<base_url> npx playwright test <path> \

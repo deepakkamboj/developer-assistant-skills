@@ -1,6 +1,6 @@
 ---
-description: Evaluate a set of review findings and render a decision per finding and overall — Take Action, Stand Down, Defer, or Escalate — using evidence and severity, not majority vote. Used by code-review and sweep-codebase.
-argument-hint: "[findings from code-review or a sweep]"
+description: Technically assess review feedback and render Take Action, Stand Down, Defer or Escalate decisions from evidence, contracts and severity. Reproduce claims before accepting them; no automatic edits, comments or follow-up publication.
+argument-hint: "[review feedback, findings or approved review export]"
 ---
 
 Read and execute the skill at `.developer/skills/review/deliberate/SKILL.md`. Follow its Role, load the listed context, and complete its

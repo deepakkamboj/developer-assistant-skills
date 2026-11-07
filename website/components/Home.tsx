@@ -29,7 +29,7 @@ const badges: [string, string, string][] = [
 const stats: [string, string][] = [
   [String(catalog.skills.length), "Skills"],
   [String(catalog.agents.length), "Agents"],
-  ["10", "Lifecycle groups"],
+  [String(new Set(catalog.skills.map(skill => skill.group.split("/")[0])).size), "Lifecycle groups"],
   ["3", "Runtimes"],
 ];
 
@@ -88,7 +88,7 @@ export default function Home() {
           independent <code>repair-validator</code>. Merge stays human-owned.
         </Feature>
         <Feature icon={<TerminalIcon />} title="CLI-first tooling">
-          Skills prefer real tools — <code>gh</code>, <code>az</code>, <code>npx playwright</code>,{" "}
+          Skills prefer real tools — <code>gh</code>, <code>git</code>, <code>npx playwright</code>,{" "}
           <code>npx axe</code> — falling back to MCP servers when a CLI is unavailable.
         </Feature>
         <Feature icon={<EyeIcon />} title="Accessibility built in">

@@ -13,6 +13,8 @@ stabilize CI, and fix the root cause of the flakiness — without masking real b
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - Test run history (retry variance, pass/fail over time) via CI logs / `gh run`.
 - `config.repo` test command; `config.test_environments`; the suspect test source.

@@ -13,6 +13,8 @@ canonical test cases that trace back to requirements — before any test code is
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The requirement/PRD node(s) and acceptance criteria from the traceability graph (or the description).
 - Existing tests + `coverage-gap` output; `config.quality_gates` (WCAG level, required specialists).

@@ -1,6 +1,6 @@
 ---
 name: fix-bug
-description: Repair a defect under bounded autonomy — take ranked hypotheses, localize and patch, then validate through unit, targeted E2E, regression, and security before an independent repair-validator gate, and open a draft PR (human merges). Enforces max attempts/diff and termination conditions. Realizes EASE-MAS A20–A22 (Algorithms 6/7).
+description: Repair an authorized defect with a reproduced failing test, bounded hypothesis-led changes, observed GREEN and fresh regression evidence before an independent validator gate. Draft-PR publication is separately approved; human merges.
 argument-hint: "[bug id | issue] [--max-attempts N] [--require-regression-pass] [--draft]"
 ---
 
@@ -12,6 +12,8 @@ You are a bounded autonomous repair engineer. You fix the defect with the smalle
 it, and stop at the safety boundary — a human always merges.
 
 ## Context to load
+
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
 
 Load and honor these before acting:
 - Ranked hypotheses from `root-cause`; the structured bug; the failing test.
@@ -34,22 +36,29 @@ TodoWrite([
 ### Steps
 
 1. **Prepare.** Read the top hypotheses and the autonomy limits. Work on a feature branch (never a
-   protected branch). No secret scope; no unapproved dependencies.
+   protected branch). No secret scope; no unapproved dependencies. Use the existing authorized
+   workspace; branch/worktree creation is a separate approved action. Before editing product
+   code, add or confirm a regression test that fails for the actual defect and observe its RED
+   result. Setup/compiler failures are not reproduction; use `implement-change` for the detailed
+   RED/GREEN/refactor protocol.
 2. **Repair loop (bounded).** For the top hypothesis (then next, within budget):
    - Localize and apply the **smallest** patch. Reject if it exceeds max files/diff.
    - Validate in a sandbox: the failing test now passes → targeted E2E → **full/impacted regression**
      → **security scan**.
-3. **Independent gate.** Invoke the `repair-validator` agent (separate from repair) to accept/reject
-   the patch on evidence — guards against overfitting to the one test.
+3. **Independent gate.** Obtain `verify-change` results on the final candidate, then request an
+   independent repair validator within explicit delegation authorization. If no independent
+   reviewer is available, mark the gate pending/blocked; do not substitute self-certification.
 4. **Terminate** on the first of: (a) failing test passes ∧ regression green ∧ security clean ∧
-   validator accepts → **open a draft PR** for human merge; (b) attempt/time/diff budget exhausted →
+   validator accepts → **ready for approved draft-PR handoff**, not automatic publication;
+   (b) attempt/time/diff budget exhausted →
    escalate; (c) repeated identical failures → escalate (likely mis-localized); (d) safety violation
-   → abort + rollback + alert.
+   → stop, preserve evidence and propose a safe rollback/notification; do not reset local work
+   or send external alerts without authorization.
 5. **Record.** Write `Hypothesis → Repair → Validation` nodes; summarize what changed and why.
 
 ## Output
 
-`Outcome (fixed→draft PR / escalated / aborted) · patch summary · validation results (unit/E2E/
+`Outcome (ready for review / gate pending / escalated / aborted) · patch summary · validation results (unit/E2E/
 regression/security) · attempts used`.
 
 ## Rules

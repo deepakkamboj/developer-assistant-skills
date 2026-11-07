@@ -13,6 +13,8 @@ scenario, and decide what to do about any drift.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The target test and the requirement/scenario it should cover (traceability `tests` edge).
 - Repo conventions; `config.repo` test command.

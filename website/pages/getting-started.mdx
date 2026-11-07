@@ -8,7 +8,7 @@ import { FileStructure } from "../components/FileStructure";
 
 # Getting started
 
-Requirements: Node.js ≥ 18. Optional CLIs used on demand by skills: `gh`, `az`, `npx playwright`, `npx axe`.
+Requirements: Node.js ≥ 18. Optional CLIs used on demand by skills: `gh`, `git`, `npx playwright`, `npx axe`.
 
 ## 1. Install
 
@@ -31,10 +31,10 @@ The canonical library lives under `.developer/`:
       type: "folder",
       description: "canonical source of truth",
       children: [
-        { name: "skills/", type: "folder", description: "38 skills in 10 lifecycle groups" },
-        { name: "agents/", type: "folder", description: "20 critics & leads" },
+        { name: "skills/", type: "folder", description: "canonical English-named generic workflows" },
+        { name: "agents/", type: "folder", description: "independent critics, leads and evidence roles" },
         { name: "config/", type: "folder", description: "config.example.json + companions" },
-        { name: "mcp/", type: "folder", description: "github · playwright · ado" },
+        { name: "mcp/", type: "folder", description: "configured generic tool transports" },
         { name: "scripts/", type: "folder", description: "cli · traceability · gen-commands" },
         { name: "docs/", type: "folder", description: "design · skill-sources" },
       ],
@@ -58,7 +58,7 @@ export DEVELOPER_CONFIG=~/.developer/config.json
 # PowerShell: $env:DEVELOPER_CONFIG = "$HOME/.developer/config.json"
 ```
 
-Set your `profile`, `repos[]` (provider `github` or `ado`), `quality_gates`, `autonomy`,
+Set your `profile`, `repos[]`, `quality_gates`, `autonomy`,
 `toolchain`, and `test_environments`. The plugin resolves configuration from these environment
 variables:
 

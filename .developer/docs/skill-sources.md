@@ -145,3 +145,46 @@ Drop `agent0_ado_fetcher`, `agent6_ado_publisher`, all ADO I/O.
 
 > Status: blueprint. Skills are ported/created in subsequent commits; each will note its source
 > and license in its own README/frontmatter where applicable.
+
+## Generic consolidation 2026-11-06
+
+The sections above retain the historical source record. This consolidation starts from
+`main` commit `ae64d4715508fc170aebbb545cf3cea962efb9fc`; it preserves the original 38
+skill names and 20 agent names. Generic authoring remains in `.developer/skills` and
+`.developer/agents`, with English purpose/action names.
+
+The [coverage map](../config/generic-coverage.json) is the current comparison and rename
+contract. It maps the 15 named development-method outcomes used for the Superpowers
+comparison, the supporting generic purposes from the local inventory, and legacy role
+purposes to concrete canonical definitions. Consolidation is not an unlimited claim about
+every other framework or a certification of equivalent runtime behavior.
+
+### Authorship and licensing
+
+New workflow text is original, written against the requested outcomes, this repository's
+existing contracts, and established engineering techniques. Superpowers was a concept
+comparison baseline only. No upstream files, prompts, scripts, tests, assets, distinctive
+wording, or prescribed automatic bootstrap were imported into these additions.
+There is therefore no newly imported Superpowers distribution to relicense or strip notices
+from. This does not remove this project's MIT license or earlier source obligations.
+Do not remove notices from any existing third-party-derived material.
+
+### Source boundary and migration
+
+| Responsibility | Canonical authoring location | Migration rule |
+| --- | --- | --- |
+| Generic development, writing, work coordination and evidence methods | `.developer/skills` | English IDs; merge responsibilities rather than duplicate providers |
+| Generic leads and independent critics | `.developer/agents` | Retain existing names; new evidence roles are read-only |
+| Runtime invocation adapters | Generated `.claude/commands/dev` and `.github/prompts` | Thin references only; regenerate after changes |
+| Website catalog | Generated `website/data/catalog.json` | Reflect actual canonical metadata |
+| Enterprise-provider integration | Separate Microsoft-specific adapter bundle | Provider identities, access, account scope and tracking remain outside this public tree |
+
+Installed caches and personal copies were inventoried, not overwritten, uninstalled or
+treated as downstream authoring sources. Select a canonical plugin ID in the host and
+deliberately disable conflicting copies after testing; a filesystem merge alone cannot
+prove discovery precedence.
+
+Run `npm test`, `node .developer/scripts/gen-commands.js`, and
+`node website/scripts/gen-catalog.mjs`. The generic-catalog tests check canonical references,
+preserved names, English IDs, discovery paths, generated adapters and metadata.
+They do not prove an LLM follows a procedure or that a remote connector is authorized.

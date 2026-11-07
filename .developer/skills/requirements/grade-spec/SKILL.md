@@ -13,6 +13,8 @@ rubric and returning concrete gaps — not vibes.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The PRD/spec under review; `config.quality_gates` (required NFRs).
 - The traceability graph (to check every requirement is testable/linked).

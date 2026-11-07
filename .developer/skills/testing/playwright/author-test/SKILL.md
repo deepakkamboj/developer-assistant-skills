@@ -13,6 +13,8 @@ user-visible behavior, tie back to a requirement, and avoid brittle selectors an
 
 ## Context to load
 
+First apply the [shared execution boundary](../../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `config.test_environments` + `.developer/skills/testing/playwright/_conventions.md`.
 - The target component/page source and any related requirement/PRD node in the traceability graph.
