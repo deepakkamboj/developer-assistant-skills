@@ -38,6 +38,17 @@ For example, `refactorer` is a maintainability critic, not an implied separate c
 worker. The library's own accessibility skills remain in the diagram; no external
 plugin or provider adapter is required by this view.
 
+### Where is the coding agent?
+
+**Column B / Plan + Build shows the coding executor: the main session agent.**
+It uses `implement-change` to write authorized code and `refactor` for
+behavior-preserving changes. `unit-testing-advocate`, `e2e-test-author` and
+`refactorer` are advisors/critics, not substitutes for the implementation owner.
+
+The executor is supplied by the host; there is no additional saved `coding-agent`
+definition among the current 32 roles. Adding a dedicated coding role would be
+a separate authoring change with its own tool and permission contract.
+
 ## Stage gates and handoffs
 
 | Stage | Entry and work | Output required before the next stage |

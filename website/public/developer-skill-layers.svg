@@ -63,11 +63,14 @@
       <text x="410" y="478" font-size="23" font-weight="700">B / PLAN + BUILD</text>
       <text x="410" y="503" font-size="18">Stages 3, 4: tests and change</text>
       <g font-size="18">
-        <text data-agent="unit-testing-advocate" x="406" y="608">unit-testing-advocate</text>
-        <text data-agent="e2e-test-author" x="406" y="633">e2e-test-author</text>
-        <text data-agent="refactorer" x="406" y="658">refactorer</text>
-        <text x="406" y="804">Main session owner implements;</text>
-        <text x="406" y="829">consult critics as appropriate.</text>
+        <text x="406" y="608" font-weight="700">CODING AGENT / host executor</text>
+        <text data-executor="main-session-agent" x="406" y="633">Main session agent writes code</text>
+        <text x="406" y="658">Not an extra saved agent definition.</text>
+        <text x="406" y="704" font-weight="700">ADVISORS / CRITICS</text>
+        <text data-agent="unit-testing-advocate" x="406" y="733">unit-testing-advocate</text>
+        <text data-agent="e2e-test-author" x="406" y="758">e2e-test-author</text>
+        <text data-agent="refactorer" x="406" y="783">refactorer</text>
+        <text x="406" y="829">Critics advise; executor edits.</text>
         <text data-skill="coordinate-work" x="406" y="948">coordinate-work</text>
         <text data-skill="test-plan" x="406" y="972">test-plan</text>
         <text data-skill="coverage-gap" x="406" y="996">coverage-gap</text>

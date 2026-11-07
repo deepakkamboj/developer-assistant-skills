@@ -47,6 +47,9 @@ test('developer-only layered diagram includes every canonical ID once and preser
     .map(match => match[1]).sort();
   assert.deepEqual(attributes(/data-skill="([^"]+)"/g), [...catalog.originalSkills, ...catalog.addedSkills].sort());
   assert.deepEqual(attributes(/data-agent="([^"]+)"/g), [...catalog.originalAgents, ...catalog.addedAgents].sort());
+  assert.deepEqual(attributes(/data-executor="([^"]+)"/g), ['main-session-agent']);
+  assert.ok(svg.includes('CODING AGENT / host executor'));
+  assert.ok(svg.includes('Main session agent writes code'));
   assert.deepEqual(attributes(/data-layer="([^"]+)"/g), ['scope', 'coordination', 'agents', 'skills', 'tools', 'evidence'].sort());
   assert.deepEqual(attributes(/data-phase="([^"]+)"/g),
     ['discover-design', 'plan-build', 'verify-review', 'diagnose-release', 'learn-measure'].sort());
