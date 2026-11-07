@@ -16,6 +16,28 @@ The metadata and source definitions remain under `.developer/`.
 
 <Diagram src="/agentic-lifecycle.svg" alt="Prepare, understand, design, plan, build, verify, review and release flow into learning; failures return through diagnosis and bounded repair, with a human approval gate." caption="Lifecycle routing, not an installed scheduler. The tables give every skill and agent a home and identify the evidence required before the next stage." />
 
+## Developer-only layered architecture
+
+<Diagram src="/developer-skill-layers.svg" alt="Six layers show human scope, coordination, all 32 developer agent roles, all 49 canonical skills, authorized tools, and evidence with human acceptance, organized into five labeled lifecycle groups." caption="One library, not a comparison of plugins. Read down for role-to-skill-to-tool relationships and across for the development lifecycle. Names at the same height are not one-to-one pairs." />
+
+[Open the full-size layered SVG](/developer-skill-layers.svg) to read every ID or zoom.
+All 49 skills and 32 roles appear exactly once. Colors identify the five lifecycle
+groups, not separate sources, tool permissions or a mandatory execution order.
+
+| Layer | Responsibility | Relationship |
+| --- | --- | --- |
+| 1. Human scope | Outcome, repository, context, acceptance and authorization | Constrains every lower layer; personal/work data and accounts stay separate |
+| 2. Coordination | Supervisor, project ownership and traceability | Proposes bounded handoffs, dependencies and integration; no automatic squad launch |
+| 3. Agents | Named responsibilities, advice, review and independent acceptance | A main session owner selects appropriate roles; read-only critics are not coding executors |
+| 4. Skills | Canonical procedures selected for the task | Many-to-many with roles, not a fixed skill attached to each agent |
+| 5. Tools and execution | Real capabilities of the chosen host and repository | A skill cannot grant a critic write tools or override test/CI policy |
+| 6. Evidence and acceptance | Exact candidate, real checks, review and human decision | Failure returns to diagnosis; repaired work returns to verification |
+
+The main session agent performs authorized implementation with the selected methods.
+For example, `refactorer` is a maintainability critic, not an implied separate coding
+worker. The library's own accessibility skills remain in the diagram; no external
+plugin or provider adapter is required by this view.
+
 ## Stage gates and handoffs
 
 | Stage | Entry and work | Output required before the next stage |

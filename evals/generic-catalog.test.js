@@ -36,6 +36,35 @@ test('lifecycle guide places every canonical skill and agent and explains execut
   assert.ok(guide.includes('src="/agentic-lifecycle.svg"'));
 });
 
+test('developer-only layered diagram includes every canonical ID once and preserves its six-layer relationships', {
+  skip: !fs.existsSync(path.join(root, 'website/pages/lifecycle.mdx'))
+    ? 'Source-checkout documentation is not included in the npm package'
+    : false,
+}, () => {
+  const catalog = coverage();
+  const svg = read('website/public/developer-skill-layers.svg');
+  const attributes = pattern => [...svg.matchAll(pattern)]
+    .map(match => match[1]).sort();
+  assert.deepEqual(attributes(/data-skill="([^"]+)"/g), [...catalog.originalSkills, ...catalog.addedSkills].sort());
+  assert.deepEqual(attributes(/data-agent="([^"]+)"/g), [...catalog.originalAgents, ...catalog.addedAgents].sort());
+  assert.deepEqual(attributes(/data-layer="([^"]+)"/g), ['scope', 'coordination', 'agents', 'skills', 'tools', 'evidence'].sort());
+  assert.deepEqual(attributes(/data-phase="([^"]+)"/g),
+    ['discover-design', 'plan-build', 'verify-review', 'diagnose-release', 'learn-measure'].sort());
+  assert.deepEqual(attributes(/data-relation="([^"]+)"/g), [
+    'coordination-scopes-roles', 'roles-select-skills', 'skills-use-authorized-tools',
+    'repair-returns-to-verification', 'tools-produce-evidence', 'failure-returns-to-diagnosis',
+  ].sort());
+  assert.match(svg, /role="img" aria-labelledby="title description"/);
+  assert.match(svg, /<title id="title">[^<]+<\/title>/);
+  assert.match(svg, /<desc id="description">[^<]{80,}<\/desc>/);
+  assert.doesNotMatch(svg, /deepak|accessibility-plugin|workiq|azure|s360|<script|foreignObject|(?:href|onload)\s*=/i);
+  for (const boundary of ['not paired by row', 'A read-only critic stays read-only',
+    'Human-owned merge', 'not an installed scheduler']) assert.ok(svg.includes(boundary), boundary);
+  const guide = read('website/pages/lifecycle.mdx');
+  assert.ok(guide.includes('src="/developer-skill-layers.svg"'));
+  assert.ok(guide.includes('](/developer-skill-layers.svg)'));
+});
+
 function walk(directory, predicate) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     const file = path.join(directory, entry.name);
