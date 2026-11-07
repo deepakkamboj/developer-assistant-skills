@@ -13,6 +13,8 @@ meaningful coverage, and deterministic across runs (not flaky).
 
 ## Context to load
 
+First apply the [shared execution boundary](../../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The test file + the behavior/requirement it claims to cover.
 - `config.test_environments` + `.developer/skills/testing/playwright/_conventions.md`.

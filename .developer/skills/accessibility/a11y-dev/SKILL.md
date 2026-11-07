@@ -13,6 +13,8 @@ existing accessible patterns; generated code still needs runtime and assistive-t
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - The component/feature request, the framework in use (React/Vue/Angular/plain HTML), and

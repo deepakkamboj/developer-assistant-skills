@@ -24,11 +24,14 @@
     "./skills/design",
     "./skills/development",
     "./skills/devops",
+    "./skills/knowledge",
+    "./skills/planning",
     "./skills/repo",
     "./skills/requirements",
     "./skills/review",
     "./skills/testing",
-    "./skills/testing/playwright"
+    "./skills/testing/playwright",
+    "./skills/writing"
   ],
   "agents": "./agents"
 }

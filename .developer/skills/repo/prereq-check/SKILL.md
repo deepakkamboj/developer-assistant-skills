@@ -13,6 +13,8 @@ authorization, and tool presence is not readiness. Without a target, report inve
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Resolve `DEVELOPER_CONFIG` (fallback `~/.developer/config.json`), profile/context and repository
 instructions. Load [shared accessibility instructions](../../../config/accessibility.md)
 when checking accessibility work. Read the actual toolchain, test environment and MCP declarations;

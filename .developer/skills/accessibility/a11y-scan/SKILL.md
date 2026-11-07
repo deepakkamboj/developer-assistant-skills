@@ -13,6 +13,8 @@ with the exact success criterion and where to fix them.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - `config.quality_gates.wcag_level` (default AA); `config.test_environments` (for authenticated URLs).

@@ -13,6 +13,8 @@ compliance and fail when accessibility regresses.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - The component/page source (or URL) and its interactive elements.

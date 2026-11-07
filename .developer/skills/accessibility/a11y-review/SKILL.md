@@ -13,6 +13,8 @@ real contrast, meaning-by-color, link clarity, display modes, and responsiveness
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - The target file/folder or URL + `config.test_environments` (auth via `playwright-auth` if needed).

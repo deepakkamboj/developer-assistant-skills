@@ -1,0 +1,154 @@
+---
+title: Agentic development lifecycle
+---
+
+import Diagram from "../components/Diagram";
+
+# Agentic development lifecycle
+
+**Skills describe methods. Agents own responsibilities. The host supplies execution and
+tools.** They are not three names for the same object. One running agent can use several
+skills. A saved agent definition does not start a process, and a skill does not grant access.
+
+This map places all **49 canonical skills and 32 agents** in the lifecycle. Placement means
+"useful here", not automatic execution, a required agent for every step, or runtime certification.
+The metadata and source definitions remain under `.developer/`.
+
+<Diagram src="/agentic-lifecycle.svg" alt="Prepare, understand, design, plan, build, verify, review and release flow into learning; failures return through diagnosis and bounded repair, with a human approval gate." caption="Lifecycle routing, not an installed scheduler. The tables give every skill and agent a home and identify the evidence required before the next stage." />
+
+## Developer-only layered architecture
+
+<Diagram src="/developer-skill-layers.svg" alt="Six layers show human scope, coordination, all 32 developer agent roles, all 49 canonical skills, authorized tools, and evidence with human acceptance, organized into five labeled lifecycle groups." caption="One library, not a comparison of plugins. Read down for role-to-skill-to-tool relationships and across for the development lifecycle. Names at the same height are not one-to-one pairs." />
+
+[Open the full-size layered SVG](/developer-skill-layers.svg) to read every ID or zoom.
+All 49 skills and 32 roles appear exactly once. Colors identify the five lifecycle
+groups, not separate sources, tool permissions or a mandatory execution order.
+
+| Layer | Responsibility | Relationship |
+| --- | --- | --- |
+| 1. Human scope | Outcome, repository, context, acceptance and authorization | Constrains every lower layer; personal/work data and accounts stay separate |
+| 2. Coordination | Supervisor, project ownership and traceability | Proposes bounded handoffs, dependencies and integration; no automatic squad launch |
+| 3. Agents | Named responsibilities, advice, review and independent acceptance | A main session owner selects appropriate roles; read-only critics are not coding executors |
+| 4. Skills | Canonical procedures selected for the task | Many-to-many with roles, not a fixed skill attached to each agent |
+| 5. Tools and execution | Real capabilities of the chosen host and repository | A skill cannot grant a critic write tools or override test/CI policy |
+| 6. Evidence and acceptance | Exact candidate, real checks, review and human decision | Failure returns to diagnosis; repaired work returns to verification |
+
+The main session agent performs authorized implementation with the selected methods.
+For example, `refactorer` is a maintainability critic, not an implied separate coding
+worker. The library's own accessibility skills remain in the diagram; no external
+plugin or provider adapter is required by this view.
+
+### Where is the coding agent?
+
+**Column B / Plan + Build shows the coding executor: the main session agent.**
+It uses `implement-change` to write authorized code and `refactor` for
+behavior-preserving changes. `unit-testing-advocate`, `e2e-test-author` and
+`refactorer` are advisors/critics, not substitutes for the implementation owner.
+
+The executor is supplied by the host; there is no additional saved `coding-agent`
+definition among the current 32 roles. Adding a dedicated coding role would be
+a separate authoring change with its own tool and permission contract.
+
+## Stage gates and handoffs
+
+| Stage | Entry and work | Output required before the next stage |
+| --- | --- | --- |
+| 0. Prepare | Select source, host, account, repository and permission ceiling | Verified prerequisites, exact working folder/branch and bounded authorization |
+| 1. Understand | Read approved requirements; resolve material ambiguity | Testable scope, acceptance criteria and explicit human decisions |
+| 2. Design | Inspect code and constraints; compare implementation choices | Source-grounded design, interfaces, risks and approved material choices |
+| 3. Plan | Split work by real dependencies and ownership | File-level plan, tests, integration owner and approved implementation scope |
+| 4. Build | Observe the intended failing test; implement and refactor | Candidate revision, observed RED/GREEN evidence and bounded changes |
+| 5. Verify | Run the target repository's checks against the exact candidate | Fresh results; PASS, FAIL, BLOCKED, SKIPPED and stale evidence kept distinct |
+| 6. Review | Review the actual diff; assess findings against requirements | Supported findings, explicit decisions and independent repair acceptance when needed |
+| 7. Diagnose and repair | Reproduce an observed failure; test causal hypotheses | Bounded repair and regression evidence; return to verification and review |
+| 8. Release handoff | Check release requirements and unresolved risk | Human-owned merge/deployment decision; publication requires its own authorization |
+| 9. Learn and measure | Use approved delivery, usage and outcome evidence | Source-linked knowledge, validated measurements and proposed follow-up work |
+
+This is a loop, not a waterfall. A failing build goes to diagnosis. A design question returns
+to clarification. A changed requirement updates its tests. A blocked prerequisite stops
+the affected branch rather than producing a success-shaped fallback.
+
+## Skill placement
+
+Every skill appears once below at its primary home; skills can be reused at other stages.
+Choose the smallest relevant workflow, not every entry in a row.
+
+| Primary home | Canonical skill IDs |
+| --- | --- |
+| 0. Prepare | `discover-skills`, `prereq-check`, `plugin-version-check`, `organize-workspace`, `worktree-handoff` |
+| 1. Understand | `from-requirements`, `grade-spec`, `start-feature` |
+| 2. Design | `graph-repo`, `architecture-doc`, `threat-model`, `design-spec`, `from-figma` |
+| 3. Plan | `coordinate-work`, `test-plan`, `coverage-gap` |
+| 4. Build | `implement-change`, `refactor`, `a11y-dev`, `author-test`, `a11y-test-gen` |
+| 5. Verify | `playwright-auth`, `run-tests`, `verify-test`, `validate-scenario`, `verify-change`, `a11y-scan`, `a11y-review`, `a11y-verify` |
+| 6. Review | `code-review`, `deliberate`, `pr-followups`, `sweep-codebase` |
+| 7. Diagnose and repair | `analyze-bug`, `root-cause`, `fix-bug`, `fix-test`, `flaky-test`, `update-test`, `fix-ci`, `a11y-fix` |
+| 8. Release handoff | `release-readiness` |
+| 9. Learn and measure | `pr-learn`, `curate-knowledge`, `professional-writing`, `track-commitments`, `impact-readiness`, `a11y-report`, `author-skill` |
+
+`run-tests` and the other Playwright-specific methods do not replace a repository's
+Vitest, unit-test or CI policies. `verify-change` checks the evidence from the appropriate
+runner; it is not another test runner. Accessibility review and verification remain
+distinct from authoring and fixing; a clean automated scan is not full accessibility proof.
+
+## Agent placement
+
+These are role definitions, not proof that the host has launched them. A stage can be
+completed by one authorized agent without constructing a squad.
+
+| Responsibility | Canonical agent IDs |
+| --- | --- |
+| Scope, coordination and plan integration | `supervisor`, `project-coordinator` |
+| Requirements summaries and meeting preparation | `engineering-brief-writer`, `meeting-preparation-coordinator` |
+| Design and user experience | `architecture-advocate`, `style-guardian`, `internationalization-expert` |
+| Test strategy | `unit-testing-advocate`, `e2e-test-author` |
+| Maintainable implementation | `refactorer` |
+| Verification and independent acceptance | `manual-tester`, `a11y`, `repair-validator` |
+| Risk-selected review | `code-reviewer`, `security-advocate`, `dependency-manager`, `performance-advocate`, `observability-advocate`, `accessibility-advocate` |
+| Diagnosis and bounded repair | `debugger`, `bug-exterminator`, `reliability-coordinator` |
+| Knowledge and evidence | `documentation-steward`, `evidence-collector`, `contribution-analyst` |
+| Measurement and impact | `metric-analyst`, `adoption-analyst`, `contribution-attribution-reviewer`, `measurement-readiness-reviewer`, `impact-writer`, `dashboard-planner` |
+| Cross-cutting traceability | `traceability-keeper` |
+
+The new evidence and coordination roles are read-only. Their output is a proposal,
+evidence package or handoff, not a write, deployment, message or automatic agent launch.
+Existing leads and critics retain their own tool and approval contracts.
+
+## One agent, specialists, or a squad?
+
+| Arrangement | Choose it when | Relationship and boundary |
+| --- | --- | --- |
+| One agent | The work is one continuous trace with a small context | One owner selects relevant skills and returns evidence; no delegation needed |
+| Main agent with a specialist | One bounded question needs separate expertise | Main owner sends the exact candidate/question, receives findings and integrates them |
+| Squad | Multiple tasks genuinely need independent contexts and are authorized | Coordinator owns a dependency graph; workers own non-conflicting scopes; integration is explicit |
+| Independent validator | Repair acceptance must be separate from implementation | Validator checks the original failure and regressions; it does not author the repair |
+
+A squad is not a fourth artifact type in this library. It is an execution arrangement
+provided by a compatible host. `coordinate-work` proposes ownership and dependencies;
+it does not create sessions or install an orchestrator. Parallelism is optional.
+
+## Context and source boundaries
+
+Personal versus work is a **data/account boundary**, not a different set of generic
+engineering methods. Apply the same skills to either context, but select approved
+repositories, configuration, memory and credentials separately. A folder, worktree or
+session label is not a security sandbox.
+
+Provider adapters live outside the generic library. An adapter can normalize an approved
+record for a canonical skill or prepare a role handoff. It does not duplicate the generic
+method, inherit permission from another account, or automatically invoke the next role.
+
+When another plugin offers a similarly named skill, choose an effective source and
+qualified ID explicitly. Do not mix independent accessibility review implementations
+silently, and do not count installed copies as additional unique capabilities.
+
+## A small worked route
+
+For a bounded defect: prepare the repository and evidence; reproduce with `analyze-bug`
+and `root-cause`; use `fix-bug` for an authorized repair; check fresh results with
+`verify-change`; obtain independent `repair-validator` acceptance and relevant
+`code-review`; then give the human the release handoff. Use the repository's required
+runner throughout. A validator's rejection returns to diagnosis, not straight to merge.
+
+Start with one task and one owner. Add a specialist only for a bounded independent
+question. See [architecture](/architecture), [skills](/skills) and [agents](/agents).

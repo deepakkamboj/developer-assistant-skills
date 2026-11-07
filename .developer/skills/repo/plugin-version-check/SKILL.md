@@ -13,6 +13,8 @@ development checkout or an unrelated npm package. Do not execute updates.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load [shared instructions](../../../config/accessibility.md) for prerequisite,
 evidence and approval boundaries.
 Resolve `DEVELOPER_CONFIG`, the current host's documented plugin-list procedure, configured

@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1730" viewBox="0 0 1800 1730" role="img" aria-labelledby="title description">
+  <title id="title">Developer-only six-layer architecture for skills and agents</title>
+  <desc id="description">All 49 canonical developer skills and 32 agent roles are placed in six layers: human scope, coordination, agent responsibilities, skill methods, authorized tools, and evidence with human acceptance. Five labeled lifecycle columns group discovery and design, planning and building, verification and review, diagnosis and release, and learning and measurement. Agents select relevant skills, not one skill per agent. A main session owner performs authorized work; read-only critics do not gain write tools. Failure returns to diagnosis and repair returns to verification. Colors indicate lifecycle groups, not different plugins or permissions.</desc>
+  <rect width="1800" height="1730" rx="20" fill="#0f172a"/>
+  <g font-family="system-ui,sans-serif">
+    <g fill="#f1f5f9">
+      <text x="40" y="46" font-size="31" font-weight="700">developer-assistant-skills: six layers across the development lifecycle</text>
+      <text x="40" y="82" font-size="21">49 skills + 32 roles. One canonical library. Colors label lifecycle groups; they do not grant permissions.</text>
+      <text data-layer="scope" x="40" y="119" font-size="22" font-weight="700">1 / HUMAN SCOPE: desired outcome, repository, context, acceptance criteria and approval ceiling</text>
+    </g>
+    <rect x="40" y="138" width="1720" height="80" rx="12" fill="#e2e8f0"/>
+    <g fill="#0f172a" font-size="21">
+      <text x="62" y="170">Choose personal or work accounts/data separately. Confirm the actual folder, revision and authorized write scope.</text>
+      <text x="62" y="200">Default to one main session owner. A specialist or squad is optional and needs a supported host and explicit authorization.</text>
+    </g>
+    <g stroke="#cbd5e1" stroke-width="3" fill="none">
+      <path d="M900 224v26m-8-10 8 10 8-10"/>
+    </g>
+    <text data-layer="coordination" x="40" y="280" font-size="22" font-weight="700" fill="#f1f5f9">2 / COORDINATION: scope, dependencies, ownership and traceability span every lifecycle stage</text>
+    <rect x="40" y="298" width="1720" height="87" rx="12" fill="#e2e8f0"/>
+    <g fill="#0f172a" font-size="22" font-weight="700">
+      <text data-agent="supervisor" x="70" y="334">supervisor</text>
+      <text data-agent="project-coordinator" x="605" y="334">project-coordinator</text>
+      <text data-agent="traceability-keeper" x="1180" y="334">traceability-keeper</text>
+    </g>
+    <g fill="#0f172a" font-size="19">
+      <text x="70" y="365">Bounded plan and approved handoffs</text>
+      <text x="605" y="365">Owners, commitments and integration</text>
+      <text x="1180" y="365">Requirement to evidence relationships</text>
+    </g>
+    <text x="40" y="427" font-size="21" fill="#f1f5f9">LIFECYCLE COLUMNS: primary placement, not automatic execution of every name in a column</text>
+    <g data-phase="discover-design" fill="#0f172a">
+      <rect x="40" y="451" width="328" height="64" rx="10" fill="#bfdbfe"/>
+      <rect x="40" y="575" width="328" height="266" rx="12" fill="#bfdbfe"/>
+      <rect x="40" y="915" width="328" height="361" rx="12" fill="#bfdbfe"/>
+      <text x="62" y="478" font-size="23" font-weight="700">A / DISCOVER + DESIGN</text>
+      <text x="62" y="503" font-size="18">Stages 0, 1, 2: prepare to design</text>
+      <g font-size="18">
+        <text data-agent="engineering-brief-writer" x="58" y="608">engineering-brief-writer</text>
+        <text data-agent="meeting-preparation-coordinator" x="58" y="633">meeting-preparation-coordinator</text>
+        <text data-agent="architecture-advocate" x="58" y="658">architecture-advocate</text>
+        <text data-agent="style-guardian" x="58" y="683">style-guardian</text>
+        <text data-agent="internationalization-expert" x="58" y="708">internationalization-expert</text>
+        <text data-skill="discover-skills" x="58" y="948">discover-skills</text>
+        <text data-skill="prereq-check" x="58" y="972">prereq-check</text>
+        <text data-skill="plugin-version-check" x="58" y="996">plugin-version-check</text>
+        <text data-skill="organize-workspace" x="58" y="1020">organize-workspace</text>
+        <text data-skill="worktree-handoff" x="58" y="1044">worktree-handoff</text>
+        <text data-skill="from-requirements" x="58" y="1068">from-requirements</text>
+        <text data-skill="grade-spec" x="58" y="1092">grade-spec</text>
+        <text data-skill="start-feature" x="58" y="1116">start-feature</text>
+        <text data-skill="graph-repo" x="58" y="1140">graph-repo</text>
+        <text data-skill="architecture-doc" x="58" y="1164">architecture-doc</text>
+        <text data-skill="threat-model" x="58" y="1188">threat-model</text>
+        <text data-skill="design-spec" x="58" y="1212">design-spec</text>
+        <text data-skill="from-figma" x="58" y="1236">from-figma</text>
+      </g>
+    </g>
+    <g data-phase="plan-build" fill="#0f172a">
+      <rect x="388" y="451" width="328" height="64" rx="10" fill="#a7f3d0"/>
+      <rect x="388" y="575" width="328" height="266" rx="12" fill="#a7f3d0"/>
+      <rect x="388" y="915" width="328" height="361" rx="12" fill="#a7f3d0"/>
+      <text x="410" y="478" font-size="23" font-weight="700">B / PLAN + BUILD</text>
+      <text x="410" y="503" font-size="18">Stages 3, 4: tests and change</text>
+      <g font-size="18">
+        <text x="406" y="608" font-weight="700">CODING AGENT / host executor</text>
+        <text data-executor="main-session-agent" x="406" y="633">Main session agent writes code</text>
+        <text x="406" y="658">Not an extra saved agent definition.</text>
+        <text x="406" y="704" font-weight="700">ADVISORS / CRITICS</text>
+        <text data-agent="unit-testing-advocate" x="406" y="733">unit-testing-advocate</text>
+        <text data-agent="e2e-test-author" x="406" y="758">e2e-test-author</text>
+        <text data-agent="refactorer" x="406" y="783">refactorer</text>
+        <text x="406" y="829">Critics advise; executor edits.</text>
+        <text data-skill="coordinate-work" x="406" y="948">coordinate-work</text>
+        <text data-skill="test-plan" x="406" y="972">test-plan</text>
+        <text data-skill="coverage-gap" x="406" y="996">coverage-gap</text>
+        <text data-skill="implement-change" x="406" y="1020">implement-change</text>
+        <text data-skill="refactor" x="406" y="1044">refactor</text>
+        <text data-skill="a11y-dev" x="406" y="1068">a11y-dev</text>
+        <text data-skill="author-test" x="406" y="1092">author-test</text>
+        <text data-skill="a11y-test-gen" x="406" y="1116">a11y-test-gen</text>
+      </g>
+    </g>
+    <g data-phase="verify-review" fill="#0f172a">
+      <rect x="736" y="451" width="328" height="64" rx="10" fill="#ddd6fe"/>
+      <rect x="736" y="575" width="328" height="266" rx="12" fill="#ddd6fe"/>
+      <rect x="736" y="915" width="328" height="361" rx="12" fill="#ddd6fe"/>
+      <text x="758" y="478" font-size="23" font-weight="700">C / VERIFY + REVIEW</text>
+      <text x="758" y="503" font-size="18">Stages 5, 6: evidence and decisions</text>
+      <g font-size="18">
+        <text data-agent="manual-tester" x="754" y="608">manual-tester</text>
+        <text data-agent="a11y" x="754" y="633">a11y</text>
+        <text data-agent="repair-validator" x="754" y="658">repair-validator</text>
+        <text data-agent="code-reviewer" x="754" y="683">code-reviewer</text>
+        <text data-agent="security-advocate" x="754" y="708">security-advocate</text>
+        <text data-agent="dependency-manager" x="754" y="733">dependency-manager</text>
+        <text data-agent="performance-advocate" x="754" y="758">performance-advocate</text>
+        <text data-agent="observability-advocate" x="754" y="783">observability-advocate</text>
+        <text data-agent="accessibility-advocate" x="754" y="808">accessibility-advocate</text>
+        <text data-skill="playwright-auth" x="754" y="948">playwright-auth</text>
+        <text data-skill="run-tests" x="754" y="972">run-tests</text>
+        <text data-skill="verify-test" x="754" y="996">verify-test</text>
+        <text data-skill="validate-scenario" x="754" y="1020">validate-scenario</text>
+        <text data-skill="verify-change" x="754" y="1044">verify-change</text>
+        <text data-skill="a11y-scan" x="754" y="1068">a11y-scan</text>
+        <text data-skill="a11y-review" x="754" y="1092">a11y-review</text>
+        <text data-skill="a11y-verify" x="754" y="1116">a11y-verify</text>
+        <text data-skill="code-review" x="754" y="1140">code-review</text>
+        <text data-skill="deliberate" x="754" y="1164">deliberate</text>
+        <text data-skill="pr-followups" x="754" y="1188">pr-followups</text>
+        <text data-skill="sweep-codebase" x="754" y="1212">sweep-codebase</text>
+      </g>
+    </g>
+    <g data-phase="diagnose-release" fill="#0f172a">
+      <rect x="1084" y="451" width="328" height="64" rx="10" fill="#fde68a"/>
+      <rect x="1084" y="575" width="328" height="266" rx="12" fill="#fde68a"/>
+      <rect x="1084" y="915" width="328" height="361" rx="12" fill="#fde68a"/>
+      <text x="1106" y="478" font-size="23" font-weight="700">D / REPAIR + RELEASE</text>
+      <text x="1106" y="503" font-size="18">Stages 7, 8: fix and hand off</text>
+      <g font-size="18">
+        <text data-agent="debugger" x="1102" y="608">debugger</text>
+        <text data-agent="bug-exterminator" x="1102" y="633">bug-exterminator</text>
+        <text data-agent="reliability-coordinator" x="1102" y="658">reliability-coordinator</text>
+        <text x="1102" y="804">Independent acceptance is in C;</text>
+        <text x="1102" y="829">release decisions stay human-owned.</text>
+        <text data-skill="analyze-bug" x="1102" y="948">analyze-bug</text>
+        <text data-skill="root-cause" x="1102" y="972">root-cause</text>
+        <text data-skill="fix-bug" x="1102" y="996">fix-bug</text>
+        <text data-skill="fix-test" x="1102" y="1020">fix-test</text>
+        <text data-skill="flaky-test" x="1102" y="1044">flaky-test</text>
+        <text data-skill="update-test" x="1102" y="1068">update-test</text>
+        <text data-skill="fix-ci" x="1102" y="1092">fix-ci</text>
+        <text data-skill="a11y-fix" x="1102" y="1116">a11y-fix</text>
+        <text data-skill="release-readiness" x="1102" y="1140">release-readiness</text>
+      </g>
+    </g>
+    <g data-phase="learn-measure" fill="#0f172a">
+      <rect x="1432" y="451" width="328" height="64" rx="10" fill="#d9f99d"/>
+      <rect x="1432" y="575" width="328" height="266" rx="12" fill="#d9f99d"/>
+      <rect x="1432" y="915" width="328" height="361" rx="12" fill="#d9f99d"/>
+      <text x="1454" y="478" font-size="23" font-weight="700">E / LEARN + MEASURE</text>
+      <text x="1454" y="503" font-size="18">Stage 9: knowledge and outcomes</text>
+      <g font-size="18">
+        <text data-agent="documentation-steward" x="1450" y="608">documentation-steward</text>
+        <text data-agent="evidence-collector" x="1450" y="633">evidence-collector</text>
+        <text data-agent="contribution-analyst" x="1450" y="658">contribution-analyst</text>
+        <text data-agent="metric-analyst" x="1450" y="683">metric-analyst</text>
+        <text data-agent="adoption-analyst" x="1450" y="708">adoption-analyst</text>
+        <text data-agent="contribution-attribution-reviewer" x="1450" y="733">contribution-attribution-reviewer</text>
+        <text data-agent="measurement-readiness-reviewer" x="1450" y="758">measurement-readiness-reviewer</text>
+        <text data-agent="impact-writer" x="1450" y="783">impact-writer</text>
+        <text data-agent="dashboard-planner" x="1450" y="808">dashboard-planner</text>
+        <text data-skill="pr-learn" x="1450" y="948">pr-learn</text>
+        <text data-skill="curate-knowledge" x="1450" y="972">curate-knowledge</text>
+        <text data-skill="professional-writing" x="1450" y="996">professional-writing</text>
+        <text data-skill="track-commitments" x="1450" y="1020">track-commitments</text>
+        <text data-skill="impact-readiness" x="1450" y="1044">impact-readiness</text>
+        <text data-skill="a11y-report" x="1450" y="1068">a11y-report</text>
+        <text data-skill="author-skill" x="1450" y="1092">author-skill</text>
+      </g>
+    </g>
+    <g fill="#f1f5f9" font-size="22" font-weight="700">
+      <text data-layer="agents" x="40" y="553">3 / AGENTS = RESPONSIBILITIES: choose the relevant owner, advisor, critic or independent validator</text>
+      <text data-layer="skills" x="40" y="891">4 / SKILLS = METHODS: choose what the task needs; roles and skills are many-to-many, not paired by row</text>
+      <text data-layer="tools" x="40" y="1330">5 / TOOLS + EXECUTION: real host capabilities, repository policy and the active role's tool restrictions</text>
+      <text data-layer="evidence" x="40" y="1488">6 / EVIDENCE + HUMAN ACCEPTANCE: trace the requirement to the candidate, checks and review decision</text>
+    </g>
+    <g stroke="#cbd5e1" stroke-width="3" fill="none">
+      <path data-relation="coordination-scopes-roles" d="M900 390v19m-8-10 8 10 8-10"/>
+      <path data-relation="roles-select-skills" d="M204 847v16m-7-8 7 8 7-8M552 847v16m-7-8 7 8 7-8M900 847v16m-7-8 7 8 7-8M1248 847v16m-7-8 7 8 7-8M1596 847v16m-7-8 7 8 7-8"/>
+      <path data-relation="skills-use-authorized-tools" d="M552 1282v21m-7-8 7 8 7-8"/>
+      <path data-relation="repair-returns-to-verification" d="M1248 1282v22H900v-22m-7 8 7-8 7 8"/>
+      <path data-relation="tools-produce-evidence" d="M900 1439v20m-8-10 8 10 8-10"/>
+      <path data-relation="failure-returns-to-diagnosis" d="M1764 1566h18V859h-534v48m-7-8 7 8 7-8"/>
+    </g>
+    <rect x="40" y="1350" width="1720" height="82" rx="12" fill="#e2e8f0"/>
+    <g fill="#0f172a" font-size="21">
+      <text x="62" y="1382">Approved local files / Git and configured provider tools / the repository's existing test, build and browser tools</text>
+      <text x="62" y="1412">A read-only critic stays read-only. Skills do not add tools, install dependencies, create sessions or bypass denied access.</text>
+    </g>
+    <rect x="40" y="1510" width="1720" height="112" rx="12" fill="#e2e8f0"/>
+    <g fill="#0f172a" font-size="21">
+      <text x="62" y="1545">Source IDs + analyzed revision + actual changes + fresh check results + supported findings + explicit unresolved blockers</text>
+      <text x="62" y="1577">PASS / FAIL / BLOCKED / SKIPPED / STALE are distinct. Failure routes to diagnosis; a repair must return to verification and review.</text>
+      <text x="62" y="1608" font-weight="700">Independent repair acceptance where required. Human-owned merge. Separate publication and deployment approval.</text>
+    </g>
+    <g fill="#f1f5f9" font-size="20">
+      <text x="40" y="1666">Read top to bottom for relationships; read A to E for the lifecycle. Layer colors never substitute for their visible labels.</text>
+      <text x="40" y="1703">Canonical definitions, not an installed scheduler or a promise to run 32 agents. Full placement is primary-home guidance; reuse is allowed.</text>
+    </g>
+  </g>
+</svg>

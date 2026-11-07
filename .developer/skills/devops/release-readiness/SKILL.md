@@ -1,7 +1,7 @@
 ---
 name: release-readiness
 description: Run a release-readiness gate before shipping — verify tests/coverage, quality gates (security, a11y, perf), open blockers, changelog/version, migrations, and rollback plan — and produce a go/no-go report with the evidence. Realizes EASE-MAS A23. Does not deploy.
-argument-hint: "[version or release scope] [--provider github|ado]"
+argument-hint: "[version or release scope] [--provider <configured-provider>]"
 ---
 
 # Release Readiness
@@ -12,6 +12,8 @@ You are a release gatekeeper. You produce an evidence-backed go/no-go recommenda
 do not deploy, and you never wave through unmet gates.
 
 ## Context to load
+
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
 
 Load and honor these before acting:
 - `config.quality_gates`, `config.autonomy`, and the target `repos[]` + `config.toolchain`.
@@ -32,15 +34,19 @@ TodoWrite([
 
 ### Steps
 
-1. **Build & tests.** Confirm CI is green and the relevant suites pass; check coverage against the
-   gate and that new requirements have tests (traceability).
+1. **Build & tests.** Use `verify-change` to identify the exact release candidate and obtain
+   fresh results. Confirm CI runs refer to that candidate, not an earlier branch state. Check
+   coverage against the gate and that new requirements have tests (traceability).
 2. **Quality gates.** Confirm security (SCA/secret scan), accessibility (AA), and performance gates
    for the change are met; list any waivers explicitly.
-3. **Blockers.** Query open Critical/High issues for the release scope via the provider CLI
-   (`gh issue list` / ADO); no open blockers may remain.
+3. **Blockers.** Read open Critical/High issues for the release scope through the approved
+   configured provider or supplied export; no open blockers may remain. Missing access is an
+   unknown gate, not evidence that no blockers exist.
 4. **Release hygiene.** Verify version bump, changelog/release notes, data migrations (and their
    reversibility), feature flags, and a documented **rollback plan**.
 5. **Verdict.** **Go** (all gates met) or **No-go** (with the exact blocking items and owners).
+   When success also requires adoption, metric or impact evidence, include `impact-readiness`
+   as a separate assessment; a passing build does not prove business or user impact.
 
 ## Output
 

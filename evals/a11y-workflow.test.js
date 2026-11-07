@@ -278,8 +278,9 @@ test('generated adapters and portal catalog expose every synchronized entry poin
   });
 
   const catalog = JSON.parse(read('website/data/catalog.json'));
-  assert.equal(catalog.skills.length, 38);
-  assert.equal(catalog.agents.length, 20);
+  const coverage = JSON.parse(read('.developer/config/generic-coverage.json'));
+  assert.equal(catalog.skills.length, coverage.originalSkills.length + coverage.addedSkills.length);
+  assert.equal(catalog.agents.length, coverage.originalAgents.length + coverage.addedAgents.length);
   for (const name of ['a11y-review', 'prereq-check', 'plugin-version-check']) {
     const group = name.startsWith('a11y-') ? 'accessibility' : 'repo';
     const canonical = `.developer/skills/${group}/${name}/SKILL.md`;
@@ -302,9 +303,10 @@ test('packaged canonical inventory and release manifests stay synchronized', () 
     }
   }
   collect(path.join(root, '.developer/skills'));
-  assert.equal(skills.length, 38);
+  const coverage = JSON.parse(read('.developer/config/generic-coverage.json'));
+  assert.equal(skills.length, coverage.originalSkills.length + coverage.addedSkills.length);
   const agents = fs.readdirSync(path.join(root, '.developer/agents')).filter(file => file.endsWith('.agent.md'));
-  assert.equal(agents.length, 20);
+  assert.equal(agents.length, coverage.originalAgents.length + coverage.addedAgents.length);
   assert.ok(agents.includes('a11y.agent.md'));
   const version = JSON.parse(read('package.json')).version;
   assert.equal(JSON.parse(read('.developer/plugin.json')).version, version);

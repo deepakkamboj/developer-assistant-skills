@@ -1,6 +1,6 @@
 ---
-description: Turn raw requirements (a brief, ticket, or conversation) into a structured PRD — goals, user stories with acceptance criteria, scope/non-goals, constraints, and non-functional requirements — and seed the traceability graph with Requirement and PRDItem nodes. Realizes EASE-MAS A1–A4.
-argument-hint: "[requirements source: brief/ticket/link]"
+description: Turn approved requirements, tickets or conversations into a testable PRD or concise engineering brief with evidence, options, constraints, acceptance checks and unresolved decisions. Propose traceability without automatic external writes.
+argument-hint: "[approved brief, ticket or source] [--format prd|brief]"
 ---
 
 Read and execute the skill at `.developer/skills/requirements/from-requirements/SKILL.md`. Follow its Role, load the listed context, and complete its

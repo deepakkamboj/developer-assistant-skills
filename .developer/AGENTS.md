@@ -46,3 +46,20 @@ human-owned.** Autonomous CI workflows are disabled by default (opt-in via repo 
 ## Change workflow
 
 Understand → Plan → Implement → Validate → Review → Summarize.
+
+## Canonical selection and portability
+
+Use the English IDs in `config/generic-coverage.json` to select an existing method before
+creating another skill or role. The coverage map records named functional outcomes, not
+proof that a host has executed them. Read the selected definition and its actual prerequisites;
+missing configuration, denied tools and unavailable evidence must remain explicit.
+
+`.developer/skills` and `.developer/agents` are the authoring sources. Commands and website
+catalogs are generated views, not independent implementations. Keep provider-specific
+enterprise adapters outside this public generic tree; pass only approved normalized inputs.
+Do not silently delegate to a different installed plugin with a similar name.
+
+`TodoWrite` blocks describe an ordered checklist. Use the intended host's real tracking tool
+when available, or maintain the same statuses in session text; do not claim a nonexistent API
+was called. Tool availability, permissions, user authorization and higher-priority host rules
+still apply. No bootstrap hook, automatic task fanout or new permission is implied.

@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: Run a roster-driven, multi-specialist review of a code change (diff/PR). Selects the relevant critic agents by what the change touches, collects severity-tagged findings, de-duplicates, then hands them to `deliberate` for a verdict. Read-only — posts a review, never merges.
+description: Prepare or assess a code-review request for an exact diff or PR, apply relevant specialist review lenses, and deliberate evidence-backed findings. Read-only by default; independent agents and posting require explicit authorization.
 ---
 
 Read and execute the skill at [`.developer/skills/review/code-review/SKILL.md`](../../.developer/skills/review/code-review/SKILL.md). Follow its Role, load the listed context,

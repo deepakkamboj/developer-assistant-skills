@@ -1,6 +1,6 @@
 ---
 name: root-cause
-description: Given a structured bug, produce ranked root-cause hypotheses (at least k competing causes) each with cited evidence and a confidence score, and flag ambiguity when the top hypothesis isn't clearly ahead. Read-only diagnosis that feeds fix-bug. Realizes EASE-MAS A19 (Algorithm 5).
+description: Diagnose a structured bug through competing evidence-backed hypotheses, discriminating experiments and observed results. Rank supported causes, expose uncertainty and hand off to bounded repair without speculative product edits.
 argument-hint: "[bug id or analyze-bug output] [-k 3]"
 ---
 
@@ -13,6 +13,8 @@ them, and hand the best candidates to repair — you never jump to a single gues
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The structured bug from `analyze-bug` (error, stack, artifacts, suspected files, repro).
 - `diff since last green`, commit/run history, and `graph-repo` impact for the suspected area.
@@ -24,8 +26,8 @@ Load and honor these before acting:
 ```
 TodoWrite([
   { content: "Gather evidence (trace, diff, logs, history, impact)", status: "in_progress" },
-  { content: "Propose >= k competing hypotheses", status: "pending" },
-  { content: "Score each against the evidence; rank", status: "pending" },
+  { content: "Seek k supported competing hypotheses; report evidence limits", status: "pending" },
+  { content: "Design discriminating experiments; record observations and rank", status: "pending" },
   { content: "Flag ambiguity if top-1 margin is small; hand top-k to fix-bug", status: "pending" }
 ])
 ```
@@ -34,13 +36,24 @@ TodoWrite([
 
 1. **Gather evidence.** Assemble the trace/artifacts, the diff since last green, related history, and
    the dependency/call context from `graph-repo`.
-2. **Hypothesize (≥k, default 3).** Enumerate distinct plausible causes (logic error, bad input
+2. **Hypothesize (target k, default 3).** Enumerate distinct plausible causes (logic error, bad input
    handling, race, dependency change, environment/config, test bug). Avoid anchoring on the first idea.
-3. **Score.** For each hypothesis, cite the specific evidence for and against and assign a confidence.
-   A hypothesis with no supporting evidence is dropped.
-4. **Rank & judge ambiguity.** Rank by confidence. If the top-1 margin over top-2 is small, **flag as
+3. **Test predictions.** For each supported hypothesis, state what observation would support it
+   and what would disprove it. Choose the smallest safe experiment that distinguishes the leading
+   candidates: a targeted failing test, an input boundary, a trace at a specific interface or a
+   controlled comparison with the last known good environment. Change one variable at a time.
+   Do not modify product behavior during diagnosis. Execute only approved non-mutating checks;
+   otherwise return the experiment for approval. Record command, candidate/environment, expected
+   result, actual result and limitations. A proposed experiment is not an observation.
+4. **Score.** Cite evidence for and against each hypothesis. Use qualitative confidence unless
+   there is a justified numerical model. Reject contradicted causes and update the remaining
+   hypotheses after each result. Do not invent extra causes just to meet k when evidence supports
+   fewer; explicitly report the smaller set.
+5. **Rank & judge ambiguity.** Rank by confidence. If the top-1 margin over top-2 is small, **flag as
    ambiguous** and keep the top-k for repair to try in order.
-5. **Hand off.** Provide the ranked hypotheses (with localized `file:line` and evidence) to `fix-bug`.
+6. **Hand off.** Provide the ranked hypotheses, experiment results, remaining uncertainty and
+   localized `file:line` evidence to `fix-bug`. After repeated identical outcomes, stop and revisit
+   the assumption or localization rather than try unrelated edits.
 
 ## Output
 
@@ -49,5 +62,5 @@ an ambiguity flag.
 
 ## Rules
 
-- Read-only diagnosis; propose ≥k competing causes, never a single unsupported guess.
+- Read-only diagnosis; seek k competing causes when evidence permits, never unsupported guesses.
 - Cite real evidence for every hypothesis; never fabricate. Symptom ≠ cause.

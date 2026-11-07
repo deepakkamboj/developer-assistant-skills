@@ -13,6 +13,8 @@ minimally — never by disabling checks or masking failures.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - `config.toolchain` (git/issue provider, CLIs `gh`/`az`, MCP fallback); the target `repos[]` entry.
 - The failing run/PR/branch; the workflow definitions in `.github/workflows/` (or ADO pipelines).

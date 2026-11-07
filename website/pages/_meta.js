@@ -13,6 +13,7 @@ export default {
   },
   "getting-started": "Getting started",
   architecture: "Architecture",
+  lifecycle: "Agentic lifecycle: skills and agents",
   skills: "Skills",
   agents: "Agents",
 };

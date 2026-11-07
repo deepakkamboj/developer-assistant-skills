@@ -13,6 +13,8 @@ AA and didn't regress anything else.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - [Shared accessibility instructions](../../../config/accessibility.md).
 - The original full issue, baseline evidence, source trace and applied fix (the investigation

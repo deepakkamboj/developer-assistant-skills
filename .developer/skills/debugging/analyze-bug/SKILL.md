@@ -13,6 +13,8 @@ bug record that a repair loop can act on — no fixing yet.
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The failure evidence: test id/CI run (via `gh run`), stack, logs, and Playwright artifacts
   (trace/video/screenshot/DOM/console/network).

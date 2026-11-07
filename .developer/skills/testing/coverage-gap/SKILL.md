@@ -13,6 +13,8 @@ code — so testing effort goes where it matters, not just to raise a coverage n
 
 ## Context to load
 
+First apply the [shared execution boundary](../../_shared/execution-boundary.md); it limits every step below.
+
 Load and honor these before acting:
 - The traceability graph (requirements ↔ tests) and/or code + existing coverage report.
 - `config.repo` test/coverage commands; `graph-repo` for code structure and impact.
